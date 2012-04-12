@@ -627,17 +627,15 @@ public class Game extends Canvas
 		 * @param e The details of the key that was released 
 		 */
 		public void keyReleased(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_W) {
-				player.endClimb();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_A) {
-				player.stopLeft();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_D) {
-				player.stopRight();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				spaceBar = false;
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_W:
+				player.endClimb(); break;
+			case KeyEvent.VK_A:
+				player.stopLeft(); break;
+			case KeyEvent.VK_D:
+				player.stopRight(); break;
+			case KeyEvent.VK_SPACE:
+				spaceBar = false; break;
 			}
 		}
 
