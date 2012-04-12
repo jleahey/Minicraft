@@ -42,32 +42,33 @@ public class SaveLoad {
     }
 
 
-    public static void doLoad(Game game) {
+    public static boolean doLoad(Game game) {
+        File f = new File("MiniCraft.sav");
 
+
+        ObjectInputStream in = null;
         try {
-        	File f = new File("MiniCraft.sav");
-        	if(!f.exists())
-        		return;
-            FileInputStream fileIn = new FileInputStream(f);
-            ObjectInputStream in = new ObjectInputStream(fileIn);
-
-            game.inventory = (Inventory)in.readObject();
-            game.world = (World)in.readObject();
-            game.entities = (ArrayList<Entity>)in.readObject();
-            
-            
-            in.close();
-            fileIn.close();
-            
-        } catch(FileNotFoundException e) {
-            e.printStackTrace();
-        } catch(ClassNotFoundException e) {
-        	e.printStackTrace();
+            in = new ObjectInputStream(new FileInputStream(f));
+        } catch (InvalidClassException e){
+            System.err.println("Save file has the wrong version.");
+        } catch (FileNotFoundException e) {
+            System.err.println("Save file does not exist.");
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if (in == null) return false;
 
-
+        try {        
+            game.inventory = (Inventory)in.readObject();
+            game.world = (World)in.readObject();
+            game.entities = (ArrayList<Entity>)in.readObject();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+            return false;   
+        }
+        return true;
     }
-
 }

@@ -167,23 +167,21 @@ public class Game extends Canvas
 	 */
 	private void startGame(boolean load, int width)
 	{
-		System.out.println("Created world width: " + width);
+		System.out.println("Creating world width: " + width);
 		panel.setCursor(myCursor); 
 		worldWidth = width;
 		
 		entities.clear();
-		if(load)
-		{
-			SaveLoad.doLoad(this);
-			for(Entity entity : entities)
-				if(entity.getClass() == Player.class)
-				{
+		if(load && SaveLoad.doLoad(this)) {
+			for(Entity entity : entities) {
+				if(entity instanceof Player) {
 					player = (Player) entity;
 					player.widthPX = 7*(tileSize/8);
 					player.heightPX = 14*(tileSize/8);
 				}
+			}
 		}
-		if(player == null)
+		if(player == null)  // didn't load a saved game
 		{
 			world = new World(worldWidth,worldHeight, random);
 			player = new Player(true,world.spawnLocation.x,world.spawnLocation.y,7*(tileSize/8),14*(tileSize/8));
