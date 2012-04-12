@@ -21,7 +21,11 @@
   <target name="jar" depends="compile" description="generate the JAR" >
     <jar jarfile="${jar}">
       <fileset dir="${build}"/>
-      <fileset dir="resources"/>
+      <fileset dir="src">
+      	<exclude name="com/"/>
+      	<include name="sounds/"/>
+      	<include name="sprites/"/>
+      </fileset>
       <zipgroupfileset dir="lib" includes="*.jar"/>
       <manifest>
         <attribute name="Main-Class" value="com.github.jleahey.minicraft.Game"/>
