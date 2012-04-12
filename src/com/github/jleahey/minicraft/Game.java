@@ -549,7 +549,7 @@ public class Game extends Canvas
 			inventory.selectedInventory += notches;
 			if(inventory.selectedInventory < 0)//hack should be get/set
 				inventory.selectedInventory = 0;
-			if(inventory.selectedInventory > 9)
+			else if(inventory.selectedInventory > 9)
 				inventory.selectedInventory = 9;
 		}
 	}
@@ -569,32 +569,25 @@ public class Game extends Canvas
 		}
 	}
 	
-	private class MouseInputHander implements MouseListener
+	private class MouseInputHander extends MouseAdapter
 	{
 		@Override
-		public void mouseEntered(MouseEvent arg0) {}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {}
-
-		@Override
 		public void mousePressed(MouseEvent arg0) {
-			if(arg0.getButton() == MouseEvent.BUTTON1)
-				leftClick = true;
-			if (arg0.getButton() == MouseEvent.BUTTON2 || arg0.getButton() == MouseEvent.BUTTON3)
-				rightClick = true;
+			switch (arg0.getButton()) {
+			case MouseEvent.BUTTON1: leftClick = true; break;
+			case MouseEvent.BUTTON2: // fall through
+			case MouseEvent.BUTTON3: rightClick = true; break;
+			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			if(arg0.getButton() == MouseEvent.BUTTON1)
-				leftClick = false;
-			if (arg0.getButton() == MouseEvent.BUTTON2|| arg0.getButton() == MouseEvent.BUTTON3)
-				rightClick = false;
+			switch (arg0.getButton()) {
+			case MouseEvent.BUTTON1: leftClick = false; break;
+			case MouseEvent.BUTTON2: // fall through
+			case MouseEvent.BUTTON3: rightClick = false; break;
+			}
 		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {}
 	}
 	
 	private class KeyInputHandler extends KeyAdapter {
@@ -607,17 +600,11 @@ public class Game extends Canvas
 		 * @param e The details of the key that was pressed 
 		 */
 		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_W) {
-				player.startClimb();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_A) {
-				player.startLeft(e.isShiftDown());
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_D) {
-				player.startRight(e.isShiftDown());
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				spaceBar = true;
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_W: player.startClimb(); break;
+			case KeyEvent.VK_A: player.startLeft(e.isShiftDown()); break;
+			case KeyEvent.VK_D: player.startRight(e.isShiftDown()); break;
+			case KeyEvent.VK_SPACE: spaceBar = true; break;
 			}
 		} 
 		
@@ -628,14 +615,10 @@ public class Game extends Canvas
 		 */
 		public void keyReleased(KeyEvent e) {
 			switch (e.getKeyCode()) {
-			case KeyEvent.VK_W:
-				player.endClimb(); break;
-			case KeyEvent.VK_A:
-				player.stopLeft(); break;
-			case KeyEvent.VK_D:
-				player.stopRight(); break;
-			case KeyEvent.VK_SPACE:
-				spaceBar = false; break;
+			case KeyEvent.VK_W: player.endClimb(); break;
+			case KeyEvent.VK_A: player.stopLeft(); break;
+			case KeyEvent.VK_D: player.stopRight(); break;
+			case KeyEvent.VK_SPACE: spaceBar = false; break;
 			}
 		}
 
