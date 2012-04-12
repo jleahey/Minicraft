@@ -31,7 +31,17 @@ public class Entity implements java.io.Serializable
 	public float dx;
 	public float dy;
 	
-	protected Entity(){}
+	protected Entity(float x, float y, float dx, float dy, Sprite sprite, boolean gravityApplies, int width, int height)
+	{
+		this.x = x;
+		this.y = y;
+		this.dx = dx;
+		this.dy = dy;
+		this.sprite = sprite;
+		this.gravityApplies = gravityApplies;
+		this.heightPX = height;
+		this.widthPX = width;
+	}
 	
 	public Entity(String ref, boolean gravityApplies, float x, float y, int width, int height)
 	{
@@ -335,7 +345,6 @@ public class Entity implements java.io.Serializable
 	}
 	
 	public boolean collidesWith(Entity entity, int tileSize) {
-		  
 	    float left1, left2;
 	    float right1, right2;
 	    float top1, top2;
@@ -350,14 +359,8 @@ public class Entity implements java.io.Serializable
 	    bottom1 = this.getBottom(tileSize);
 	    bottom2 = entity.getBottom(tileSize);
 
-	    if (bottom1 < top2) return false;
-	    if (top1 > bottom2) return false;
-
-	    if (right1 < left2) return false;
-	    if (left1 > right2) return false;
-
-	    return true;
-	};
+	    return !(bottom1 < top2 || top1 > bottom2 || right1 < left2 || left1 > right2);
+	}
 	
 	public void draw(Graphics g, float cameraX, float cameraY, int screenWidth, int screenHeight, int tileSize)
 	{
@@ -368,15 +371,6 @@ public class Entity implements java.io.Serializable
 	
 	public Object clone()
 	{
-		Entity result = new Entity();
-		result.x = x;
-		result.y = y;
-		result.dx = dx;
-		result.dy = dy;
-		result.sprite = sprite;
-		result.gravityApplies = gravityApplies;
-		result.heightPX = heightPX;
-		result.widthPX = widthPX;
-		return result;
+		return new Entity(x,y,dx,dy,sprite,gravityApplies,widthPX,heightPX);
 	}
 }
