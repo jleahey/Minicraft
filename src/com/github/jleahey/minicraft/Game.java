@@ -640,66 +640,46 @@ public class Game extends Canvas
 		}
 
 		public void keyTyped(KeyEvent e) {
-			char key = e.getKeyChar();
-			if(key >= '1' && key <= '9')
-			{
-				setInventorySelect(key-(int)'1');
-			}
-			else if (key == '0')
-			{
-				setInventorySelect(9);
-			}
-			else if (key == 'i')
-			{
-				inventory.setVisible(!inventory.isVisible());
-			}
-			else if(key == '=')
-			{
-				zoom(1);
-			}
-			else if(key == 'p')
-			{
-				paused = !paused;
-			}
-			else if(key == 'm')
-			{
-				musicPlayer.toggleSound();
-			}
-			else if(key == 'o')
-			{
-				zoom(0);
-			}
-			else if(key == '-')
-			{
-				zoom(-1);
-			}
-			else if(key == 'f')
-			{
-				viewFPS = !viewFPS;
-			}
-			else if(key == 'q')
-			{
-				InventoryItem inventoryItem = inventory.selectedItem();
-				if(!inventoryItem.isEmpty())
-				{
-					Item newItem = inventoryItem.getItem();
-					if (!(newItem instanceof Tool))
-						newItem = (Item) newItem.clone();
-					inventoryItem.remove(1);
-					if(player.facingRight)
-						newItem.x = player.x + 1 + random.nextFloat();
-					else
-						newItem.x = player.x - 1 - random.nextFloat();;
-					newItem.y = player.y;
-					newItem.dy = -.1f;
-					entities.add(newItem);					
-				}
-			}
-			else if (key == 27) {
-				zoom(0);
-				SaveLoad.doSave(getGame());
-				musicPlayer.close();
-				System.exit(0);
+			switch (e.getKeyCode()) {
+				case KeyEvent.VK_1: setInventorySelect(1); break;
+				case KeyEvent.VK_2: setInventorySelect(2); break;
+				case KeyEvent.VK_3: setInventorySelect(3); break;
+				case KeyEvent.VK_4: setInventorySelect(4); break;
+				case KeyEvent.VK_5: setInventorySelect(5); break;
+				case KeyEvent.VK_6: setInventorySelect(6); break;
+				case KeyEvent.VK_7: setInventorySelect(7); break;
+				case KeyEvent.VK_8: setInventorySelect(8); break;
+				case KeyEvent.VK_9: setInventorySelect(9); break;
+				case KeyEvent.VK_0: setInventorySelect(9); break;
+				case KeyEvent.VK_I: inventory.setVisible(!inventory.isVisible()); break;
+				case KeyEvent.VK_EQUALS: zoom(1); break;
+				case KeyEvent.VK_P: paused = !paused; break;
+				case KeyEvent.VK_M: musicPlayer.toggleSound(); break;
+				case KeyEvent.VK_O: zoom(0); break;
+				case KeyEvent.VK_MINUS: zoom(-1); break;
+				case KeyEvent.VK_F: viewFPS = !viewFPS; break;
+				case KeyEvent.VK_Q:
+					InventoryItem inventoryItem = inventory.selectedItem();
+					if(!inventoryItem.isEmpty())
+					{
+						Item newItem = inventoryItem.getItem();
+						if (!(newItem instanceof Tool))
+							newItem = (Item) newItem.clone();
+						inventoryItem.remove(1);
+						if(player.facingRight)
+							newItem.x = player.x + 1 + random.nextFloat();
+						else
+							newItem.x = player.x - 1 - random.nextFloat();;
+						newItem.y = player.y;
+						newItem.dy = -.1f;
+						entities.add(newItem);					
+					}
+					break;
+				case KeyEvent.VK_ESCAPE:
+					zoom(0);
+					SaveLoad.doSave(getGame());
+					musicPlayer.close();
+					System.exit(0);
 			}
 		}
 	}
