@@ -45,8 +45,7 @@ public class Game extends Canvas
 	
 	
 	private int breakingTicks;
-	private int breakingX;
-	private int breakingY;
+	private Int2 breakingPos;
 	
 	
 	/* menu sprites */
@@ -335,18 +334,17 @@ public class Game extends Canvas
 
 			if(leftClick && player.handBreakPos.x != -1)
 			{
-				if(player.handBreakPos.x == breakingX && player.handBreakPos.y == breakingY)
+				if (player.handBreakPos.equals(breakingPos))
 					breakingTicks++;
 				else
 					breakingTicks = 0;
-				breakingX = player.handBreakPos.x;
-				breakingY = player.handBreakPos.y;
+				breakingPos = player.handBreakPos;
 				
 				InventoryItem inventoryItem = inventory.selectedItem();
 				Item item = inventoryItem.getItem();
-				int ticksNeeded = world.breakTicks(breakingX, breakingY, item);
+				int ticksNeeded = world.breakTicks(breakingPos.x, breakingPos.y, item);
 				
-				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, breakingX, breakingY);
+				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, breakingPos.x, breakingPos.y);
 				int sprite_index = (int) Math.min(1, (double)breakingTicks/ticksNeeded)*(breakingSprites.length-1);
 				breakingSprites[sprite_index].draw(g,pos.x, pos.y,tileSize,tileSize);
 				if(breakingTicks >= ticksNeeded)
