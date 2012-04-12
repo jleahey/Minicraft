@@ -42,6 +42,7 @@ public class SaveLoad {
     }
 
 
+    @SuppressWarnings("unchecked")
     public static boolean doLoad(Game game) {
         File f = new File("MiniCraft.sav");
 
