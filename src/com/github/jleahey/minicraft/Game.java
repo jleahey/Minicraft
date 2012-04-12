@@ -12,39 +12,11 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.AWTException;
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.PointerInfo;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.BufferStrategy;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -73,27 +45,26 @@ public class Game extends Canvas
 	
 	
 	private int breakingTicks;
-	private int breakingX;
-	private int breakingY;
+	private Int2 breakingPos;
 	
 	
 	/* menu sprites */
-	private Sprite menu_bgTile = SpriteStore.get().getSprite("sprites/tiles/dirt.png");
-	private Sprite menu_logo = SpriteStore.get().getSprite("sprites/menus/title.png");
-	private Sprite menu_newUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
-	private Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
-	private Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
-	private Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
-	private Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
-	private Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
-	private Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
-	private Sprite menu_miniDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
-	private Sprite menu_mediumDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
-	private Sprite menu_bigDown = SpriteStore.get().getSprite("sprites/menus/big_down.png");
-	private Sprite menu_tag = SpriteStore.get().getSprite("sprites/menus/tag.png");
-	private int menu_miniWidth = 256;
-	private int menu_mediumWidth = 512;
-	private int menu_bigWidth = 1024;
+	private final Sprite menu_bgTile = SpriteStore.get().getSprite("sprites/tiles/dirt.png");
+	private final Sprite menu_logo = SpriteStore.get().getSprite("sprites/menus/title.png");
+	private final Sprite menu_newUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
+	private final Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
+	private final Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
+	private final Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
+	private final Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
+	private final Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
+	private final Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
+	private final Sprite menu_miniDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
+	private final Sprite menu_mediumDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
+	private final Sprite menu_bigDown = SpriteStore.get().getSprite("sprites/menus/big_down.png");
+	private final Sprite menu_tag = SpriteStore.get().getSprite("sprites/menus/tag.png");
+	private final int menu_miniWidth = 256;
+	private final int menu_mediumWidth = 512;
+	private final int menu_bigWidth = 1024;
 	
 	private Sprite builderIcon;
 	private Sprite minerIcon;
@@ -108,7 +79,7 @@ public class Game extends Canvas
 	private Player player;
 	public World world;
 	
-	MusicPlayer musicPlayer = new MusicPlayer("sounds/music.ogg");;
+	MusicPlayer musicPlayer = new MusicPlayer("sounds/music.ogg");
 	int screenMouseX;
 	int screenMouseY;
 
@@ -122,7 +93,6 @@ public class Game extends Canvas
 
 		// create a frame to contain our game
 		container = new JFrame("Minicraft");
-
 		
 		try
 		{
@@ -141,8 +111,7 @@ public class Game extends Canvas
 		panel.setPreferredSize(new Dimension(screenWidth, screenHeight));
 		panel.setLayout(null);
 		panel.addComponentListener(new ComponentAdapter(){
-			public void componentResized(ComponentEvent e)
-			{
+			public void componentResized(ComponentEvent e) {
 				Dimension d = e.getComponent().getSize();
 				setBounds(0,0, d.width, d.height);
 				screenWidth = d.width;
@@ -172,7 +141,6 @@ public class Game extends Canvas
 				musicPlayer.close();
 				System.exit(0);
 			}
-			
 		});
 		
 		// add a key input system (defined below) to our canvas
@@ -189,7 +157,6 @@ public class Game extends Canvas
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 
-
 		System.gc();
 	}
 	
@@ -199,96 +166,71 @@ public class Game extends Canvas
 	 */
 	private void startGame(boolean load, int width)
 	{
-		System.out.println("Created world width: " + width);
+		System.out.println("Creating world width: " + width);
 		panel.setCursor(myCursor); 
 		worldWidth = width;
 		
-		 entities.clear();
-		 if(load)
-		 {
-			 SaveLoad.doLoad(this);
-			 for(Entity entity : entities)
-				 if(entity.getClass() == Player.class)
-				 {
-				 	player = (Player) entity;
-				 	player.widthPX = 7*(tileSize/8);
-				 	player.heightPX = 14*(tileSize/8);
-				 }
-		 }
-		 if(player == null)
-		 {
-			 world = new World(worldWidth,worldHeight, random);
-			 player = new Player(true,world.spawnLocation.x,world.spawnLocation.y,7*(tileSize/8),14*(tileSize/8));
-			 entities.add(player);
-		 }
+		entities.clear();
+		if(load && SaveLoad.doLoad(this)) {
+			for(Entity entity : entities) {
+				if(entity instanceof Player) {
+					player = (Player) entity;
+					player.widthPX = 7*(tileSize/8);
+					player.heightPX = 14*(tileSize/8);
+				}
+			}
+		}
+		if(player == null)  // didn't load a saved game
+		{
+			world = new World(worldWidth,worldHeight, random);
+			player = new Player(true,world.spawnLocation.x,world.spawnLocation.y,7*(tileSize/8),14*(tileSize/8));
+			entities.add(player);
+		}
+
+		builderIcon = SpriteStore.get().getSprite("sprites/other/builder.png");
+		minerIcon = SpriteStore.get().getSprite("sprites/other/miner.png");
+		 
+		itemTypes.put((char)('k'+'w'), new Tool("sprites/tools/wPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'w'), new char[][]{{'p','p','p'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Wood));
+		itemTypes.put((char)('k'+'s'), new Tool("sprites/tools/sPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'s'), new char[][]{{'b','b','b'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Stone));
+		itemTypes.put((char)('k'+'i'), new Tool("sprites/tools/mPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'i'), new char[][]{{'i','i','i'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Metal));
+		itemTypes.put((char)('k'+'m'), new Tool("sprites/tools/dPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'m'), new char[][]{{'m','m','m'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Diamond));
 		 
 
-
-		 builderIcon = SpriteStore.get().getSprite("sprites/other/builder.png");
-		 minerIcon = SpriteStore.get().getSprite("sprites/other/miner.png");
+		itemTypes.put((char)('x'+'w'), new Tool("sprites/tools/wAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'w'), new char[][]{{'p','p',0},{ 'p', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Wood));
+		itemTypes.put((char)('x'+'s'), new Tool("sprites/tools/sAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'s'), new char[][]{{'b','b',0},{ 'b', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Stone));
+		itemTypes.put((char)('x'+'i'), new Tool("sprites/tools/mAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'i'), new char[][]{{'i','i',0},{ 'i', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Metal));
+		itemTypes.put((char)('x'+'m'), new Tool("sprites/tools/dAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'m'), new char[][]{{'m','m',0},{ 'm', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Diamond));
+		
+		itemTypes.put((char)('s'+'w'), new Tool("sprites/tools/wShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'w'), new char[][]{{0,'p',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Wood));
+		itemTypes.put((char)('s'+'s'), new Tool("sprites/tools/sShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'s'), new char[][]{{0,'b',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Stone));
+		itemTypes.put((char)('s'+'i'), new Tool("sprites/tools/mShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'i'), new char[][]{{0,'i',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Metal));
+		itemTypes.put((char)('s'+'m'), new Tool("sprites/tools/dShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'m'), new char[][]{{0,'m',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Diamond));
+		
 		 
-		 itemTypes.put((char)('k'+'w'), new Tool("sprites/tools/wPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'w'), new char[][]{{'p','p','p'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Wood));
-		 itemTypes.put((char)('k'+'s'), new Tool("sprites/tools/sPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'s'), new char[][]{{'b','b','b'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Stone));
-		 itemTypes.put((char)('k'+'i'), new Tool("sprites/tools/mPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'i'), new char[][]{{'i','i','i'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Metal));
-		 itemTypes.put((char)('k'+'m'), new Tool("sprites/tools/dPic.png", true, 0, 0, tileSize/2, tileSize/2, (char)('k'+'m'), new char[][]{{'m','m','m'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Diamond));
+		itemTypes.put('L', new Item("sprites/tiles/ladder.png", true, 0, 0, tileSize/2, tileSize/2, 'L', new char[][]{{'k', 0,'k'},{ 'k', 'k', 'k'},{ 'k', 0, 'k'}}, 8));
+		itemTypes.put('d', new Item("sprites/tiles/dirt.png", true, 0, 0, tileSize/2, tileSize/2, 'd', null, 0));
+		itemTypes.put('p', new Item("sprites/tiles/plank.png", true, 0, 0, tileSize/2, tileSize/2, 'p', new char[][]{{'w'}}, 4));
+		itemTypes.put('s', new Item("sprites/tiles/stone.png", true, 0, 0, tileSize/2, tileSize/2, 's', null, 0));
+		itemTypes.put('n', new Item("sprites/tiles/sand.png", true, 0, 0, tileSize/2, tileSize/2, 'n', null, 0));
+		itemTypes.put('i', new Item("sprites/entities/iron.png", true, 0, 0, tileSize/2, tileSize/2, 'i', null, 0));
+		itemTypes.put('c', new Item("sprites/entities/coal.png", true, 0, 0, tileSize/2, tileSize/2, 'c', null, 0));
+		itemTypes.put('m', new Item("sprites/entities/diamond.png", true, 0, 0, tileSize/2, tileSize/2, 'm', null, 0));
+		itemTypes.put('b', new Item("sprites/tiles/cobble.png", true, 0, 0, tileSize/2, tileSize/2, 'b', null, 0));
+		itemTypes.put('w', new Item("sprites/tiles/wood.png", true, 0, 0, tileSize/2, tileSize/2, 'w', null, 0 ));
+		itemTypes.put('f', new Item("sprites/tiles/craft.png", true, 0, 0, tileSize/2, tileSize/2, 'f', new char[][]{{'p','p'},{'p','p'}}, 1));
+		itemTypes.put('k', new Item("sprites/entities/stick.png", true, 0, 0, tileSize/2, tileSize/2, 'k', new char[][]{{'p'},{'p'}}, 4));
+		itemTypes.put('S', new Item("sprites/tiles/sappling.png", true, 0, 0, tileSize/2, tileSize/2, 'S', null, 0 ));
 		 
-
-		 itemTypes.put((char)('x'+'w'), new Tool("sprites/tools/wAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'w'), new char[][]{{'p','p',0},{ 'p', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Wood));
-		 itemTypes.put((char)('x'+'s'), new Tool("sprites/tools/sAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'s'), new char[][]{{'b','b',0},{ 'b', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Stone));
-		 itemTypes.put((char)('x'+'i'), new Tool("sprites/tools/mAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'i'), new char[][]{{'i','i',0},{ 'i', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Metal));
-		 itemTypes.put((char)('x'+'m'), new Tool("sprites/tools/dAxe.png", true, 0, 0, tileSize/2, tileSize/2, (char)('x'+'m'), new char[][]{{'m','m',0},{ 'm', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Diamond));
+		if(inventory == null)
+			inventory = new Inventory(10,4,3,itemTypes);
 		 
-		 itemTypes.put((char)('s'+'w'), new Tool("sprites/tools/wShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'w'), new char[][]{{0,'p',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Wood));
-		 itemTypes.put((char)('s'+'s'), new Tool("sprites/tools/sShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'s'), new char[][]{{0,'b',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Stone));
-		 itemTypes.put((char)('s'+'i'), new Tool("sprites/tools/mShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'i'), new char[][]{{0,'i',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Metal));
-		 itemTypes.put((char)('s'+'m'), new Tool("sprites/tools/dShovel.png", true, 0, 0, tileSize/2, tileSize/2, (char)('s'+'m'), new char[][]{{0,'m',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Diamond));
-		 
-		 
-		 
-
-		 itemTypes.put('L', new Item("sprites/tiles/ladder.png", true, 0, 0, tileSize/2, tileSize/2, 'L', new char[][]{{'k', 0,'k'},{ 'k', 'k', 'k'},{ 'k', 0, 'k'}}, 8));
-		 itemTypes.put('d', new Item("sprites/tiles/dirt.png", true, 0, 0, tileSize/2, tileSize/2, 'd', null, 0));
-		 itemTypes.put('p', new Item("sprites/tiles/plank.png", true, 0, 0, tileSize/2, tileSize/2, 'p', new char[][]{{'w'}}, 4));
-		 itemTypes.put('s', new Item("sprites/tiles/stone.png", true, 0, 0, tileSize/2, tileSize/2, 's', null, 0));
-		 itemTypes.put('n', new Item("sprites/tiles/sand.png", true, 0, 0, tileSize/2, tileSize/2, 'n', null, 0));
-		 itemTypes.put('i', new Item("sprites/entities/iron.png", true, 0, 0, tileSize/2, tileSize/2, 'i', null, 0));
-		 itemTypes.put('c', new Item("sprites/entities/coal.png", true, 0, 0, tileSize/2, tileSize/2, 'c', null, 0));
-		 itemTypes.put('m', new Item("sprites/entities/diamond.png", true, 0, 0, tileSize/2, tileSize/2, 'm', null, 0));
-		 itemTypes.put('b', new Item("sprites/tiles/cobble.png", true, 0, 0, tileSize/2, tileSize/2, 'b', null, 0));
-		 itemTypes.put('w', new Item("sprites/tiles/wood.png", true, 0, 0, tileSize/2, tileSize/2, 'w', null, 0 ));
-		 itemTypes.put('f', new Item("sprites/tiles/craft.png", true, 0, 0, tileSize/2, tileSize/2, 'f', new char[][]{{'p','p'},{'p','p'}}, 1));
-		 itemTypes.put('k', new Item("sprites/entities/stick.png", true, 0, 0, tileSize/2, tileSize/2, 'k', new char[][]{{'p'},{'p'}}, 4));
-		 itemTypes.put('S', new Item("sprites/tiles/sappling.png", true, 0, 0, tileSize/2, tileSize/2, 'S', null, 0 ));
-		 
-		 if(inventory == null)
-			 inventory = new Inventory(10,4,3,itemTypes);
-		 
-		 /*
-		 inventory.addItem(itemTypes.get((char)('k'+'w')), 1);
-		 inventory.addItem(itemTypes.get((char)('s'+'w')), 1);
-		 inventory.addItem(itemTypes.get((char)('x'+'w')), 1);
-
-		 inventory.addItem(itemTypes.get((char)('k'+'s')), 1);
-		 inventory.addItem(itemTypes.get((char)('s'+'s')), 1);
-		 inventory.addItem(itemTypes.get((char)('x'+'s')), 1);
-		 
-		 inventory.addItem(itemTypes.get((char)('k'+'i')), 1);
-		 inventory.addItem(itemTypes.get((char)('s'+'i')), 1);
-		 inventory.addItem(itemTypes.get((char)('x'+'i')), 1);
-		 
-		 inventory.addItem(itemTypes.get((char)('k'+'m')), 1);
-		 inventory.addItem(itemTypes.get((char)('s'+'m')), 1);
-		 inventory.addItem(itemTypes.get((char)('x'+'m')), 1);
-		 */
-
 		 musicPlayer.play();
 		 
 		 breakingSprites = new Sprite[8];
 		 for(int i = 0; i < 8; i++)
-			 breakingSprites[i] = SpriteStore.get().getSprite("sprites/tiles/break"+i+".png");
+			breakingSprites[i] = SpriteStore.get().getSprite("sprites/tiles/break"+i+".png");
 		 
 		System.gc();
-
 	}
 
 	public void drawStartMenu(Graphics2D g)
@@ -299,21 +241,22 @@ public class Game extends Canvas
 		drawCenteredX(g, menu_loadUp, 300, 160, 64);
 		float pixels = (Math.abs((float)((ticksRunning%100)-50)/ 50)+1);
 		menu_tag.draw(g, 450, 70, (int)(60*pixels), (int)(37*pixels));
-		if(leftClick && screenMouseY >= 300)
+		if (!leftClick) return;
+
+		if(screenMouseY >= 300)
 		{
 			leftClick = false;
 			startMenu = false;
 			startGame(true, menu_mediumWidth);
 		}
-		else if(leftClick && screenMouseY < 300)
+		else if(screenMouseY < 300)
 		{
 			leftClick = false;
 			startMenu = false;
 			newMenu = true;
 		}
-		
-
 	}
+
 	public void drawNewMenu(Graphics2D g)
 	{
 		drawTileBackground(g, menu_bgTile, 32);
@@ -323,29 +266,31 @@ public class Game extends Canvas
 		drawCenteredX(g, menu_bigUp, 350, 160, 64);
 		float pixels = (Math.abs((float)((ticksRunning%100)-50)/ 50)+1);
 		menu_tag.draw(g, 450, 70, (int)(60*pixels), (int)(37*pixels));
-		if(leftClick && screenMouseY >= 350)
+		if (!leftClick) return;
+
+		if(screenMouseY >= 350)
 		{
 			leftClick = false;
 			startMenu = false;
 			newMenu = false;
 			startGame(false, menu_bigWidth);
 		}
-		else if(leftClick && screenMouseY >= 250)
+		else if(screenMouseY >= 250)
 		{
 			leftClick = false;
 			startMenu = false;
 			newMenu = false;
 			startGame(false, menu_mediumWidth);
 		}
-		else if(leftClick && screenMouseY >= 150)
+		else if(screenMouseY >= 150)
 		{
 			leftClick = false;
 			startMenu = false;
 			newMenu = false;
 			startGame(false, menu_miniWidth);
 		}
-		
 	}
+		
 	public void drawCenteredX(Graphics2D g, Sprite s, int top, int width, int height)
 	{
 		s.draw(g, screenWidth/2 - width/2, top, width, height);
@@ -353,47 +298,31 @@ public class Game extends Canvas
 	
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
-		
+
 		// keep looping round till the game ends
 		while (gameRunning) {
 			ticksRunning++;
 			long delta = SystemTimer.getTime() - lastLoopTime;
 			lastLoopTime = SystemTimer.getTime();
-			
 
-			
 			// Get hold of a graphics context for the accelerated 
 			// surface and blank it out
 			Graphics2D g = (Graphics2D) strategy.getDrawGraphics();
 			g.setColor(Color.black);
 			g.fillRect(0, 0, screenWidth, screenHeight);
-
 			
-			
-			
-			if(startMenu)
+			if (startMenu || newMenu)
 			{
-				drawStartMenu(g);
+				if (startMenu) drawStartMenu(g);
+				else           drawNewMenu(g);
 				g.dispose();
 				strategy.show();
 				SystemTimer.sleep(lastLoopTime+16-SystemTimer.getTime());
 				continue;
 			}
-			else if(newMenu)
-			{
-				drawNewMenu(g);
-				g.dispose();
-				strategy.show();
-				SystemTimer.sleep(lastLoopTime+16-SystemTimer.getTime());
-				continue;
-			}
-			
-			
-			
 
 			float cameraX = player.x-screenWidth/tileSize/2;
 			float cameraY = player.y-screenHeight/tileSize/2;
-	
 			
 			world.chunkUpdate();
 			world.draw(g, 0, 0, screenWidth, screenHeight, cameraX, cameraY, tileSize);
@@ -404,29 +333,30 @@ public class Game extends Canvas
 				leftClick = false;
 				rightClick = false;
 			}
-			if(spaceBar)
-				player.jump(world, tileSize);
+
+			if(spaceBar) player.jump(world, tileSize);
+
 			if(leftClick && player.handBreakPos.x != -1)
 			{
-				if(player.handBreakPos.x == breakingX && player.handBreakPos.y == breakingY)
+				if (player.handBreakPos.equals(breakingPos))
 					breakingTicks++;
 				else
 					breakingTicks = 0;
-				breakingX = player.handBreakPos.x;
-				breakingY = player.handBreakPos.y;
+				breakingPos = player.handBreakPos;
 				
 				InventoryItem inventoryItem = inventory.selectedItem();
 				Item item = inventoryItem.getItem();
-				int ticksNeeded = world.breakTicks(breakingX, breakingY, item);
+				int ticksNeeded = world.breakTicks(breakingPos.x, breakingPos.y, item);
 				
-				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, breakingX, breakingY);
-				breakingSprites[(int) (Math.min(1, (double)breakingTicks/ticksNeeded)*(breakingSprites.length-1))].draw(g,pos.x, pos.y,tileSize,tileSize);
+				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, breakingPos.x, breakingPos.y);
+				int sprite_index = (int) Math.min(1, (double)breakingTicks/ticksNeeded)*(breakingSprites.length-1);
+				breakingSprites[sprite_index].draw(g,pos.x, pos.y,tileSize,tileSize);
 				if(breakingTicks >= ticksNeeded)
 				{
 					if(item != null && item.getClass() == Tool.class)
 					{
 						Tool tool = (Tool)item;
-						tool.uses ++;
+						tool.uses++;
 						if(tool.uses >= tool.totalUses)
 						{
 							inventoryItem.setEmpty();
@@ -442,7 +372,7 @@ public class Game extends Canvas
 					if(name == 'l' && random.nextDouble() < .1)
 						name = 'S';
 					Item newItem = itemTypes.get(name);
-					if(newItem != null)//couldn't find that item
+					if(newItem != null)  //couldn't find that item
 					{
 						newItem = (Item) newItem.clone();
 						newItem.x = player.handBreakPos.x + random.nextFloat()*(1-(float)newItem.widthPX/tileSize);
@@ -454,6 +384,7 @@ public class Game extends Canvas
 			}
 			else
 				breakingTicks = 0;
+
 			if(rightClick)
 			{
 				if(world.isCraft(player.handBreakPos.x,player.handBreakPos.y))
@@ -482,24 +413,17 @@ public class Game extends Canvas
 				}
 			}
 			
-
-			
 			float worldMouseX = (float) ((cameraX*tileSize + screenMouseX)/tileSize);
 			float worldMouseY = (float) ((cameraY*tileSize + screenMouseY)/tileSize)-.5f;
-			
-			
-			
-			
 			player.updateHand(cameraX, cameraY, g, worldMouseX, worldMouseY, world, tileSize);
 
 			java.util.Iterator<Entity> it = entities.iterator();
-			
 			while(it.hasNext())
 			{
 				Entity entity = it.next();
 				if(entity != player && player.collidesWith(entity, tileSize))
 				{
-					if(entity.getClass() == Item.class || entity.getClass() == Tool.class)
+					if(entity instanceof Item || entity instanceof Tool)
 						addToInventory(((Item)entity));
 					it.remove();
 					continue;
@@ -516,35 +440,27 @@ public class Game extends Canvas
 			}
 
 			//Draw the UI
-			
 			if(player.handBreakPos.x != -1)
 			{
-				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, player.handBuildPos.x, player.handBuildPos.y);//player.handBreakPos.x+.5f, player.handBreakPos.y+.5f);
+				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, player.handBuildPos.x, player.handBuildPos.y);
 				builderIcon.draw(g, pos.x, pos.y, tileSize, tileSize);
 				
-				pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, player.handBreakPos.x, player.handBreakPos.y);//player.handBreakPos.x+.5f, player.handBreakPos.y+.5f);
+				pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, player.handBreakPos.x, player.handBreakPos.y);
 				minerIcon.draw(g, pos.x, pos.y, tileSize, tileSize);
-				
 			}
 			
 			inventory.draw(g, screenWidth, screenHeight);
 			
 			Int2 mouseTest = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, worldMouseX, worldMouseY);
-
 			g.setColor(Color.white);
 			g.fillOval(mouseTest.x-4, mouseTest.y-4, 8, 8);
 			g.setColor(Color.black);
 			g.fillOval(mouseTest.x-3, mouseTest.y-3, 6, 6);
-			//g.setColor(Color.ORANGE);
 
-			//g.drawString(message, 220, 50);//screenWidth - (g.getFontMetrics().stringWidth(message))/2, 100);
-			
-			
 			// finally, we've completed drawing so clear up the graphics
 			// and flip the buffer over
 			g.dispose();
 			strategy.show();
-			
 
 			SystemTimer.sleep(lastLoopTime+16-SystemTimer.getTime());
 		}
@@ -627,73 +543,50 @@ public class Game extends Canvas
 
 	private class MouseWheelInputHander implements MouseWheelListener
 	{
-
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			int notches = e.getWheelRotation();
 			inventory.selectedInventory += notches;
 			if(inventory.selectedInventory < 0)//hack should be get/set
 				inventory.selectedInventory = 0;
-			if(inventory.selectedInventory > 9)
+			else if(inventory.selectedInventory > 9)
 				inventory.selectedInventory = 9;
 		}
-		
 	}
 	
 	private class MouseMoveInputHander implements MouseMotionListener
 	{
-
 		@Override
 		public void mouseDragged(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 			screenMouseX = arg0.getX();
 			screenMouseY = arg0.getY();
 		}
 
 		@Override
 		public void mouseMoved(MouseEvent arg0) {
-			// TODO Auto-generated method stub
 			screenMouseX = arg0.getX();
 			screenMouseY = arg0.getY();
 		}
 	}
 	
-	private class MouseInputHander implements MouseListener
+	private class MouseInputHander extends MouseAdapter
 	{
 		@Override
-		public void mouseEntered(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
-		public void mouseExited(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			
-		}
-
-		@Override
 		public void mousePressed(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			if(arg0.getButton() == MouseEvent.BUTTON1)
-				leftClick = true;
-			if (arg0.getButton() == MouseEvent.BUTTON2 || arg0.getButton() == MouseEvent.BUTTON3)
-				rightClick = true;
+			switch (arg0.getButton()) {
+			case MouseEvent.BUTTON1: leftClick = true; break;
+			case MouseEvent.BUTTON2: // fall through
+			case MouseEvent.BUTTON3: rightClick = true; break;
+			}
 		}
 
 		@Override
 		public void mouseReleased(MouseEvent arg0) {
-			// TODO Auto-generated method stub
-			if(arg0.getButton() == MouseEvent.BUTTON1)
-				leftClick = false;
-			if (arg0.getButton() == MouseEvent.BUTTON2|| arg0.getButton() == MouseEvent.BUTTON3)
-				rightClick = false;
-		}
-
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			// TODO Auto-generated method stub
-			
+			switch (arg0.getButton()) {
+			case MouseEvent.BUTTON1: leftClick = false; break;
+			case MouseEvent.BUTTON2: // fall through
+			case MouseEvent.BUTTON3: rightClick = false; break;
+			}
 		}
 	}
 	
@@ -707,17 +600,11 @@ public class Game extends Canvas
 		 * @param e The details of the key that was pressed 
 		 */
 		public void keyPressed(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_W) {
-				player.startClimb();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_A) {
-				player.startLeft(e.isShiftDown());
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_D) {
-				player.startRight(e.isShiftDown());
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				spaceBar = true;
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_W: player.startClimb(); break;
+			case KeyEvent.VK_A: player.startLeft(e.isShiftDown()); break;
+			case KeyEvent.VK_D: player.startRight(e.isShiftDown()); break;
+			case KeyEvent.VK_SPACE: spaceBar = true; break;
 			}
 		} 
 		
@@ -727,83 +614,55 @@ public class Game extends Canvas
 		 * @param e The details of the key that was released 
 		 */
 		public void keyReleased(KeyEvent e) {
-			if (e.getKeyCode() == KeyEvent.VK_W) {
-				player.endClimb();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_A) {
-				player.stopLeft();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_D) {
-				player.stopRight();
-			}
-			else if (e.getKeyCode() == KeyEvent.VK_SPACE) {
-				spaceBar = false;
+			switch (e.getKeyCode()) {
+			case KeyEvent.VK_W: player.endClimb(); break;
+			case KeyEvent.VK_A: player.stopLeft(); break;
+			case KeyEvent.VK_D: player.stopRight(); break;
+			case KeyEvent.VK_SPACE: spaceBar = false; break;
 			}
 		}
 
-
 		public void keyTyped(KeyEvent e) {
-			
-			char key = e.getKeyChar();
-			if(key >= '1' && key <= '9')
-			{
-				setInventorySelect(key-(int)'1');
-			}
-			else if (key == '0')
-			{
-				setInventorySelect(9);
-			}
-			else if (key == 'i')
-			{
-				inventory.setVisible(!inventory.isVisible());
-			}
-			else if(key == '=')
-			{
-				zoom(1);
-			}
-			else if(key == 'p')
-			{
-				paused = !paused;
-			}
-			else if(key == 'm')
-			{
-				musicPlayer.toggleSound();
-			}
-			else if(key == 'o')
-			{
-				zoom(0);
-			}
-			else if(key == '-')
-			{
-				zoom(-1);
-			}
-			else if(key == 'f')
-			{
-				viewFPS = !viewFPS;
-			}
-			else if(key == 'q')
-			{
-				InventoryItem inventoryItem = inventory.selectedItem();
-				if(!inventoryItem.isEmpty())
-				{
-					Item newItem = inventoryItem.getItem();
-					if(newItem.getClass() != Tool.class)
-						newItem = (Item) newItem.clone();
-					inventoryItem.remove(1);
-					if(player.facingRight)
-						newItem.x = player.x + 1 + random.nextFloat();
-					else
-						newItem.x = player.x - 1 - random.nextFloat();;
-					newItem.y = player.y;
-					newItem.dy = -.1f;
-					entities.add(newItem);					
-				}
-			}
-			else if (key == 27) {
-				zoom(0);
-				SaveLoad.doSave(getGame());
-				musicPlayer.close();
-				System.exit(0);
+			switch (e.getKeyCode()) {
+				case KeyEvent.VK_1: setInventorySelect(1); break;
+				case KeyEvent.VK_2: setInventorySelect(2); break;
+				case KeyEvent.VK_3: setInventorySelect(3); break;
+				case KeyEvent.VK_4: setInventorySelect(4); break;
+				case KeyEvent.VK_5: setInventorySelect(5); break;
+				case KeyEvent.VK_6: setInventorySelect(6); break;
+				case KeyEvent.VK_7: setInventorySelect(7); break;
+				case KeyEvent.VK_8: setInventorySelect(8); break;
+				case KeyEvent.VK_9: setInventorySelect(9); break;
+				case KeyEvent.VK_0: setInventorySelect(9); break;
+				case KeyEvent.VK_I: inventory.setVisible(!inventory.isVisible()); break;
+				case KeyEvent.VK_EQUALS: zoom(1); break;
+				case KeyEvent.VK_P: paused = !paused; break;
+				case KeyEvent.VK_M: musicPlayer.toggleSound(); break;
+				case KeyEvent.VK_O: zoom(0); break;
+				case KeyEvent.VK_MINUS: zoom(-1); break;
+				case KeyEvent.VK_F: viewFPS = !viewFPS; break;
+				case KeyEvent.VK_Q:
+					InventoryItem inventoryItem = inventory.selectedItem();
+					if(!inventoryItem.isEmpty())
+					{
+						Item newItem = inventoryItem.getItem();
+						if (!(newItem instanceof Tool))
+							newItem = (Item) newItem.clone();
+						inventoryItem.remove(1);
+						if(player.facingRight)
+							newItem.x = player.x + 1 + random.nextFloat();
+						else
+							newItem.x = player.x - 1 - random.nextFloat();;
+						newItem.y = player.y;
+						newItem.dy = -.1f;
+						entities.add(newItem);					
+					}
+					break;
+				case KeyEvent.VK_ESCAPE:
+					zoom(0);
+					SaveLoad.doSave(getGame());
+					musicPlayer.close();
+					System.exit(0);
 			}
 		}
 	}
@@ -816,7 +675,7 @@ public class Game extends Canvas
 	 * @param argv The arguments that are passed into our game
 	 */
 	public static void main(String argv[]) {
-		Game g =new Game();
+		Game g = new Game();
 
 		// Start the main game loop, note: this method will not
 		// return until the game has finished running. Hence we are

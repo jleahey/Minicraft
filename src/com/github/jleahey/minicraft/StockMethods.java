@@ -20,14 +20,7 @@ public final class StockMethods
 	{
 		StockMethods.pos.x = (int) ((positionX - cameraX) * tileSize);
 		StockMethods.pos.y = (int) ((positionY - cameraY) * tileSize);
-		onScreen = true;
-		if(pos.x + tileSize < 0 || pos.x > width * tileSize || pos.y + tileSize < 0 || pos.y > height * tileSize)
-			onScreen = false;
-			
-		
+		onScreen = !(pos.x + tileSize < 0 || pos.x > width * tileSize || pos.y + tileSize < 0 || pos.y > height * tileSize);
 		return StockMethods.pos;
 	}
-	
-
-	
 }

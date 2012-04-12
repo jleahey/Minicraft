@@ -12,16 +12,12 @@
 
 package com.github.jleahey.minicraft;
 
-
 public class Tile implements java.io.Serializable
 {
 	public TileType type;
 	
-	
-	
 	public Tile(TileType type)
 	{
 		this.type = type;
-	}
-	
+	}	
 }

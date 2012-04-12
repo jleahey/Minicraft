@@ -20,8 +20,15 @@ public class Tool extends Item
 	int uses;
 	public ToolType toolType;
 	public ToolPower toolPower;
-	
-	private Tool(){super();}
+
+	Tool(float x, float y, float dx, float dy, Sprite sprite, boolean g, int width, int height, char name, 
+		 Template t, int totalUses, ToolType toolType, ToolPower toolPower){
+		super(x,y,dx,dy,sprite,g,width,height,name,t);
+		this.totalUses = totalUses;
+		this.uses = 0;
+		this.toolType = toolType;
+		this.toolPower = toolPower;
+	}
 	
 	public Tool(String ref, boolean gravityApplies, float x, float y,
 			int width, int height, char name, char[][] template,
@@ -41,21 +48,6 @@ public class Tool extends Item
 	
 	public Object clone()
 	{
-		Tool result = new Tool();
-		result.x = x;
-		result.y = y;
-		result.dx = dx;
-		result.dy = dy;
-		result.sprite = sprite;
-		result.name = name;
-		result.gravityApplies = gravityApplies;
-		result.heightPX = heightPX;
-		result.widthPX = widthPX;
-		result.totalUses = totalUses;
-		result.uses = 0; //Reset the counter
-		result.toolType = toolType;
-		result.toolPower = toolPower;
-		
-		return result;
+		return new Tool(x,y,dx,dy,sprite,gravityApplies,widthPX,heightPX,name,template,totalUses,toolType,toolPower);
 	}
 }
