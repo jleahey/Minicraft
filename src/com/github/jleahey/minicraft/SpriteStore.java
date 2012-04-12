@@ -93,6 +93,6 @@ public class SpriteStore {
 		// we're pretty dramatic here, if a resource isn't available
 		// we dump the message and exit the game
 		System.err.println(message);
-		System.exit(0);
+		System.exit(1);
 	}
 }
