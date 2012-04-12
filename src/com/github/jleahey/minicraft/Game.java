@@ -49,22 +49,22 @@ public class Game extends Canvas
 	
 	
 	/* menu sprites */
-	private Sprite menu_bgTile = SpriteStore.get().getSprite("sprites/tiles/dirt.png");
-	private Sprite menu_logo = SpriteStore.get().getSprite("sprites/menus/title.png");
-	private Sprite menu_newUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
-	private Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
-	private Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
-	private Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
-	private Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
-	private Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
-	private Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
-	private Sprite menu_miniDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
-	private Sprite menu_mediumDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
-	private Sprite menu_bigDown = SpriteStore.get().getSprite("sprites/menus/big_down.png");
-	private Sprite menu_tag = SpriteStore.get().getSprite("sprites/menus/tag.png");
-	private int menu_miniWidth = 256;
-	private int menu_mediumWidth = 512;
-	private int menu_bigWidth = 1024;
+	private final Sprite menu_bgTile = SpriteStore.get().getSprite("sprites/tiles/dirt.png");
+	private final Sprite menu_logo = SpriteStore.get().getSprite("sprites/menus/title.png");
+	private final Sprite menu_newUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
+	private final Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
+	private final Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
+	private final Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
+	private final Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
+	private final Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
+	private final Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
+	private final Sprite menu_miniDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
+	private final Sprite menu_mediumDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
+	private final Sprite menu_bigDown = SpriteStore.get().getSprite("sprites/menus/big_down.png");
+	private final Sprite menu_tag = SpriteStore.get().getSprite("sprites/menus/tag.png");
+	private final int menu_miniWidth = 256;
+	private final int menu_mediumWidth = 512;
+	private final int menu_bigWidth = 1024;
 	
 	private Sprite builderIcon;
 	private Sprite minerIcon;
@@ -241,13 +241,15 @@ public class Game extends Canvas
 		drawCenteredX(g, menu_loadUp, 300, 160, 64);
 		float pixels = (Math.abs((float)((ticksRunning%100)-50)/ 50)+1);
 		menu_tag.draw(g, 450, 70, (int)(60*pixels), (int)(37*pixels));
-		if(leftClick && screenMouseY >= 300)
+		if (!leftClick) return;
+
+		if(screenMouseY >= 300)
 		{
 			leftClick = false;
 			startMenu = false;
 			startGame(true, menu_mediumWidth);
 		}
-		else if(leftClick && screenMouseY < 300)
+		else if(screenMouseY < 300)
 		{
 			leftClick = false;
 			startMenu = false;
@@ -264,21 +266,23 @@ public class Game extends Canvas
 		drawCenteredX(g, menu_bigUp, 350, 160, 64);
 		float pixels = (Math.abs((float)((ticksRunning%100)-50)/ 50)+1);
 		menu_tag.draw(g, 450, 70, (int)(60*pixels), (int)(37*pixels));
-		if(leftClick && screenMouseY >= 350)
+		if (!leftClick) return;
+
+		if(screenMouseY >= 350)
 		{
 			leftClick = false;
 			startMenu = false;
 			newMenu = false;
 			startGame(false, menu_bigWidth);
 		}
-		else if(leftClick && screenMouseY >= 250)
+		else if(screenMouseY >= 250)
 		{
 			leftClick = false;
 			startMenu = false;
 			newMenu = false;
 			startGame(false, menu_mediumWidth);
 		}
-		else if(leftClick && screenMouseY >= 150)
+		else if(screenMouseY >= 150)
 		{
 			leftClick = false;
 			startMenu = false;
