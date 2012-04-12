@@ -14,7 +14,7 @@ package com.github.jleahey.minicraft;
 import java.awt.Graphics;
 
 
-public class Entity implements java.io.Serializable
+public abstract class Entity implements java.io.Serializable
 {
 	private static final long serialVersionUID = 7655418873368275522L;
 	protected static final float gravityAcceleration = .03f;
@@ -31,7 +31,7 @@ public class Entity implements java.io.Serializable
 	public float dx;
 	public float dy;
 	
-	protected Entity(float x, float y, float dx, float dy, Sprite sprite, boolean gravityApplies, int width, int height)
+	Entity(float x, float y, float dx, float dy, Sprite sprite, boolean gravityApplies, int width, int height)
 	{
 		this.x = x;
 		this.y = y;
@@ -367,10 +367,5 @@ public class Entity implements java.io.Serializable
 		Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight, tileSize, x, y);
 		if(StockMethods.onScreen)
 			sprite.draw(g, pos.x, pos.y, widthPX, heightPX);
-	}
-	
-	public Object clone()
-	{
-		return new Entity(x,y,dx,dy,sprite,gravityApplies,widthPX,heightPX);
 	}
 }
