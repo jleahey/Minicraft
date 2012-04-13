@@ -594,6 +594,7 @@ public class Game extends Canvas
 	}
 	
 	private class KeyInputHandler extends KeyAdapter {
+		static final char ESCAPE = (char) 27;
 		
 		/**
 		 * Notification from AWT that a key has been pressed. Note that
@@ -626,25 +627,25 @@ public class Game extends Canvas
 		}
 
 		public void keyTyped(KeyEvent e) {
-			switch (e.getKeyCode()) {
-				case KeyEvent.VK_1: setInventorySelect(1); break;
-				case KeyEvent.VK_2: setInventorySelect(2); break;
-				case KeyEvent.VK_3: setInventorySelect(3); break;
-				case KeyEvent.VK_4: setInventorySelect(4); break;
-				case KeyEvent.VK_5: setInventorySelect(5); break;
-				case KeyEvent.VK_6: setInventorySelect(6); break;
-				case KeyEvent.VK_7: setInventorySelect(7); break;
-				case KeyEvent.VK_8: setInventorySelect(8); break;
-				case KeyEvent.VK_9: setInventorySelect(9); break;
-				case KeyEvent.VK_0: setInventorySelect(9); break;
-				case KeyEvent.VK_I: inventory.setVisible(!inventory.isVisible()); break;
-				case KeyEvent.VK_EQUALS: zoom(1); break;
-				case KeyEvent.VK_P: paused = !paused; break;
-				case KeyEvent.VK_M: musicPlayer.toggleSound(); break;
-				case KeyEvent.VK_O: zoom(0); break;
-				case KeyEvent.VK_MINUS: zoom(-1); break;
-				case KeyEvent.VK_F: viewFPS = !viewFPS; break;
-				case KeyEvent.VK_Q:
+			switch (e.getKeyChar()) {
+				case '1':
+				case '2': // these all fall through to 9
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9': setInventorySelect((int)(e.getKeyChar()-'1')); break;
+				case '0': setInventorySelect(9); break;
+				case 'i': inventory.setVisible(!inventory.isVisible()); break;
+				case '=': zoom(1); break;
+				case 'p': paused = !paused; break;
+				case 'm': musicPlayer.toggleSound(); break;
+				case 'o': zoom(0); break;
+				case '-': zoom(-1); break;
+				case 'f': viewFPS = !viewFPS; break;
+				case 'q':
 					InventoryItem inventoryItem = inventory.selectedItem();
 					if(!inventoryItem.isEmpty())
 					{
@@ -661,7 +662,7 @@ public class Game extends Canvas
 						entities.add(newItem);					
 					}
 					break;
-				case KeyEvent.VK_ESCAPE:
+				case ESCAPE:
 					zoom(0);
 					SaveLoad.doSave(getGame());
 					musicPlayer.close();
