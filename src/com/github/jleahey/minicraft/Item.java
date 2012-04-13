@@ -17,21 +17,20 @@ public class Item extends Entity {
 	public char name;
 	public Template template;
 	
-	Item(float x, float y, float dx, float dy, Sprite sprite, boolean g, int width, int height, char name, Template t){
-		super(x,y,dx,dy,sprite,g,width,height);
-		this.name = name;
-		this.template = t;
+	Item(Item other){
+		super(other);
+		this.name = other.name;
+		this.template = other.template;
 	}
 
-	public Item(String ref, boolean gravityApplies, float x, float y,
-			int width, int height, char name, char[][] template, int templateCount) {
-		super(ref, gravityApplies, x, y, width, height);
+	public Item(String ref, int size, char name, char[][] template, int templateCount) {
+		super(ref, true, 0, 0, size, size);
 		this.template = new Template(template, templateCount);
 		this.name = name;
 	}
 
 	public Object clone() {
-		return new Item(x,y,dx,dy,sprite,gravityApplies,widthPX,heightPX,name,template);
+		return new Item(this);
 	}
 
 }
