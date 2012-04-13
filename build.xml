@@ -26,6 +26,7 @@
       	<exclude name="com/"/>
       	<include name="sounds/"/>
       	<include name="sprites/"/>
+      	<include name="items/"/>
       </fileset>
       <zipgroupfileset dir="lib" includes="*.jar"/>
       <manifest>

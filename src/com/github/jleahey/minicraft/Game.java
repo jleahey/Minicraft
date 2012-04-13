@@ -22,7 +22,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-
 public class Game extends Canvas
 {
 	private int screenWidth = 640;
@@ -36,7 +35,7 @@ public class Game extends Canvas
 	private boolean rightClick = false;
 	private boolean paused = true;
 	
-	private Map<Character, Item> itemTypes = new HashMap<Character, Item>();
+	private Map<Character, Item> itemTypes;
 	
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	
@@ -157,41 +156,8 @@ public class Game extends Canvas
 		createBufferStrategy(2);
 		strategy = getBufferStrategy();
 
-		loadItems();
+		itemTypes = ItemLoader.loadItems(tileSize/2);
 		System.gc();
-	}
-
-	private void loadItems(){
-		int size = tileSize/2;
-		itemTypes.put((char)('k'+'w'), new Tool("sprites/tools/wPic.png", size, (char)('k'+'w'), new char[][]{{'p','p','p'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Wood));
-		itemTypes.put((char)('k'+'s'), new Tool("sprites/tools/sPic.png", size, (char)('k'+'s'), new char[][]{{'b','b','b'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Stone));
-		itemTypes.put((char)('k'+'i'), new Tool("sprites/tools/mPic.png", size, (char)('k'+'i'), new char[][]{{'i','i','i'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Metal));
-		itemTypes.put((char)('k'+'m'), new Tool("sprites/tools/dPic.png", size, (char)('k'+'m'), new char[][]{{'m','m','m'},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Pick, Tool.ToolPower.Diamond));
-		 
-		itemTypes.put((char)('x'+'w'), new Tool("sprites/tools/wAxe.png", size, (char)('x'+'w'), new char[][]{{'p','p',0},{ 'p', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Wood));
-		itemTypes.put((char)('x'+'s'), new Tool("sprites/tools/sAxe.png", size, (char)('x'+'s'), new char[][]{{'b','b',0},{ 'b', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Stone));
-		itemTypes.put((char)('x'+'i'), new Tool("sprites/tools/mAxe.png", size, (char)('x'+'i'), new char[][]{{'i','i',0},{ 'i', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Metal));
-		itemTypes.put((char)('x'+'m'), new Tool("sprites/tools/dAxe.png", size, (char)('x'+'m'), new char[][]{{'m','m',0},{ 'm', 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Axe, Tool.ToolPower.Diamond));
-		
-		itemTypes.put((char)('s'+'w'), new Tool("sprites/tools/wShovel.png", size, (char)('s'+'w'), new char[][]{{0,'p',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Wood));
-		itemTypes.put((char)('s'+'s'), new Tool("sprites/tools/sShovel.png", size, (char)('s'+'s'), new char[][]{{0,'b',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Stone));
-		itemTypes.put((char)('s'+'i'), new Tool("sprites/tools/mShovel.png", size, (char)('s'+'i'), new char[][]{{0,'i',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Metal));
-		itemTypes.put((char)('s'+'m'), new Tool("sprites/tools/dShovel.png", size, (char)('s'+'m'), new char[][]{{0,'m',0},{ 0, 'k', 0},{ 0, 'k', 0}}, 1, Tool.ToolType.Shovel, Tool.ToolPower.Diamond));
-		
-		 
-		itemTypes.put('L', new Item("sprites/tiles/ladder.png", size, 'L', new char[][]{{'k', 0,'k'},{ 'k', 'k', 'k'},{ 'k', 0, 'k'}}, 8));
-		itemTypes.put('d', new Item("sprites/tiles/dirt.png", size, 'd', null, 0));
-		itemTypes.put('p', new Item("sprites/tiles/plank.png", size, 'p', new char[][]{{'w'}}, 4));
-		itemTypes.put('s', new Item("sprites/tiles/stone.png", size, 's', null, 0));
-		itemTypes.put('n', new Item("sprites/tiles/sand.png", size, 'n', null, 0));
-		itemTypes.put('i', new Item("sprites/entities/iron.png", size, 'i', null, 0));
-		itemTypes.put('c', new Item("sprites/entities/coal.png", size, 'c', null, 0));
-		itemTypes.put('m', new Item("sprites/entities/diamond.png", size, 'm', null, 0));
-		itemTypes.put('b', new Item("sprites/tiles/cobble.png", size, 'b', null, 0));
-		itemTypes.put('w', new Item("sprites/tiles/wood.png", size, 'w', null, 0 ));
-		itemTypes.put('f', new Item("sprites/tiles/craft.png", size, 'f', new char[][]{{'p','p'},{'p','p'}}, 1));
-		itemTypes.put('k', new Item("sprites/entities/stick.png", size, 'k', new char[][]{{'p'},{'p'}}, 4));
-		itemTypes.put('S', new Item("sprites/tiles/sappling.png", size, 'S', null, 0 ));
 	}
 	
 	/**
