@@ -31,16 +31,16 @@ public abstract class Entity implements java.io.Serializable
 	public float dx;
 	public float dy;
 	
-	Entity(float x, float y, float dx, float dy, Sprite sprite, boolean gravityApplies, int width, int height)
+	Entity(Entity other)
 	{
-		this.x = x;
-		this.y = y;
-		this.dx = dx;
-		this.dy = dy;
-		this.sprite = sprite;
-		this.gravityApplies = gravityApplies;
-		this.heightPX = height;
-		this.widthPX = width;
+		this.x = other.x;
+		this.y = other.y;
+		this.dx = other.dx;
+		this.dy = other.dy;
+		this.sprite = other.sprite;
+		this.gravityApplies = other.gravityApplies;
+		this.heightPX = other.heightPX;
+		this.widthPX = other.widthPX;
 	}
 	
 	public Entity(String ref, boolean gravityApplies, float x, float y, int width, int height)
