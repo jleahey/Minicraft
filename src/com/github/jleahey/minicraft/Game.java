@@ -318,8 +318,9 @@ public class Game extends Canvas
 				int ticksNeeded = world.breakTicks(breakingPos.x, breakingPos.y, item);
 				
 				Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, breakingPos.x, breakingPos.y);
-				int sprite_index = (int) Math.min(1, (double)breakingTicks/ticksNeeded)*(breakingSprites.length-1);
+				int sprite_index = (int) (Math.min(1, (double)breakingTicks/ticksNeeded)*(breakingSprites.length-1));
 				breakingSprites[sprite_index].draw(g,pos.x, pos.y,tileSize,tileSize);
+				
 				if(breakingTicks >= ticksNeeded)
 				{
 					if(item != null && item.getClass() == Tool.class)
