@@ -11,6 +11,7 @@
 
   <target name="compile" depends="init" description="compile the source " >
     <javac srcdir="${src}" destdir="${build}" includeantruntime="false">
+      <compilerarg value="-Xlint:unchecked"/>
       <classpath id="classpath" description="The default classpath.">
         <pathelement path="${classpath}"/>
         <fileset dir="lib"/>
@@ -25,6 +26,7 @@
       	<exclude name="com/"/>
       	<include name="sounds/"/>
       	<include name="sprites/"/>
+      	<include name="items/"/>
       </fileset>
       <zipgroupfileset dir="lib" includes="*.jar"/>
       <manifest>

@@ -20,13 +20,18 @@ public class Tool extends Item
 	int uses;
 	public ToolType toolType;
 	public ToolPower toolPower;
+
+	Tool(Tool other){
+		super(other);
+		this.totalUses = other.totalUses;
+		this.uses = 0;
+		this.toolType = other.toolType;
+		this.toolPower = other.toolPower;
+	}
 	
-	private Tool(){super();}
-	
-	public Tool(String ref, boolean gravityApplies, float x, float y,
-			int width, int height, char name, char[][] template,
+	public Tool(String ref, int size, char name, char[][] template,
 			int templateCount, ToolType toolType, ToolPower toolPower) {
-		super(ref, gravityApplies, x, y, width, height, name, template, templateCount);
+		super(ref, size, name, template, templateCount);
 		if(toolPower == ToolPower.Wood)
 			totalUses = 32;
 		else if(toolPower == ToolPower.Stone)
@@ -41,21 +46,6 @@ public class Tool extends Item
 	
 	public Object clone()
 	{
-		Tool result = new Tool();
-		result.x = x;
-		result.y = y;
-		result.dx = dx;
-		result.dy = dy;
-		result.sprite = sprite;
-		result.name = name;
-		result.gravityApplies = gravityApplies;
-		result.heightPX = heightPX;
-		result.widthPX = widthPX;
-		result.totalUses = totalUses;
-		result.uses = 0; //Reset the counter
-		result.toolType = toolType;
-		result.toolPower = toolPower;
-		
-		return result;
+		return new Tool(this);
 	}
 }

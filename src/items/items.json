@@ -1,0 +1,15 @@
+[
+{name:"d",spriteRef:"sprites/tiles/dirt.png",      yield:0},
+{name:"s",spriteRef:"sprites/tiles/stone.png",     yield:0},
+{name:"n",spriteRef:"sprites/tiles/sand.png",      yield:0},
+{name:"i",spriteRef:"sprites/entities/iron.png",   yield:0},
+{name:"c",spriteRef:"sprites/entities/coal.png",   yield:0},
+{name:"m",spriteRef:"sprites/entities/diamond.png",yield:0},
+{name:"b",spriteRef:"sprites/tiles/cobble.png",    yield:0},
+{name:"w",spriteRef:"sprites/tiles/wood.png",      yield:0},
+{name:"S",spriteRef:"sprites/tiles/sappling.png",  yield:0},
+{name:"f",spriteRef:"sprites/tiles/craft.png",     yield:1, recipe:[["p","p"],["p","p"]]},
+{name:"k",spriteRef:"sprites/entities/stick.png",  yield:4, recipe:[["p"],["p"]]},
+{name:"L",spriteRef:"sprites/tiles/ladder.png",    yield:8, recipe:[["k","\u0000","k"],["k","k","k"],["k","\u0000","k"]]},
+{name:"p",spriteRef:"sprites/tiles/plank.png",     yield:4, recipe:[["w"]]}
+]

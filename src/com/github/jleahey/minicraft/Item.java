@@ -12,35 +12,25 @@
 
 package com.github.jleahey.minicraft;
 
-public class Item extends Entity{
+public class Item extends Entity {
 
 	public char name;
 	public Template template;
 	
-	protected Item(){
-		super();
+	Item(Item other){
+		super(other);
+		this.name = other.name;
+		this.template = other.template;
 	}
-	
-	public Item(String ref, boolean gravityApplies, float x, float y,
-			int width, int height, char name, char[][] template, int templateCount) {
-		super(ref, gravityApplies, x, y, width, height);
+
+	public Item(String ref, int size, char name, char[][] template, int templateCount) {
+		super(ref, true, 0, 0, size, size);
 		this.template = new Template(template, templateCount);
 		this.name = name;
 	}
-	
-	public Object clone()
-	{
-		Item result = new Item();
-		result.x = x;
-		result.y = y;
-		result.dx = dx;
-		result.dy = dy;
-		result.sprite = sprite;
-		result.name = name;
-		result.gravityApplies = gravityApplies;
-		result.heightPX = heightPX;
-		result.widthPX = widthPX;
-		return result;
+
+	public Object clone() {
+		return new Item(this);
 	}
 
 }

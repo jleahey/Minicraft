@@ -38,20 +38,17 @@ public class Player extends Entity
 	boolean jumping = false;
 	boolean facingRight = true;
 	
-	public Player(boolean gravityApplies, float x, float y,
-			int width, int height) {
+	public Player(boolean gravityApplies, float x, float y, int width, int height) {
 		super(null, gravityApplies, x, y, width, height);
 		
 		leftWalkSprite = SpriteStore.get().getSprite("sprites/entities/left_man.png");
 		rightWalkSprite = SpriteStore.get().getSprite("sprites/entities/right_man.png");
 		sprite = SpriteStore.get().getSprite("sprites/entities/player.gif");
-		
 	}
 
 	public void jump(World world, int tileSize)
 	{
-		if(jumping)
-			return;
+		if (jumping) return;
 
 		if(!this.isInWater(world, tileSize))
 		{
@@ -120,23 +117,19 @@ public class Player extends Entity
 	}
 	
 	public float findIntersection(float rayOx, float rayOy, float m, float p1x, float p1y, float p2x, float p2y) {
-		
 		float freeVar = -1;
 		if(p1x == p2x)//segment is vertical
 		{
 			freeVar = -m*(rayOx - p1x) + rayOy;//y1
-			if((freeVar < p1y && freeVar < p2y) || (freeVar > p1y && freeVar > p2y))
-					return -1;
+			if((freeVar < p1y && freeVar < p2y) || (freeVar > p1y && freeVar > p2y)) return -1;
 		}
 		else if(p1y == p2y)//segment is horizontal
 		{
 			freeVar = -(rayOy - p1y)/m + rayOx;//x1
-			if((freeVar < p1x && freeVar < p2x) || (freeVar > p1x && freeVar > p2x))
-					return -1;
+			if((freeVar < p1x && freeVar < p2x) || (freeVar > p1x && freeVar > p2x)) return -1;
 		}
 		else
-			System.out.println("Find intersection -- bad arguments");
-		
+			System.err.println("Find intersection -- bad arguments");
 		return freeVar;
 	}
 	
@@ -224,10 +217,6 @@ public class Player extends Entity
 				if(!world.isBreakable((int)px, (int)py))
 					continue;
 				
-				
-
-				
-				
 				float down = -1;
 				float left = -1;
 				float up = -1;
@@ -237,9 +226,6 @@ public class Player extends Entity
 				float rightX = px+1;
 				float upY = py-1;
 				float leftX = px;
-
-				
-				
 				
 				if((x >= px && x >= mouseX) &&//left 
 					(y >= py && y >= mouseY)) //up
@@ -268,12 +254,6 @@ public class Player extends Entity
 				else
 					continue;
 				
-				
-				
-
-				
-				
-
 				if(down != -1 || left!= -1  || up!= -1  || right!= -1 )
 				{
 					Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, x, y);
@@ -325,14 +305,9 @@ public class Player extends Entity
 				}
 			}
 		}
-		
 		handBreakPos.x = hitX;
 		handBreakPos.y = hitY;
-		
 	}
-	
-	
-	
 	
 	public void draw(Graphics g, float cameraX, float cameraY, int screenWidth, int screenHeight, int tileSize)
 	{
@@ -350,8 +325,6 @@ public class Player extends Entity
 					rightWalkSprite.draw(g, pos.x, pos.y, widthPX, heightPX);
 				else
 					leftWalkSprite.draw(g, pos.x, pos.y, widthPX, heightPX);
-					
-				
 			}
 			else
 			{
@@ -363,12 +336,7 @@ public class Player extends Entity
 					rightWalkSprite.draw(g, pos.x+widthPX, pos.y, -widthPX, heightPX);
 				else
 					leftWalkSprite.draw(g, pos.x+widthPX, pos.y, -widthPX, heightPX);
-				
 			}
-				
 		}
 	}
-	
-
-
 }

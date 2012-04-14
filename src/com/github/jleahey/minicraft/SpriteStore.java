@@ -34,7 +34,7 @@ public class SpriteStore {
 	}
 	
 	/** The cached sprite map, from reference to sprite instance */
-	private HashMap sprites = new HashMap();
+	private HashMap<String,Sprite> sprites = new HashMap<String,Sprite>();
 	
 	/**
 	 * Retrieve a sprite from the store
@@ -93,6 +93,6 @@ public class SpriteStore {
 		// we're pretty dramatic here, if a resource isn't available
 		// we dump the message and exit the game
 		System.err.println(message);
-		System.exit(0);
+		System.exit(1);
 	}
 }

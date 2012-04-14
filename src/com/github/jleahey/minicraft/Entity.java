@@ -14,7 +14,7 @@ package com.github.jleahey.minicraft;
 import java.awt.Graphics;
 
 
-public class Entity implements java.io.Serializable
+public abstract class Entity implements java.io.Serializable
 {
 	private static final long serialVersionUID = 7655418873368275522L;
 	protected static final float gravityAcceleration = .03f;
@@ -31,7 +31,17 @@ public class Entity implements java.io.Serializable
 	public float dx;
 	public float dy;
 	
-	protected Entity(){}
+	Entity(Entity other)
+	{
+		this.x = other.x;
+		this.y = other.y;
+		this.dx = other.dx;
+		this.dy = other.dy;
+		this.sprite = other.sprite;
+		this.gravityApplies = other.gravityApplies;
+		this.heightPX = other.heightPX;
+		this.widthPX = other.widthPX;
+	}
 	
 	public Entity(String ref, boolean gravityApplies, float x, float y, int width, int height)
 	{
@@ -335,7 +345,6 @@ public class Entity implements java.io.Serializable
 	}
 	
 	public boolean collidesWith(Entity entity, int tileSize) {
-		  
 	    float left1, left2;
 	    float right1, right2;
 	    float top1, top2;
@@ -350,33 +359,13 @@ public class Entity implements java.io.Serializable
 	    bottom1 = this.getBottom(tileSize);
 	    bottom2 = entity.getBottom(tileSize);
 
-	    if (bottom1 < top2) return false;
-	    if (top1 > bottom2) return false;
-
-	    if (right1 < left2) return false;
-	    if (left1 > right2) return false;
-
-	    return true;
-	};
+	    return !(bottom1 < top2 || top1 > bottom2 || right1 < left2 || left1 > right2);
+	}
 	
 	public void draw(Graphics g, float cameraX, float cameraY, int screenWidth, int screenHeight, int tileSize)
 	{
 		Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight, tileSize, x, y);
 		if(StockMethods.onScreen)
 			sprite.draw(g, pos.x, pos.y, widthPX, heightPX);
-	}
-	
-	public Object clone()
-	{
-		Entity result = new Entity();
-		result.x = x;
-		result.y = y;
-		result.dx = dx;
-		result.dy = dy;
-		result.sprite = sprite;
-		result.gravityApplies = gravityApplies;
-		result.heightPX = heightPX;
-		result.widthPX = widthPX;
-		return result;
 	}
 }
