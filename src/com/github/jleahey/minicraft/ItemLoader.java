@@ -34,34 +34,35 @@ public class ItemLoader {
 
 		HashMap<Character,Item> itemTypes = new HashMap<Character, Item>();
 		for (ToolDefinition td : tools){
-			itemTypes.put(td.name, td.makeTool(size));
+			itemTypes.put((char)td.item_id, td.makeTool(size));
 		}
 		for (ItemDefinition id : items){
-			itemTypes.put(id.name, id.makeItem(size));
+			itemTypes.put((char)id.item_id, id.makeItem(size));
 		}
 		return itemTypes;
 	}
 }
 
 class ItemDefinition {
-	char name;
+	int item_id;
+	String name;
 	String spriteRef;
 	char[][] recipe;
 	int yield;
-	public ItemDefinition(char n, String s, char[][] t, int y){
-		name=n; spriteRef=s; recipe=t; yield=y;
+	public ItemDefinition(int id, String n, String s, char[][] t, int y){
+		item_id=id; name=n; spriteRef=s; recipe=t; yield=y;
 	}
 	public Item makeItem(int size){
-		return new Item(spriteRef,size,name,recipe,yield);
+		return new Item(spriteRef,size,(char)item_id,recipe,yield);
 	}
 }
 class ToolDefinition extends ItemDefinition {
 	Tool.ToolType type;
 	Tool.ToolPower power;
-	public ToolDefinition(char n, String s, char[][] t, int y, Tool.ToolType tt, Tool.ToolPower tp){
-		super(n,s,t,y); type=tt; power=tp;
+	public ToolDefinition(int id, String n, String s, char[][] t, int y, Tool.ToolType tt, Tool.ToolPower tp){
+		super(id,n,s,t,y); type=tt; power=tp;
 	}
 	public Tool makeTool(int size){
-		return new Tool(spriteRef,size,name,recipe,yield,type,power);
+		return new Tool(spriteRef,size,(char)item_id,recipe,yield,type,power);
 	}
 }

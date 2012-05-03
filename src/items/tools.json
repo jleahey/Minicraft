@@ -1,15 +1,14 @@
 [
-{type:"Pick",  power:"Wood",   name:"â",spriteRef:"sprites/tools/wPic.png",   recipe:[["p","p","p"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Pick",  power:"Wood",   name:"â",spriteRef:"sprites/tools/wPic.png",   recipe:[["p","p","p"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Pick",  power:"Stone",  name:"?",   spriteRef:"sprites/tools/sPic.png",   recipe:[["b","b","b"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Pick",  power:"Metal",  name:"Ô",   spriteRef:"sprites/tools/mPic.png",   recipe:[["i","i","i"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Pick",  power:"Diamond",name:"Ø",   spriteRef:"sprites/tools/dPic.png",   recipe:[["m","m","m"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Axe",   power:"Wood",   name:"ï",spriteRef:"sprites/tools/wAxe.png",   recipe:[["p","p","\u0000"],["p","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Axe",   power:"Stone",  name:"ë",spriteRef:"sprites/tools/sAxe.png",   recipe:[["b","b","\u0000"],["b","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Axe",   power:"Metal",  name:"á",spriteRef:"sprites/tools/mAxe.png",   recipe:[["i","i","\u0000"],["i","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Axe",   power:"Diamond",name:"å",spriteRef:"sprites/tools/dAxe.png",   recipe:[["m","m","\u0000"],["m","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
-{type:"Shovel",power:"Wood",   name:"ê",spriteRef:"sprites/tools/wShovel.png",recipe:[["\u0000","p","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1},
-{type:"Shovel",power:"Stone",  name:"æ",   spriteRef:"sprites/tools/sShovel.png",recipe:[["\u0000","b","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1},
-{type:"Shovel",power:"Metal",  name:"Ü",spriteRef:"sprites/tools/mShovel.png",recipe:[["\u0000","i","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1},
-{type:"Shovel",power:"Diamond",name:"à",spriteRef:"sprites/tools/dShovel.png",recipe:[["\u0000","m","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1}
+{type:"Pick",  power:"Wood",   item_id:89, name:"wPick",spriteRef:"sprites/tools/wPic.png",   recipe:[["p","p","p"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Pick",  power:"Stone",  item_id:63, name:"sPick",spriteRef:"sprites/tools/sPic.png",   recipe:[["b","b","b"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Pick",  power:"Metal",  item_id:239,name:"mPick",spriteRef:"sprites/tools/mPic.png",   recipe:[["i","i","i"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Pick",  power:"Diamond",item_id:175,name:"dPick",spriteRef:"sprites/tools/dPic.png",   recipe:[["m","m","m"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Axe",   power:"Wood",   item_id:95, name:"wAxe", spriteRef:"sprites/tools/wAxe.png",   recipe:[["p","p","\u0000"],["p","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Axe",   power:"Stone",  item_id:91, name:"sAxe", spriteRef:"sprites/tools/sAxe.png",   recipe:[["b","b","\u0000"],["b","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Axe",   power:"Metal",  item_id:87, name:"mAxe", spriteRef:"sprites/tools/mAxe.png",   recipe:[["i","i","\u0000"],["i","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Axe",   power:"Diamond",item_id:140,name:"dAxe", spriteRef:"sprites/tools/dAxe.png",   recipe:[["m","m","\u0000"],["m","k","\u0000"],["\u0000","k","\u0000"]],          yield:1},
+{type:"Shovel",power:"Wood",   item_id:90, name:"wShov",spriteRef:"sprites/tools/wShovel.png",recipe:[["\u0000","p","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1},
+{type:"Shovel",power:"Stone",  item_id:190,name:"sShov",spriteRef:"sprites/tools/sShovel.png",recipe:[["\u0000","b","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1},
+{type:"Shovel",power:"Metal",  item_id:86, name:"mShov",spriteRef:"sprites/tools/mShovel.png",recipe:[["\u0000","i","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1},
+{type:"Shovel",power:"Diamond",item_id:88, name:"dShov",spriteRef:"sprites/tools/dShovel.png",recipe:[["\u0000","m","\u0000"],["\u0000","k","\u0000"],["\u0000","k","\u0000"]],yield:1}
 ]
