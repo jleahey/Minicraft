@@ -53,7 +53,7 @@ class ItemDefinition {
 		item_id=id; name=n; spriteRef=s; recipe=t; yield=y;
 	}
 	public Item makeItem(int size){
-		return new Item(spriteRef,size,(char)item_id,recipe,yield);
+		return new Item(spriteRef,size,item_id,name,recipe,yield);
 	}
 }
 class ToolDefinition extends ItemDefinition {
@@ -63,6 +63,6 @@ class ToolDefinition extends ItemDefinition {
 		super(id,n,s,t,y); type=tt; power=tp;
 	}
 	public Tool makeTool(int size){
-		return new Tool(spriteRef,size,(char)item_id,recipe,yield,type,power);
+		return new Tool(spriteRef,size,item_id,name,recipe,yield,type,power);
 	}
 }

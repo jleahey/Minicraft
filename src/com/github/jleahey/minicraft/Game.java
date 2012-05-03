@@ -375,7 +375,7 @@ public class Game extends Canvas
 						
 						if(!(player.handBuildPos.x >= left && player.handBuildPos.x <= right && player.handBuildPos.y >= top && player.handBuildPos.y <= bottom))
 						{
-							boolean placed = world.addTile(player.handBuildPos.x, player.handBuildPos.y, current.getItem().name);
+							boolean placed = world.addTile(player.handBuildPos.x, player.handBuildPos.y, (char)current.getItem().item_id);
 							if(placed)
 								inventory.decreaseSeleted(1);
 						}

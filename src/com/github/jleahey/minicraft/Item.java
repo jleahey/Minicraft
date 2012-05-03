@@ -14,18 +14,21 @@ package com.github.jleahey.minicraft;
 
 public class Item extends Entity {
 
-	public char name;
+	public int item_id;
+	public String name;
 	public Template template;
 	
 	Item(Item other){
 		super(other);
+		this.item_id = other.item_id;
 		this.name = other.name;
 		this.template = other.template;
 	}
 
-	public Item(String ref, int size, char name, int[][] template, int templateCount) {
+	public Item(String ref, int size, int id, String name, int[][] template, int templateCount) {
 		super(ref, true, 0, 0, size, size);
 		this.template = new Template(template, templateCount);
+		this.item_id = id;
 		this.name = name;
 	}
 

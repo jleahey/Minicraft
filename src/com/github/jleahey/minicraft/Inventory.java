@@ -140,7 +140,7 @@ public class Inventory implements java.io.Serializable
 					holding.count = 0;
 				}
 			}
-			else if(holding.item.name == inventoryItems[position.x][position.y].item.name && inventoryItems[position.x][position.y].count < maxCount)
+			else if(holding.item.item_id == inventoryItems[position.x][position.y].item.item_id && inventoryItems[position.x][position.y].count < maxCount)
 			{
 				if((holding.item.getClass() == Tool.class) || (inventoryItems[position.x][position.y].item.getClass() == Tool.class))
 				{
@@ -253,8 +253,9 @@ public class Inventory implements java.io.Serializable
 		for(int i = 0; i < tableSizeAvailable; i++)
 			for(int j = 0; j < tableSizeAvailable; j++)
 			{
-				if(inventoryItems[i + inventoryItems.length - tableSizeAvailable][j].item != null)
-					currentTable[j][i] = inventoryItems[i + inventoryItems.length - tableSizeAvailable][j].item.name;
+				Item item = inventoryItems[i+inventoryItems.length-tableSizeAvailable][j].item;
+				if(item != null)
+					currentTable[j][i] = (char) item.item_id;
 				else 
 					currentTable[j][i] = (char) 0;
 			}
