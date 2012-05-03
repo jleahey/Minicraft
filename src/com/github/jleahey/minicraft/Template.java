@@ -18,9 +18,15 @@ public class Template implements java.io.Serializable
 	public Int2 position = new Int2(0,0);
 	private char[][] matrix;
 	
-	public Template(char[][] matrix, int outCount)
+	public Template(int[][] matrix, int outCount)
 	{
-		this.matrix = matrix;
+		if (matrix != null){
+			// temporary workaround while we convert templates to int[][]
+			this.matrix = new char[matrix.length][matrix[0].length];
+			for (int i=0; i<matrix.length; i++)
+				for (int j=0; j<matrix[0].length; j++)
+					this.matrix[i][j] = (char)matrix[i][j];
+		}
 		this.outCount = outCount;
 	}
 	

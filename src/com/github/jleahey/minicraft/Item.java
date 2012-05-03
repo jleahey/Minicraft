@@ -23,7 +23,7 @@ public class Item extends Entity {
 		this.template = other.template;
 	}
 
-	public Item(String ref, int size, char name, char[][] template, int templateCount) {
+	public Item(String ref, int size, char name, int[][] template, int templateCount) {
 		super(ref, true, 0, 0, size, size);
 		this.template = new Template(template, templateCount);
 		this.name = name;

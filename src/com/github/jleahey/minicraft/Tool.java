@@ -29,7 +29,7 @@ public class Tool extends Item
 		this.toolPower = other.toolPower;
 	}
 	
-	public Tool(String ref, int size, char name, char[][] template,
+	public Tool(String ref, int size, char name, int[][] template,
 			int templateCount, ToolType toolType, ToolPower toolPower) {
 		super(ref, size, name, template, templateCount);
 		if(toolPower == ToolPower.Wood)

@@ -53,12 +53,7 @@ class ItemDefinition {
 		item_id=id; name=n; spriteRef=s; recipe=t; yield=y;
 	}
 	public Item makeItem(int size){
-		char[][] r = null;
-		if (recipe != null){
-			r = new char[recipe.length][recipe[0].length];
-			for (int i=0; i<r.length; i++) for (int j=0; j<r[0].length; j++) r[i][j] = (char)(recipe[i][j]);
-		}
-		return new Item(spriteRef,size,(char)item_id,r,yield);
+		return new Item(spriteRef,size,(char)item_id,recipe,yield);
 	}
 }
 class ToolDefinition extends ItemDefinition {
@@ -68,11 +63,6 @@ class ToolDefinition extends ItemDefinition {
 		super(id,n,s,t,y); type=tt; power=tp;
 	}
 	public Tool makeTool(int size){
-		char[][] r = null;
-		if (recipe != null){
-			r = new char[recipe.length][recipe[0].length];
-			for (int i=0; i<r.length; i++) for (int j=0; j<r[0].length; j++) r[i][j] = (char)(recipe[i][j]);
-		}
-		return new Tool(spriteRef,size,(char)item_id,r,yield,type,power);
+		return new Tool(spriteRef,size,(char)item_id,recipe,yield,type,power);
 	}
 }
