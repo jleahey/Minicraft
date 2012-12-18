@@ -607,7 +607,7 @@ public class Game extends Canvas
 				case '8':
 				case '9': setInventorySelect((int)(e.getKeyChar()-'1')); break;
 				case '0': setInventorySelect(9); break;
-				case 'i': inventory.setVisible(!inventory.isVisible()); break;
+				case 'e': inventory.setVisible(!inventory.isVisible()); break;
 				case '=': zoom(1); break;
 				case 'p': paused = !paused; break;
 				case 'm': musicPlayer.toggleSound(); break;
