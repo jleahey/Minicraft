@@ -7,7 +7,7 @@
 {item_id:109,name:"diamond", spriteRef:"sprites/entities/diamond.png",yield:0},
 {item_id:98, name:"cobble",  spriteRef:"sprites/tiles/cobble.png",    yield:0},
 {item_id:119,name:"wood",    spriteRef:"sprites/tiles/wood.png",      yield:0},
-{item_id:83, name:"sappling",spriteRef:"sprites/tiles/sappling.png",  yield:0},
+{item_id:83, name:"sapling", spriteRef:"sprites/tiles/sapling.png",    yield:0},
 {item_id:102,name:"craft",   spriteRef:"sprites/tiles/craft.png",     yield:1, recipe:[[112,112],[112,112]]},
 {item_id:107,name:"stick",   spriteRef:"sprites/entities/stick.png",  yield:4, recipe:[[112],[112]]},
 {item_id:76, name:"ladder",  spriteRef:"sprites/tiles/ladder.png",    yield:8, recipe:[[107,0,107],[107,107,107],[107,0,107]]},

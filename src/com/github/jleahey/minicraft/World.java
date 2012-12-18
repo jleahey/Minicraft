@@ -56,7 +56,7 @@ public class World implements java.io.Serializable
 		tileTypes.put('b', new Tile(new TileType("sprites/tiles/cobble.png", 'b')));
 		tileTypes.put('f', new Tile(new TileType("sprites/tiles/craft.png", 'f')));
 		tileTypes.put('x', new Tile(new TileType("sprites/tiles/adminite.png", 'x')));
-		tileTypes.put('S', new Tile(new TileType("sprites/tiles/sappling.png", 'S', true, false)));
+		tileTypes.put('S', new Tile(new TileType("sprites/tiles/sapling.png", 'S', true, false)));
 		tileTypes.put('L', new Tile(new TileType("sprites/tiles/ladder.png", 'L', true, false)));
 		
 		char[][] generated = WorldGenerator.generate(width, height, random);
