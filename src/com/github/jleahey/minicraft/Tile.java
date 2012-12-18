@@ -14,6 +14,8 @@ package com.github.jleahey.minicraft;
 
 public class Tile implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	public TileType type;
 	
 	public Tile(TileType type)

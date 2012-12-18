@@ -24,6 +24,8 @@ import javax.swing.JPanel;
 
 public class Game extends Canvas
 {
+	private static final long serialVersionUID = 1L;
+
 	private int screenWidth = 640;
 	private int screenHeight = 480;
 	private int worldWidth = 512;

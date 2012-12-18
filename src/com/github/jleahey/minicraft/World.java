@@ -19,6 +19,8 @@ import java.util.Random;
 
 public class World implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1L;
+
 	public Map<Character, Tile> tileTypes = new HashMap<Character, Tile>();
 	
 	public Tile[][] tiles;
@@ -35,7 +37,6 @@ public class World implements java.io.Serializable
 	
 	private Color skyAir = new Color(132,210,230);
 	private Color caveAir = new Color(100,100,100);
-	private Sprite skyBar = SpriteStore.get().getSprite("sprites/other/sky.png");
 	private long ticksAlive = 0;
 	private final int dayLength = 2000;
 	

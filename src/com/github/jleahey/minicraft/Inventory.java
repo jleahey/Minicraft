@@ -12,17 +12,14 @@
 
 package com.github.jleahey.minicraft;
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 
 public class Inventory implements java.io.Serializable
 {
-	private static final long serialVersionUID = 7435825941863771995L;
+	private static final long serialVersionUID = 1L;
+	
 	public InventoryItem[][] inventoryItems;
 	private int maxCount = 64;
 	public int tableSizeAvailable = 2;

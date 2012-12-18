@@ -14,6 +14,8 @@ package com.github.jleahey.minicraft;
 
 public class Tool extends Item
 {
+	private static final long serialVersionUID = 1L;
+
 	public enum ToolType { Shovel, Pick, Axe};
 	public enum ToolPower { Wood, Stone, Metal, Diamond};
 	int totalUses;

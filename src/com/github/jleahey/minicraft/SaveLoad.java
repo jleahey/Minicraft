@@ -63,6 +63,7 @@ public class SaveLoad {
             game.inventory = (Inventory)in.readObject();
             game.world = (World)in.readObject();
             game.entities = (ArrayList<Entity>)in.readObject();
+            in.close();
         } catch (IOException e) {
             e.printStackTrace();
             return false;

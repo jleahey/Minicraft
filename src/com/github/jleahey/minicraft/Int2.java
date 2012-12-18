@@ -14,6 +14,8 @@ package com.github.jleahey.minicraft;
 
 public class Int2 implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
     public int x, y;
 
     public Int2(int x, int y)

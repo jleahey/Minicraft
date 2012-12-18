@@ -15,6 +15,8 @@ import java.io.*;
  */
 public class Sprite implements java.io.Serializable
 {
+	private static final long serialVersionUID = 1L;
+	
 	/** The image to be drawn for this sprite */
 	transient private Image image;
 	private String ref;

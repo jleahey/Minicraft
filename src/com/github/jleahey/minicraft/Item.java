@@ -13,6 +13,7 @@
 package com.github.jleahey.minicraft;
 
 public class Item extends Entity {
+	private static final long serialVersionUID = 1L;
 
 	public int item_id;
 	public String name;

@@ -16,6 +16,8 @@ import java.awt.Graphics;
 
 public class TileType implements java.io.Serializable
 {	
+	private static final long serialVersionUID = 1L;
+	
 	/** The sprite that represents this Type */
 	protected Sprite sprite;
 	protected char name;

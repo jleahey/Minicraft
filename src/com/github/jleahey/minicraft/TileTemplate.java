@@ -13,23 +13,24 @@
 package com.github.jleahey.minicraft;
 
 public final class TileTemplate implements java.io.Serializable
+{
+	private static final long serialVersionUID = 1L;
+	public final static TileTemplate tree = new TileTemplate(
+			new char[][]{
+					{ 0 ,'l','l', 0 , 0 , 0},
+					{'l','l','l','l', 0 , 0},
+					{'l','l','l','w','w','w'},
+					{'l','l','l','l', 0 , 0},
+					{ 0 ,'l','l', 0 , 0 , 0}
+			},
+			5, 2);
+	public char[][] template;
+	public int spawnX;
+	public int spawnY;
+	private TileTemplate(char[][] template, int spawnX, int spawnY)
 	{
-		public final static TileTemplate tree = new TileTemplate(
-				new char[][]{
-						{ 0 ,'l','l', 0 , 0 , 0},
-						{'l','l','l','l', 0 , 0},
-						{'l','l','l','w','w','w'},
-						{'l','l','l','l', 0 , 0},
-						{ 0 ,'l','l', 0 , 0 , 0}
-				},
-				5, 2);
-		public char[][] template;
-		public int spawnX;
-		public int spawnY;
-		private TileTemplate(char[][] template, int spawnX, int spawnY)
-		{
-			this.template = template;
-			this.spawnX = spawnX;
-			this.spawnY = spawnY;
-		}
+		this.template = template;
+		this.spawnX = spawnX;
+		this.spawnY = spawnY;
 	}
+}

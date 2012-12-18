@@ -11,13 +11,14 @@
  */
 
 package com.github.jleahey.minicraft;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 
 public class Player extends Entity
 {
+	private static final long serialVersionUID = 1L;
+
 	final float walkSpeed = .1f;
 	final float swimSpeed = .04f;
 	float armLength = 4.5f;
@@ -256,7 +257,7 @@ public class Player extends Entity
 				
 				if(down != -1 || left!= -1  || up!= -1  || right!= -1 )
 				{
-					Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, x, y);
+					//Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize, tileSize, tileSize, x, y);
 					/*
 					int posX = pos.x;
 					int posY = pos.y;
