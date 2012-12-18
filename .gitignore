@@ -1,3 +1,5 @@
 *.class
+*.DS_Store
 Minicraft.jar
 Minicraft.sav
+bin/
