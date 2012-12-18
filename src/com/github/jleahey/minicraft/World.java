@@ -44,7 +44,7 @@ public class World implements java.io.Serializable
 		tileTypes.put('d', new Tile(new TileType("sprites/tiles/dirt.png", 'd')));
 		tileTypes.put('g', new Tile(new TileType("sprites/tiles/dirtwithgrass.png", 'g')));
 		tileTypes.put('l', new Tile(new TileType("sprites/tiles/leaves.png", 'l')));
-		tileTypes.put('p', new Tile(new TileType("sprites/tiles/plank.png", 'p', true, false)));
+		tileTypes.put('p', new Tile(new TileType("sprites/tiles/plank.png", 'p')));
 		tileTypes.put('w', new Tile(new TileType("sprites/tiles/wood.png", 'w', true, false)));
 		tileTypes.put('s', new Tile(new TileType("sprites/tiles/stone.png", 's')));
 		tileTypes.put('a', new Tile(new TileType("sprites/tiles/air.png", 'a', true, false)));
