@@ -12,43 +12,45 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Cursor;
-import java.awt.Dimension;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Point;
-import java.awt.Toolkit;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
-import java.awt.event.MouseWheelEvent;
-import java.awt.event.MouseWheelListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferStrategy;
+//import java.awt.Canvas;
+//import java.awt.Color;
+//import java.awt.Cursor;
+//import java.awt.Dimension;
+//import java.awt.Graphics2D;
+//import java.awt.Image;
+//import java.awt.Point;
+//import java.awt.Toolkit;
+//import java.awt.event.ComponentAdapter;
+//import java.awt.event.ComponentEvent;
+//import java.awt.event.KeyAdapter;
+//import java.awt.event.KeyEvent;
+//import java.awt.event.MouseAdapter;
+//import java.awt.event.MouseEvent;
+//import java.awt.event.MouseMotionListener;
+//import java.awt.event.MouseWheelEvent;
+//import java.awt.event.MouseWheelListener;
+//import java.awt.event.WindowAdapter;
+//import java.awt.event.WindowEvent;
+//import java.awt.image.BufferStrategy;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+//import javax.swing.ImageIcon;
+//import javax.swing.JFrame;
+//import javax.swing.JPanel;
 
-public class Game extends Canvas {
+//import com.github.jleahey.minicraft.awtgraphics.Sprite;
+//import com.github.jleahey.minicraft.awtgraphics.SpriteStore;
+
+public class Game {
 	private static final long serialVersionUID = 1L;
 	
 	private int screenWidth = 640;
 	private int screenHeight = 480;
 	private int worldWidth = 512;
 	private int worldHeight = 256;
-	private BufferStrategy strategy;
 	private boolean gameRunning = true;
 	private boolean spaceBar = false;
 	private boolean leftClick = false;
@@ -101,79 +103,14 @@ public class Game extends Canvas {
 	private int screenMouseX;
 	private int screenMouseY;
 	
-	private JFrame container;
-	private Cursor myCursor = null;
-	private JPanel panel;
+
 	
 	/**
 	 * Construct our game and set it running.
 	 */
 	public Game() {
 		
-		// create a frame to contain our game
-		container = new JFrame("Minicraft");
-		
-		try {
-			ImageIcon ii = new ImageIcon(new URL("file:sprites/other/mouse.png"));
-			Image im = ii.getImage();
-			Toolkit tk = getToolkit();
-			myCursor = tk.createCustomCursor(im, new Point(0, 0), "MyCursor");
-		} catch (Exception e) {
-			System.out.println("myCursor creation failed " + e);
-		}
-		
-		// get hold the content of the frame and set up the resolution of the game
-		panel = (JPanel) container.getContentPane();
-		panel.setPreferredSize(new Dimension(screenWidth, screenHeight));
-		panel.setLayout(null);
-		panel.addComponentListener(new ComponentAdapter() {
-			@Override
-			public void componentResized(ComponentEvent e) {
-				Dimension d = e.getComponent().getSize();
-				setBounds(0, 0, d.width, d.height);
-				screenWidth = d.width;
-				screenHeight = d.height;
-			}
-		});
-		
-		// setup our canvas size and put it into the content of the frame
-		setBounds(0, 0, screenWidth + 10, screenHeight + 10);
-		panel.add(this);
-		
-		// Tell AWT not to bother repainting our canvas since we're
-		// going to do that our self in accelerated mode
-		setIgnoreRepaint(true);
-		
-		// finally make the window visible
-		container.pack();
-		container.setResizable(true);
-		container.setVisible(true);
-		
-		// add a listener to respond to the user closing the window. If they
-		// do we'd like to exit the game
-		container.addWindowListener(new WindowAdapter() {
-			@Override
-			public void windowClosing(WindowEvent e) {
-				zoom(0);
-				SaveLoad.doSave(getGame());
-				musicPlayer.close();
-				System.exit(0);
-			}
-		});
-		
-		// add a key input system (defined below) to our canvas
-		// so we can respond to key pressed
-		addKeyListener(new KeyInputHandler());
-		addMouseListener(new MouseInputHander());
-		addMouseWheelListener(new MouseWheelInputHander());
-		addMouseMotionListener(new MouseMoveInputHander());
-		// request the focus so key events come to us
-		requestFocus();
-		
-		// create the buffering strategy which will allow AWT
-		// to manage our accelerated graphics
-		createBufferStrategy(2);
-		strategy = getBufferStrategy();
+
 		
 		itemTypes = ItemLoader.loadItems(tileSize / 2);
 		System.gc();
