@@ -12,34 +12,39 @@
 
 package com.github.jleahey.minicraft;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Scanner;
 
-public final class StockMethods
-{
+public final class StockMethods {
 	public static Boolean onScreen = true;
-	public static Int2 pos = new Int2(0,0);
-	public static Int2 computeDrawLocationInPlace(float cameraX, float cameraY, int width, int height, int tileSize, float positionX, float positionY)
-	{
+	public static Int2 pos = new Int2(0, 0);
+	
+	public static Int2 computeDrawLocationInPlace(float cameraX, float cameraY, int width,
+			int height, int tileSize, float positionX, float positionY) {
 		StockMethods.pos.x = (int) ((positionX - cameraX) * tileSize);
 		StockMethods.pos.y = (int) ((positionY - cameraY) * tileSize);
-		onScreen = !(pos.x + tileSize < 0 || pos.x > width * tileSize || pos.y + tileSize < 0 || pos.y > height * tileSize);
+		onScreen = !(pos.x + tileSize < 0 || pos.x > width * tileSize || pos.y + tileSize < 0 || pos.y > height
+				* tileSize);
 		return StockMethods.pos;
 	}
-
+	
 	public static String readFile(String pathname) throws IOException {
-		//NOTE: drops newlines
-	    StringBuilder fileContents = new StringBuilder();
-	    InputStream in = Thread.currentThread().getContextClassLoader().getResourceAsStream(pathname);
-	    if (in == null) throw new IOException("no resource found at "+pathname);
-	    Scanner scanner = new Scanner(in);
-	    try {
-	        while(scanner.hasNextLine()) {        
-	            fileContents.append(scanner.nextLine());
-	        }
-	        return fileContents.toString();
-	    } finally {
-	        scanner.close();
-	    }
+		// NOTE: drops newlines
+		StringBuilder fileContents = new StringBuilder();
+		InputStream in = Thread.currentThread().getContextClassLoader()
+				.getResourceAsStream(pathname);
+		if (in == null) {
+			throw new IOException("no resource found at " + pathname);
+		}
+		Scanner scanner = new Scanner(in);
+		try {
+			while (scanner.hasNextLine()) {
+				fileContents.append(scanner.nextLine());
+			}
+			return fileContents.toString();
+		} finally {
+			scanner.close();
+		}
 	}
 }

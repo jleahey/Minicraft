@@ -12,29 +12,27 @@
 
 package com.github.jleahey.minicraft;
 
-public class Int2 implements java.io.Serializable
-{
+public class Int2 implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
-    public int x, y;
-
-    public Int2(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-    
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof Int2) {
-            Int2 compare = (Int2)obj;
-            return x == compare.x && y == compare.y;
-        }
-        return false;
-    }
-
-    public String toString()
-    {
-        return "{" + x + ", " + y + "}";
-    }
+	public int x, y;
+	
+	public Int2(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Int2) {
+			Int2 compare = (Int2) obj;
+			return x == compare.x && y == compare.y;
+		}
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "{" + x + ", " + y + "}";
+	}
 }

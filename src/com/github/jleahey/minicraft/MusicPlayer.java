@@ -11,53 +11,52 @@
  */
 
 package com.github.jleahey.minicraft;
+
 import java.io.IOException;
 
 import org.newdawn.easyogg.OggClip;
 
-
-public class MusicPlayer 
-{
-	//No one wants a music player crashing their game... ;)
+public class MusicPlayer {
+	// No one wants a music player crashing their game... ;)
 	OggClip ogg;
-    public MusicPlayer(String filename)
-    {
+	
+	public MusicPlayer(String filename) {
 		try {
 			ogg = new OggClip(filename);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-    }
-    
-    boolean flipMute = true;
-    public void toggleSound()
-    {
+	}
+	
+	boolean flipMute = true;
+	
+	public void toggleSound() {
 		try {
-	    	if(flipMute)
-	    		ogg.stop();
-	    	else
-	    		ogg.loop();
-	    	flipMute = !flipMute;
-    	} catch (Exception e) {
+			if (flipMute) {
+				ogg.stop();
+			} else {
+				ogg.loop();
+			}
+			flipMute = !flipMute;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
-    
-    public void play()
-    {
-    	try {
-    		ogg.loop();
-	    } catch (Exception e) {
+	}
+	
+	public void play() {
+		try {
+			ogg.loop();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
-    public void close()
-    {
-    	try {
-	    	ogg.stop();
-	    	ogg.close();
-	    } catch (Exception e) {
+	}
+	
+	public void close() {
+		try {
+			ogg.stop();
+			ogg.close();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+	}
 }

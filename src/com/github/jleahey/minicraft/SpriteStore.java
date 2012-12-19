@@ -1,4 +1,5 @@
 package com.github.jleahey.minicraft;
+
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
@@ -25,7 +26,7 @@ public class SpriteStore {
 	private static SpriteStore single = new SpriteStore();
 	
 	/**
-	 * Get the single instance of this class 
+	 * Get the single instance of this class
 	 * 
 	 * @return The single instance of this class
 	 */
@@ -34,19 +35,20 @@ public class SpriteStore {
 	}
 	
 	/** The cached sprite map, from reference to sprite instance */
-	private HashMap<String,Sprite> sprites = new HashMap<String,Sprite>();
+	private HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
 	
 	/**
 	 * Retrieve a sprite from the store
 	 * 
-	 * @param ref The reference to the image to use for the sprite
+	 * @param ref
+	 *            The reference to the image to use for the sprite
 	 * @return A sprite instance containing an accelerate image of the request reference
 	 */
 	public Sprite getSprite(String ref) {
 		// if we've already got the sprite in the cache
 		// then just return the existing version
 		if (sprites.get(ref) != null) {
-			return (Sprite) sprites.get(ref);
+			return sprites.get(ref);
 		}
 		
 		// otherwise, go away and grab the sprite from the resource
@@ -61,25 +63,27 @@ public class SpriteStore {
 			URL url = this.getClass().getClassLoader().getResource(ref);
 			
 			if (url == null) {
-				fail("Can't find ref: "+ref);
+				fail("Can't find ref: " + ref);
 			}
 			
 			// use ImageIO to read the image in
 			sourceImage = ImageIO.read(url);
 		} catch (IOException e) {
-			fail("Failed to load: "+ref);
+			fail("Failed to load: " + ref);
 		}
 		
 		// create an accelerated image of the right size to store our sprite in
-		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-		Image image = gc.createCompatibleImage(sourceImage.getWidth(),sourceImage.getHeight(),Transparency.BITMASK);
+		GraphicsConfiguration gc = GraphicsEnvironment.getLocalGraphicsEnvironment()
+				.getDefaultScreenDevice().getDefaultConfiguration();
+		Image image = gc.createCompatibleImage(sourceImage.getWidth(), sourceImage.getHeight(),
+				Transparency.BITMASK);
 		
 		// draw our source image into the accelerated image
-		image.getGraphics().drawImage(sourceImage,0,0,null);
+		image.getGraphics().drawImage(sourceImage, 0, 0, null);
 		
 		// create a sprite, add it the cache then return it
 		Sprite sprite = new Sprite(image, ref);
-		sprites.put(ref,sprite);
+		sprites.put(ref, sprite);
 		
 		return sprite;
 	}
@@ -87,7 +91,8 @@ public class SpriteStore {
 	/**
 	 * Utility method to handle resource loading failure
 	 * 
-	 * @param message The message to display on failure
+	 * @param message
+	 *            The message to display on failure
 	 */
 	private void fail(String message) {
 		// we're pretty dramatic here, if a resource isn't available

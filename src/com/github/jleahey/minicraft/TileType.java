@@ -11,11 +11,10 @@
  */
 
 package com.github.jleahey.minicraft;
+
 import java.awt.Graphics;
 
-
-public class TileType implements java.io.Serializable
-{	
+public class TileType implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/** The sprite that represents this Type */
@@ -24,20 +23,18 @@ public class TileType implements java.io.Serializable
 	protected boolean passable;
 	protected boolean liquid;
 	
-	public TileType(String ref, char name)
-	{
+	public TileType(String ref, char name) {
 		this(ref, name, false, false);
 	}
-	public TileType(String ref, char name, boolean passable, boolean liquid)
-	{
+	
+	public TileType(String ref, char name, boolean passable, boolean liquid) {
 		this.sprite = SpriteStore.get().getSprite(ref);
 		this.name = name;
 		this.passable = passable;
 		this.liquid = liquid;
 	}
-
-	public void draw(Graphics g, int x, int y)
-	{
+	
+	public void draw(Graphics g, int x, int y) {
 		sprite.draw(g, x, y);
 	}
 }

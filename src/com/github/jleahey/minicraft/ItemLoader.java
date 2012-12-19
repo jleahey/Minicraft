@@ -14,30 +14,34 @@ package com.github.jleahey.minicraft;
 
 import java.io.IOException;
 import java.util.HashMap;
-import com.google.gson.*;
+
+import com.google.gson.Gson;
 
 public class ItemLoader {
 	private static final Gson gson = new Gson();
-
-	public static HashMap<Character,Item> loadItems(int size) {
+	
+	public static HashMap<Character, Item> loadItems(int size) {
 		ToolDefinition[] tools = null;
 		ItemDefinition[] items = null;
 		// TODO: use the streaming API: https://sites.google.com/site/gson/streaming
 		try {
-			tools = gson.fromJson(StockMethods.readFile("items/tools.json"),ToolDefinition[].class);
-			items = gson.fromJson(StockMethods.readFile("items/items.json"),ItemDefinition[].class);
-		} catch (IOException e){}
-		if (tools == null || items == null){
+			tools = gson
+					.fromJson(StockMethods.readFile("items/tools.json"), ToolDefinition[].class);
+			items = gson
+					.fromJson(StockMethods.readFile("items/items.json"), ItemDefinition[].class);
+		} catch (IOException e) {
+		}
+		if (tools == null || items == null) {
 			System.err.println("Failed to load items from json.");
 			System.exit(5);
 		}
-
-		HashMap<Character,Item> itemTypes = new HashMap<Character, Item>();
-		for (ToolDefinition td : tools){
-			itemTypes.put((char)td.item_id, td.makeTool(size));
+		
+		HashMap<Character, Item> itemTypes = new HashMap<Character, Item>();
+		for (ToolDefinition td : tools) {
+			itemTypes.put((char) td.item_id, td.makeTool(size));
 		}
-		for (ItemDefinition id : items){
-			itemTypes.put((char)id.item_id, id.makeItem(size));
+		for (ItemDefinition id : items) {
+			itemTypes.put((char) id.item_id, id.makeItem(size));
 		}
 		return itemTypes;
 	}
@@ -49,20 +53,32 @@ class ItemDefinition {
 	String spriteRef;
 	int[][] recipe;
 	int yield;
-	public ItemDefinition(int id, String n, String s, int[][] t, int y){
-		item_id=id; name=n; spriteRef=s; recipe=t; yield=y;
+	
+	public ItemDefinition(int id, String n, String s, int[][] t, int y) {
+		item_id = id;
+		name = n;
+		spriteRef = s;
+		recipe = t;
+		yield = y;
 	}
-	public Item makeItem(int size){
-		return new Item(spriteRef,size,item_id,name,recipe,yield);
+	
+	public Item makeItem(int size) {
+		return new Item(spriteRef, size, item_id, name, recipe, yield);
 	}
 }
+
 class ToolDefinition extends ItemDefinition {
 	Tool.ToolType type;
 	Tool.ToolPower power;
-	public ToolDefinition(int id, String n, String s, int[][] t, int y, Tool.ToolType tt, Tool.ToolPower tp){
-		super(id,n,s,t,y); type=tt; power=tp;
+	
+	public ToolDefinition(int id, String n, String s, int[][] t, int y, Tool.ToolType tt,
+			Tool.ToolPower tp) {
+		super(id, n, s, t, y);
+		type = tt;
+		power = tp;
 	}
-	public Tool makeTool(int size){
-		return new Tool(spriteRef,size,item_id,name,recipe,yield,type,power);
+	
+	public Tool makeTool(int size) {
+		return new Tool(spriteRef, size, item_id, name, recipe, yield, type, power);
 	}
 }

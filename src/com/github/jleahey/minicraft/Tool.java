@@ -12,18 +12,23 @@
 
 package com.github.jleahey.minicraft;
 
-public class Tool extends Item
-{
+public class Tool extends Item {
 	private static final long serialVersionUID = 1L;
-
-	public enum ToolType { Shovel, Pick, Axe};
-	public enum ToolPower { Wood, Stone, Metal, Diamond};
+	
+	public enum ToolType {
+		Shovel, Pick, Axe
+	};
+	
+	public enum ToolPower {
+		Wood, Stone, Metal, Diamond
+	};
+	
 	int totalUses;
 	int uses;
 	public ToolType toolType;
 	public ToolPower toolPower;
-
-	Tool(Tool other){
+	
+	Tool(Tool other) {
 		super(other);
 		this.totalUses = other.totalUses;
 		this.uses = 0;
@@ -31,23 +36,24 @@ public class Tool extends Item
 		this.toolPower = other.toolPower;
 	}
 	
-	public Tool(String ref, int size, int id, String name, int[][] template,
-			int templateCount, ToolType toolType, ToolPower toolPower) {
+	public Tool(String ref, int size, int id, String name, int[][] template, int templateCount,
+			ToolType toolType, ToolPower toolPower) {
 		super(ref, size, id, name, template, templateCount);
-		if(toolPower == ToolPower.Wood)
+		if (toolPower == ToolPower.Wood) {
 			totalUses = 32;
-		else if(toolPower == ToolPower.Stone)
+		} else if (toolPower == ToolPower.Stone) {
 			totalUses = 64;
-		else if(toolPower == ToolPower.Metal)
+		} else if (toolPower == ToolPower.Metal) {
 			totalUses = 128;
-		else
+		} else {
 			totalUses = 256;
+		}
 		this.toolPower = toolPower;
 		this.toolType = toolType;
 	}
 	
-	public Object clone()
-	{
+	@Override
+	public Object clone() {
 		return new Tool(this);
 	}
 }

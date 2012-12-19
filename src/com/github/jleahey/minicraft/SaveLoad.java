@@ -11,66 +11,73 @@
  */
 
 package com.github.jleahey.minicraft;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InvalidClassException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
-
 public class SaveLoad {
-
-    public static void doSave(Game game) {
-
-        try {
-            if(game.inventory == null)
-            	return;
-            
-            FileOutputStream fileOut = new FileOutputStream("MiniCraft.sav");
-            ObjectOutputStream out = new ObjectOutputStream(fileOut);
-
-
-            out.writeObject(game.inventory);
-            out.writeObject(game.world);
-            out.writeObject(game.entities);
-
-            out.close();
-            fileOut.close();
-            
-        } catch(FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    @SuppressWarnings("unchecked")
-    public static boolean doLoad(Game game) {
-        File f = new File("MiniCraft.sav");
-
-
-        ObjectInputStream in = null;
-        try {
-            in = new ObjectInputStream(new FileInputStream(f));
-        } catch (InvalidClassException e){
-            System.err.println("Save file has the wrong version.");
-        } catch (FileNotFoundException e) {
-            System.err.println("Save file does not exist.");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (in == null) return false;
-
-        try {        
-            game.inventory = (Inventory)in.readObject();
-            game.world = (World)in.readObject();
-            game.entities = (ArrayList<Entity>)in.readObject();
-            in.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-            return false;   
-        }
-        return true;
-    }
+	
+	public static void doSave(Game game) {
+		
+		try {
+			if (game.inventory == null) {
+				return;
+			}
+			
+			FileOutputStream fileOut = new FileOutputStream("MiniCraft.sav");
+			ObjectOutputStream out = new ObjectOutputStream(fileOut);
+			
+			out.writeObject(game.inventory);
+			out.writeObject(game.world);
+			out.writeObject(game.entities);
+			
+			out.close();
+			fileOut.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static boolean doLoad(Game game) {
+		File f = new File("MiniCraft.sav");
+		
+		ObjectInputStream in = null;
+		try {
+			in = new ObjectInputStream(new FileInputStream(f));
+		} catch (InvalidClassException e) {
+			System.err.println("Save file has the wrong version.");
+		} catch (FileNotFoundException e) {
+			System.err.println("Save file does not exist.");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		if (in == null) {
+			return false;
+		}
+		
+		try {
+			game.inventory = (Inventory) in.readObject();
+			game.world = (World) in.readObject();
+			game.entities = (ArrayList<Entity>) in.readObject();
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	}
 }
