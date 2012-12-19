@@ -21,6 +21,7 @@ public abstract class Entity implements java.io.Serializable {
 	protected static final float waterAcceleration = .015f;
 	protected static final float maxWaterDY = .05f;
 	protected static final float maxDY = .65f;
+	protected static final int maxHP = 100;
 
 	public float x;
 	public float y;
@@ -31,6 +32,8 @@ public abstract class Entity implements java.io.Serializable {
 	protected boolean gravityApplies;
 	protected int widthPX;
 	protected int heightPX;
+
+	public int hitPoints;
 	
 	Entity(Entity other) {
 		this.x = other.x;
@@ -41,6 +44,7 @@ public abstract class Entity implements java.io.Serializable {
 		this.gravityApplies = other.gravityApplies;
 		this.heightPX = other.heightPX;
 		this.widthPX = other.widthPX;
+		this.hitPoints = other.hitPoints;
 	}
 	
 	public Entity(String ref, boolean gravityApplies, float x, float y, int width, int height) {
@@ -52,8 +56,8 @@ public abstract class Entity implements java.io.Serializable {
 		this.y = y;
 		this.widthPX = width;
 		this.heightPX = height;
-		dx = 0;
-		dy = 0;
+		this.dx = this.dy = 0;
+		this.hitPoints = maxHP;
 	}
 	
 	public void updatePosition(World world, int tileSize) {
@@ -203,6 +207,12 @@ public abstract class Entity implements java.io.Serializable {
 		if (hitTop) {
 			dy = 0.0000001f;
 		} else if (hitBottom) {
+			if (dy > 0.5f) {
+				// ranges from 0 to 0.15
+				float fallSpeedSurplus = dy - maxDY;
+				// damage is (70x)^2, from 0 to ~100 hp over [0, 0.15]
+				this.takeDamage((int)(4900*fallSpeedSurplus*fallSpeedSurplus));
+			}
 			dy = 0;
 		}
 		
@@ -359,5 +369,18 @@ public abstract class Entity implements java.io.Serializable {
 		if (StockMethods.onScreen) {
 			sprite.draw(g, pos.x, pos.y, widthPX, heightPX);
 		}
+	}
+
+	public void takeDamage(int amount) {
+		this.hitPoints -= amount;
+		// TODO: play sound, update life bar, check for death
+		System.out.println("Took "+amount+" damage. Current health = "+this.hitPoints);
+	}
+
+	public void heal(int amount) {
+		int newHP = this.hitPoints + amount;
+		this.hitPoints = (newHP > maxHP) ? maxHP : newHP;
+		// TODO: update life bar
+		System.out.println("Healed "+amount+". Current health = "+this.hitPoints);
 	}
 }
