@@ -293,16 +293,16 @@ public class Inventory implements java.io.Serializable
 			}
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(x+seperation, y+seperation, tileSize, tileSize);
-			/*if(selectedInventory == j)
-			{
-
-				if(current.item == null)
-			}
-			else
-			{
-				g.setColor(Color.LIGHT_GRAY);
-				g.fillRect(x+seperation-2, y+seperation-2, tileSize+4, tileSize+4);
-			}*/
+//			if(selectedInventory == j)
+//			{
+//
+//				if(current.item == null)
+//			}
+//			else
+//			{
+//				g.setColor(Color.LIGHT_GRAY);
+//				g.fillRect(x+seperation-2, y+seperation-2, tileSize+4, tileSize+4);
+//			}
 			
 			current.draw(g, x+seperation, y+seperation, tileSize);
 			x += tileSize + seperation;

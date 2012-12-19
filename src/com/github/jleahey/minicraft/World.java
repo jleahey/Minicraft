@@ -279,23 +279,23 @@ public class World implements java.io.Serializable
 		
 
 		//skyBar.draw(g, 0, 0);
-		/*
-		pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight, tileSize, 0, 0);
-		g.setColor(skyAir);
-		g.fillRect(pos.x, pos.y, width*tileSize, height*tileSize/2-1);
-		*/
+		
+//		pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight, tileSize, 0, 0);
+//		g.setColor(skyAir);
+//		g.fillRect(pos.x, pos.y, width*tileSize, height*tileSize/2-1);
+		
 		
 		float timeOfDay = getTimeOfDay();
-		/*
+		
 
-		int skyHeight = height*tileSize/2;
-		int skyBarHeight = skyHeight*2;
-		int skyBarMotion = skyBarHeight - skyHeight;
+//		int skyHeight = height*tileSize/2;
+//		int skyBarHeight = skyHeight*2;
+//		int skyBarMotion = skyBarHeight - skyHeight;
+//		
+//		skyBar.draw(g, 0,(int)(skyBarMotion*timeOfDay), screenWidth, skyHeight);
+//		
+//		System.out.println("(0,"+(int)((float)skyBarMotion*timeOfDay)+ ", "+screenWidth +", "+skyHeight+ ")");
 		
-		skyBar.draw(g, 0,(int)(skyBarMotion*timeOfDay), screenWidth, skyHeight);
-		
-		System.out.println("(0,"+(int)((float)skyBarMotion*timeOfDay)+ ", "+screenWidth +", "+skyHeight+ ")");
-		*/
 
 		//skyAir = new Color(.5f*timeOfDay,.9f*timeOfDay,timeOfDay);
 		pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight, tileSize, 0, 0);

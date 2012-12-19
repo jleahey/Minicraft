@@ -166,33 +166,33 @@ public abstract class Entity implements java.io.Serializable
 			}
 		}
 		
-		/*
-			for(float i = 1; i <= pixels; i++)
-			{
-				float scale = 1.f/pixels;
-				left = left + dx*scale;
-				right = right + dx*scale;
-				top = top + dy*scale;
-				bottom = bottom + dy*scale;
-				
-				boolean topLeft = world.passable((int)left, (int)top);
-				boolean topRight = world.passable((int)right, (int)top);
-				boolean bottomLeft = world.passable((int)left, (int)bottom);
-				boolean bottomRight = world.passable((int)right, (int)bottom);
-				if(!(topLeft && topRight && bottomLeft && bottomRight))
-				{
-					hitTop = topLeft || topRight;
-					hitBottom = bottomLeft || bottomRight;
-					
-					left = left - dx*scale;
-					right = right - dx*scale;
-					top = top - dy*scale;
-					bottom = bottom - dy*scale;
-					
-					break;
-				}
-			}
-		 */
+		
+//			for(float i = 1; i <= pixels; i++)
+//			{
+//				float scale = 1.f/pixels;
+//				left = left + dx*scale;
+//				right = right + dx*scale;
+//				top = top + dy*scale;
+//				bottom = bottom + dy*scale;
+//				
+//				boolean topLeft = world.passable((int)left, (int)top);
+//				boolean topRight = world.passable((int)right, (int)top);
+//				boolean bottomLeft = world.passable((int)left, (int)bottom);
+//				boolean bottomRight = world.passable((int)right, (int)bottom);
+//				if(!(topLeft && topRight && bottomLeft && bottomRight))
+//				{
+//					hitTop = topLeft || topRight;
+//					hitBottom = bottomLeft || bottomRight;
+//					
+//					left = left - dx*scale;
+//					right = right - dx*scale;
+//					top = top - dy*scale;
+//					bottom = bottom - dy*scale;
+//					
+//					break;
+//				}
+//			}
+		 
 		
 		
 		
@@ -224,68 +224,68 @@ public abstract class Entity implements java.io.Serializable
 		y = top;
 		
 		
-		/*
-
-		float onePixel = 1.f/tileSize;
-		
-		
-		int y = this.getBottom(tileSize);
-		int leftX = (int)(this.getLeft(tileSize) - onePixel);
-		int rightX = (int)(this.getRight(tileSize) + onePixel);
-		System.out.println("Left "+leftX + " Right "+rightX + " Y " + y);
-
-
-
-		
-		float dx = this.dx;
-		float dy = this.dy;
-		this.x += dx;
-		this.dx = dx;
-		
-		if(gravityApplies)
-		{
-			dy += gravityAcceleration;
-			dy = Math.min(maxDY, dy);
-		}
-		
-		//left
-		if(dx < 0 && (!world.passable(leftX,y-1) || !world.passable(leftX,y-2)))
-		{
-			this.x -= dx;
-		}
-		//right
-		if(dx > 0 && (!world.passable(rightX,y-1) || !world.passable(rightX,y-2)))
-		{
-			this.x -= dx;
-		}
 		
 
-		
-		leftX = this.getLeft(tileSize);
-		rightX = this.getRight(tileSize);
-		
-		//bottom
-		if(dy >= 0 && (!world.passable(leftX,y) || !world.passable(rightX,y)))
-		{
-			this.setYInd(y, tileSize);
-			//this.y -= this.dy;
-			dy = 0;
-		}
-		
-		//top
-		if(dy < 0 && (!world.passable(leftX,y-2) || !world.passable(rightX,y-2)))
-		{
-			this.setYInd(y, tileSize);
-			//this.y -= this.dy;
-			dy = 0;
-		}
-		
-
-		
-
-
-		this.y += dy;
-		this.dy = dy;*/
+//		float onePixel = 1.f/tileSize;
+//		
+//		
+//		int y = this.getBottom(tileSize);
+//		int leftX = (int)(this.getLeft(tileSize) - onePixel);
+//		int rightX = (int)(this.getRight(tileSize) + onePixel);
+//		System.out.println("Left "+leftX + " Right "+rightX + " Y " + y);
+//
+//
+//
+//		
+//		float dx = this.dx;
+//		float dy = this.dy;
+//		this.x += dx;
+//		this.dx = dx;
+//		
+//		if(gravityApplies)
+//		{
+//			dy += gravityAcceleration;
+//			dy = Math.min(maxDY, dy);
+//		}
+//		
+//		//left
+//		if(dx < 0 && (!world.passable(leftX,y-1) || !world.passable(leftX,y-2)))
+//		{
+//			this.x -= dx;
+//		}
+//		//right
+//		if(dx > 0 && (!world.passable(rightX,y-1) || !world.passable(rightX,y-2)))
+//		{
+//			this.x -= dx;
+//		}
+//		
+//
+//		
+//		leftX = this.getLeft(tileSize);
+//		rightX = this.getRight(tileSize);
+//		
+//		//bottom
+//		if(dy >= 0 && (!world.passable(leftX,y) || !world.passable(rightX,y)))
+//		{
+//			this.setYInd(y, tileSize);
+//			//this.y -= this.dy;
+//			dy = 0;
+//		}
+//		
+//		//top
+//		if(dy < 0 && (!world.passable(leftX,y-2) || !world.passable(rightX,y-2)))
+//		{
+//			this.setYInd(y, tileSize);
+//			//this.y -= this.dy;
+//			dy = 0;
+//		}
+//		
+//
+//		
+//
+//
+//		this.y += dy;
+//		this.dy = dy;
 
 	}
 	

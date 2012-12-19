@@ -16,7 +16,7 @@ public class SystemTimer {
 	/** The number of "timer ticks" per second */
 	private static long timerTicksPerSecond;
 	
-	/** A little initialisation at startup, we're just going to get the GAGE timer going */
+	/** A little initialization at startup, we're just going to get the GAGE timer going */
 	static {
 		timer.start();
 		timerTicksPerSecond = AdvancedTimer.getTicksPerSecond();
@@ -30,9 +30,7 @@ public class SystemTimer {
 	public static long getTime() {
 		// we get the "timer ticks" from the high resolution timer
 		// multiply by 1000 so our end result is in milliseconds
-
 		// then divide by the number of ticks in a second giving
-
 		// us a nice clear time in milliseconds
 
 		return (timer.getClockTicks() * 1000) / timerTicksPerSecond;

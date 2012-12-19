@@ -44,10 +44,8 @@ public class Game extends Canvas
 	private int tileSize = 32;
 	public Inventory inventory;
 	
-	
 	private int breakingTicks;
 	private Int2 breakingPos;
-	
 	
 	/* menu sprites */
 	private final Sprite menu_bgTile = SpriteStore.get().getSprite("sprites/tiles/dirt.png");
