@@ -28,7 +28,7 @@ public abstract class GraphicsHandler {
 		return single;
 	}
 	
-	public abstract void init();
+	public abstract void init(Game game);
 	
 	public abstract void startDrawing();
 	

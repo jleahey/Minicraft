@@ -12,46 +12,19 @@
 
 package com.github.jleahey.minicraft;
 
-//import java.awt.Canvas;
-//import java.awt.Color;
-//import java.awt.Cursor;
-//import java.awt.Dimension;
-//import java.awt.Graphics2D;
-//import java.awt.Image;
-//import java.awt.Point;
-//import java.awt.Toolkit;
-//import java.awt.event.ComponentAdapter;
-//import java.awt.event.ComponentEvent;
-//import java.awt.event.KeyAdapter;
-//import java.awt.event.KeyEvent;
-//import java.awt.event.MouseAdapter;
-//import java.awt.event.MouseEvent;
-//import java.awt.event.MouseMotionListener;
-//import java.awt.event.MouseWheelEvent;
-//import java.awt.event.MouseWheelListener;
-//import java.awt.event.WindowAdapter;
-//import java.awt.event.WindowEvent;
-//import java.awt.image.BufferStrategy;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Random;
-
-//import javax.swing.ImageIcon;
-//import javax.swing.JFrame;
-//import javax.swing.JPanel;
-
-//import com.github.jleahey.minicraft.awtgraphics.Sprite;
-//import com.github.jleahey.minicraft.awtgraphics.SpriteStore;
 
 public class Game {
 	
 	private int worldWidth = 512;
 	private int worldHeight = 256;
 	private boolean gameRunning = true;
-	private boolean spaceBar = false;
-	private boolean leftClick = false;
-	private boolean rightClick = false;
-	private boolean paused = true;
+	public boolean spaceBar = false;
+	public boolean leftClick = false;
+	public boolean rightClick = false;
+	public boolean paused = true;
 	
 	private Map<Character, Item> itemTypes;
 	
@@ -86,24 +59,24 @@ public class Game {
 	private Sprite minerIcon;
 	private Sprite[] breakingSprites;
 	
-	private boolean viewFPS = false;
+	public boolean viewFPS = false;
 	private boolean startMenu = true;
 	private boolean newMenu = false;
 	private long ticksRunning;
 	private Random random = new Random();
 	
-	private Player player;
+	public Player player;
 	public World world;
 	
-	private MusicPlayer musicPlayer = new MusicPlayer("sounds/music.ogg");
-	private int screenMouseX;
-	private int screenMouseY;
+	public MusicPlayer musicPlayer = new MusicPlayer("sounds/music.ogg");
+	public int screenMouseX;
+	public int screenMouseY;
 	
 	/**
 	 * Construct our game and set it running.
 	 */
 	public Game() {
-		GraphicsHandler.get().init();
+		GraphicsHandler.get().init(this);
 		itemTypes = ItemLoader.loadItems(tileSize / 2);
 		System.gc();
 	}
@@ -387,7 +360,7 @@ public class Game {
 		inventory.addItem(item, 1);
 	}
 	
-	private void setInventorySelect(int count) {
+	public void setInventorySelect(int count) {
 		inventory.selectedInventory = count;
 	}
 	
@@ -403,7 +376,7 @@ public class Game {
 		}
 	}
 	
-	private void zoom(int level) {
+	public void zoom(int level) {
 		if (level == 0) {
 			if (tileSize < 32) {
 				zoom(1);
@@ -438,6 +411,33 @@ public class Game {
 				}
 			}
 		}
+	}
+	
+	public void tossItem() {
+		InventoryItem inventoryItem = inventory.selectedItem();
+		if (!inventoryItem.isEmpty()) {
+			Item newItem = inventoryItem.getItem();
+			if (!(newItem instanceof Tool)) {
+				newItem = (Item) newItem.clone();
+			}
+			inventoryItem.remove(1);
+			if (player.facingRight) {
+				newItem.x = player.x + 1 + random.nextFloat();
+			} else {
+				newItem.x = player.x - 1 - random.nextFloat();
+			}
+			;
+			newItem.y = player.y;
+			newItem.dy = -.1f;
+			entities.add(newItem);
+		}
+	}
+	
+	public void quitNow() {
+		zoom(0);
+		SaveLoad.doSave(getGame());
+		musicPlayer.close();
+		System.exit(0);
 	}
 	
 	/**
