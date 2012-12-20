@@ -1,6 +1,9 @@
 package com.github.jleahey.minicraft;
 
-public class Color {
+public class Color implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+
 	// From AWT Color constant values
 	public static final Color white = new Color(255, 255, 255);
 	public static final Color darkGray = new Color(64, 64, 64);
@@ -12,11 +15,11 @@ public class Color {
 	public static final Color DARK_GRAY = darkGray;
 	public static final Color orange = new Color(255, 200, 0);
 	
-	public byte R, G, B;
+	public int R, G, B;
 	
 	public Color(int R, int G, int B) {
-		this.R = (byte) R;
-		this.G = (byte) G;
-		this.B = (byte) B;
+		this.R = R;
+		this.G = G;
+		this.B = B;
 	}
 }
