@@ -12,9 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-
 public class Player extends Entity {
 	private static final long serialVersionUID = 1L;
 	
@@ -138,8 +135,8 @@ public class Player extends Entity {
 		return freeVar;
 	}
 	
-	public void updateHand(float cameraX, float cameraY, Graphics2D g, float mouseX, float mouseY,
-			World world, int tileSize) {
+	public void updateHand(GraphicsHandler g, float cameraX, float cameraY, float mouseX,
+			float mouseY, World world, int tileSize) {
 		
 		// float startX = this.getCenterX(tileSize);
 		// float startY = this.getCenterY(tileSize);
@@ -311,8 +308,8 @@ public class Player extends Entity {
 	}
 	
 	@Override
-	public void draw(Graphics g, float cameraX, float cameraY, int screenWidth, int screenHeight,
-			int tileSize) {
+	public void draw(GraphicsHandler g, float cameraX, float cameraY, int screenWidth,
+			int screenHeight, int tileSize) {
 		Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth,
 				screenHeight, tileSize, x, y);
 		if (StockMethods.onScreen) {

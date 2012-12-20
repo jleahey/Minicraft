@@ -1,28 +1,24 @@
 package com.github.jleahey.minicraft;
 
-import java.awt.Graphics;
-import java.awt.Image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public interface Sprite extends java.io.Serializable {
 	
-	public void set(Image image, String ref);
-	
 	/**
 	 * Get the width of the drawn sprite
 	 * 
 	 * @return The width in pixels of this sprite
 	 */
-	public int getWidth() ;
+	public int getWidth();
 	
 	/**
 	 * Get the height of the drawn sprite
 	 * 
 	 * @return The height in pixels of this sprite
 	 */
-	public int getHeight() ;
+	public int getHeight();
 	
 	/**
 	 * Draw the sprite onto the graphics context provided
@@ -34,12 +30,11 @@ public interface Sprite extends java.io.Serializable {
 	 * @param y
 	 *            The y location at which to draw the sprite
 	 */
-	public void draw(Graphics g, int x, int y) ;
+	public void draw(GraphicsHandler g, int x, int y);
 	
-	public void draw(Graphics g, int x, int y, int width, int height);
-
-	void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException,
-			IOException;
+	public void draw(GraphicsHandler g, int x, int y, int width, int height);
+	
+	void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException, IOException;
 	
 	void writeObject(ObjectOutputStream aOutputStream) throws IOException;
 };

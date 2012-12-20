@@ -12,8 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -274,8 +272,8 @@ public class World implements java.io.Serializable {
 		}
 	}
 	
-	public void draw(Graphics g, int x, int y, int screenWidth, int screenHeight, float cameraX,
-			float cameraY, int tileSize) {
+	public void draw(GraphicsHandler g, int x, int y, int screenWidth, int screenHeight,
+			float cameraX, float cameraY, int tileSize) {
 		Int2 pos;
 		
 		pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight,

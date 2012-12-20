@@ -12,9 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-
 public class InventoryItem implements java.io.Serializable {
 	private static final long serialVersionUID = -2389571032163510795L;
 	
@@ -83,7 +80,7 @@ public class InventoryItem implements java.io.Serializable {
 		}
 	}
 	
-	public void draw(Graphics2D g, int x, int y, int tileSize) {
+	public void draw(GraphicsHandler g, int x, int y, int tileSize) {
 		if (this.getCount() <= 0) {
 			return;
 		}

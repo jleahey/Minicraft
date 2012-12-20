@@ -8,10 +8,8 @@ public abstract class SpriteStore {
 	/** The single instance of this class */
 	protected static SpriteStore single;
 	
-	private static final boolean awtMode = true;
-	
 	{
-		if (awtMode) {
+		if (GraphicsHandler.awtMode) {
 			single = new AwtSpriteStore();
 		} else {
 			// android!

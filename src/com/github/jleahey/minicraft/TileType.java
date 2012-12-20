@@ -12,8 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Graphics;
-
 public class TileType implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -34,7 +32,7 @@ public class TileType implements java.io.Serializable {
 		this.liquid = liquid;
 	}
 	
-	public void draw(Graphics g, int x, int y) {
+	public void draw(GraphicsHandler g, int x, int y) {
 		sprite.draw(g, x, y);
 	}
 }

@@ -12,8 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.Map;
 
 public class Inventory implements java.io.Serializable {
@@ -254,7 +252,7 @@ public class Inventory implements java.io.Serializable {
 		return clickPos;
 	}
 	
-	public void draw(Graphics2D g, int screenWidth, int screenHeight) {
+	public void draw(GraphicsHandler g, int screenWidth, int screenHeight) {
 		int tileSize = 16;
 		int seperation = 10;
 		

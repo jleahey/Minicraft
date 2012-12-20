@@ -12,8 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.awt.Graphics;
-
 public abstract class Entity implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -21,8 +19,12 @@ public abstract class Entity implements java.io.Serializable {
 	protected static final float waterAcceleration = .015f;
 	protected static final float maxWaterDY = .05f;
 	protected static final float maxDY = .65f;
+<<<<<<< HEAD
 	protected static final int maxHP = 100;
 
+=======
+	
+>>>>>>> GraphicsHandler overhaul
 	public float x;
 	public float y;
 	public float dx;
@@ -362,8 +364,8 @@ public abstract class Entity implements java.io.Serializable {
 		return !(bottom1 < top2 || top1 > bottom2 || right1 < left2 || left1 > right2);
 	}
 	
-	public void draw(Graphics g, float cameraX, float cameraY, int screenWidth, int screenHeight,
-			int tileSize) {
+	public void draw(GraphicsHandler g, float cameraX, float cameraY, int screenWidth,
+			int screenHeight, int tileSize) {
 		Int2 pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth,
 				screenHeight, tileSize, x, y);
 		if (StockMethods.onScreen) {
