@@ -25,10 +25,6 @@ import com.github.jleahey.minicraft.Sprite;
  */
 public class AwtSpriteStore extends com.github.jleahey.minicraft.SpriteStore {
 	
-	{
-		single = new AwtSpriteStore();
-	}
-	
 	@Override
 	protected Sprite loadSprite(String ref) {
 		// otherwise, go away and grab the sprite from the resource

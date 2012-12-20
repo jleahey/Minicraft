@@ -1,5 +1,4 @@
 package com.github.jleahey.minicraft;
-
 import com.github.jleahey.minicraft.awtgraphics.AwtGraphicsHandler;
 
 public abstract class GraphicsHandler {
@@ -9,12 +8,6 @@ public abstract class GraphicsHandler {
 	protected static int screenHeight = 480;
 	
 	private static GraphicsHandler single;
-	{
-		if (awtMode) {
-			single = new AwtGraphicsHandler();
-		} else {
-		}
-	}
 	
 	public int getScreenWidth() {
 		return screenWidth;
@@ -25,6 +18,13 @@ public abstract class GraphicsHandler {
 	}
 	
 	public static GraphicsHandler get() {
+		if(single == null) {
+			if (awtMode) {
+				single = new AwtGraphicsHandler();
+			} else {
+				//android!
+			}
+		}
 		return single;
 	}
 	
