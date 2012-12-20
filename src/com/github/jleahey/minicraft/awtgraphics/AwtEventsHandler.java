@@ -84,8 +84,6 @@ public class AwtEventsHandler {
 	}
 	
 	private class KeyInputHandler extends KeyAdapter {
-		static final char ESCAPE = (char) 27;
-		
 		/**
 		 * Notification from AWT that a key has been pressed. Note that
 		 * a key being pressed is equal to being pushed down but *NOT*
@@ -133,6 +131,9 @@ public class AwtEventsHandler {
 			case KeyEvent.VK_SPACE:
 				game.spaceBar = false;
 				break;
+			case KeyEvent.VK_ESCAPE:
+				game.quitNow();
+				break;
 			}
 		}
 		
@@ -177,8 +178,6 @@ public class AwtEventsHandler {
 			case 'q':
 				game.tossItem();
 				break;
-			case ESCAPE:
-				game.quitNow();
 			}
 		}
 	}
