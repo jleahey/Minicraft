@@ -24,6 +24,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import com.github.jleahey.minicraft.Sprite;
+
 public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHandler {
 	Canvas canvas;
 	private BufferStrategy strategy;
@@ -140,6 +142,16 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 	@Override
 	public void fillOval(int x, int y, int width, int height) {
 		g.fillOval(x, y, width, height);
+	}
+	
+	@Override
+	public void drawImage(Sprite sprite, int x, int y) {
+		g.drawImage(((AwtSprite)sprite).image, x, y, null);
+	}
+	
+	@Override
+	public void drawImage(Sprite sprite, int x, int y, int width, int height) {
+		g.drawImage(((AwtSprite)sprite).image, x, y, width, height, null);
 	}
 //	
 //	private class MouseWheelInputHander implements MouseWheelListener {
