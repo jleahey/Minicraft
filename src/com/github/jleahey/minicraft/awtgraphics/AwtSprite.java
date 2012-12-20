@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.github.jleahey.minicraft.GraphicsHandler;
+
 /**
  * A sprite to be displayed on the screen. Note that a sprite
  * contains no state information, i.e. its just the image and
@@ -15,7 +17,7 @@ import java.io.ObjectOutputStream;
  * 
  * @author Kevin Glass
  */
-public class AwtSprite implements java.io.Serializable {
+public class AwtSprite implements com.github.jleahey.minicraft.Sprite {
 	private static final long serialVersionUID = 1L;
 	
 	/** The image to be drawn for this sprite */
@@ -61,19 +63,20 @@ public class AwtSprite implements java.io.Serializable {
 	 * @param y
 	 *            The y location at which to draw the sprite
 	 */
-	public void draw(Graphics g, int x, int y) {
-		g.drawImage(image, x, y, null);
+	public void draw(GraphicsHandler g, int x, int y) {
+		g.drawImage(this, x, y);
 	}
 	
-	public void draw(Graphics g, int x, int y, int width, int height) {
-		g.drawImage(image, x, y, width, height, null);
+	public void draw(GraphicsHandler g, int x, int y, int width, int height) {
+		g.drawImage(this, x, y, width, height);
 	}
 	
 	/**
 	 * Always treat de-serialization as a full-blown constructor, by
 	 * validating the final state of the de-serialized object.
 	 */
-	private void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException,
+	@Override
+	public void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException,
 			IOException {
 		// always perform the default de-serialization first
 		// aInputStream.defaultReadObject();
@@ -85,10 +88,10 @@ public class AwtSprite implements java.io.Serializable {
 	 * This is the default implementation of writeObject.
 	 * Customise if necessary.
 	 */
-	private void writeObject(ObjectOutputStream aOutputStream) throws IOException {
+	@Override
+	public void writeObject(ObjectOutputStream aOutputStream) throws IOException {
 		// perform the default serialization for all non-transient, non-static fields
 		aOutputStream.writeObject(ref);
 		aOutputStream.defaultWriteObject();
 	}
-	
 }
