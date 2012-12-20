@@ -19,12 +19,8 @@ public abstract class Entity implements java.io.Serializable {
 	protected static final float waterAcceleration = .015f;
 	protected static final float maxWaterDY = .05f;
 	protected static final float maxDY = .65f;
-<<<<<<< HEAD
 	protected static final int maxHP = 100;
-
-=======
 	
->>>>>>> GraphicsHandler overhaul
 	public float x;
 	public float y;
 	public float dx;
