@@ -22,4 +22,12 @@ public class Color implements java.io.Serializable {
 		this.G = G;
 		this.B = B;
 	}
+
+	// returns a new color, interpolated toward c by amount (in range [0,1])
+	public Color interpolateTo(Color c, float amount) {
+		int dR = (int)(amount * (c.R - this.R));
+		int dG = (int)(amount * (c.G - this.G));
+		int dB = (int)(amount * (c.B - this.B));
+		return new Color(this.R + dR, this.G + dG, this.B + dB);
+	}
 }

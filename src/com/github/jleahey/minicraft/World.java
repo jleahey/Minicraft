@@ -30,10 +30,9 @@ public class World implements java.io.Serializable {
 	private int chunkWidth = 16;
 	private boolean chunkFillRight = true;
 	private Random random;
-	private Color skyAir = new Color(132, 210, 230);
 	private Color caveAir = new Color(100, 100, 100);
 	private long ticksAlive = 0;
-	private final int dayLength = 2000;
+	private final int dayLength = 20000;
 	
 	public World(int width, int height, Random random) {
 		
@@ -262,29 +261,10 @@ public class World implements java.io.Serializable {
 				tileSize, 0, height / 2);
 		g.setColor(Color.darkGray);
 		g.fillRect(pos.x, pos.y, width * tileSize, height * tileSize / 2);
-		
-		// skyBar.draw(g, 0, 0);
-		
-		// pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth,
-		// screenHeight, tileSize, 0, 0);
-		// g.setColor(skyAir);
-		// g.fillRect(pos.x, pos.y, width*tileSize, height*tileSize/2-1);
-		
-		float timeOfDay = getTimeOfDay();
-		
-		// int skyHeight = height*tileSize/2;
-		// int skyBarHeight = skyHeight*2;
-		// int skyBarMotion = skyBarHeight - skyHeight;
-		//
-		// skyBar.draw(g, 0,(int)(skyBarMotion*timeOfDay), screenWidth, skyHeight);
-		//
-		// System.out.println("(0,"+(int)((float)skyBarMotion*timeOfDay)+ ", "+screenWidth
-		// +", "+skyHeight+ ")");
-		
-		// skyAir = new Color(.5f*timeOfDay,.9f*timeOfDay,timeOfDay);
+
 		pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight,
 				tileSize, 0, 0);
-		g.setColor(skyAir);
+		g.setColor(getSkyColor());
 		g.fillRect(pos.x, pos.y, width * tileSize, height * tileSize / 2 - 1);
 		g.setColor(caveAir);
 		for (int i = 0; i < width; i++) {
@@ -371,14 +351,32 @@ public class World implements java.io.Serializable {
 		return tiles[x][y].type != null && (tiles[x][y].type.name == 'f');
 	}
 	
+	// returns a float in the range [0,1)
+	// 0 is dawn, 0.25 is noon, 0.5 is dusk, 0.75 is midnight
 	public float getTimeOfDay() {
-		int ticksInDay = (int) (ticksAlive % (dayLength)) - dayLength / 2;
-		return Math.abs((float) ticksInDay / (dayLength / 2));
-		
+		return ((float)(ticksAlive % dayLength)) / dayLength;
 	}
 	
 	public boolean isNight() {
-		return getTimeOfDay() < 0;
+		return getTimeOfDay() > 0.5f;
+	}
+
+	static final Color dawnSky = new Color(255, 217, 92);
+	static final Color noonSky = new Color(132, 210, 230);
+	static final Color duskSky = new Color(245, 92, 32);
+	static final Color midnightSky = new Color(0, 0, 0);
+
+	public Color getSkyColor() {
+		float time = getTimeOfDay();
+		if (time < 0.25f) {
+			return dawnSky.interpolateTo(noonSky, 4*time);
+		} else if (time < 0.5f) {
+			return noonSky.interpolateTo(duskSky, 4*(time - 0.25f));
+		} else if (time < 0.75f) {
+			return duskSky.interpolateTo(midnightSky, 4*(time - 0.5f));
+		} else {
+			return midnightSky.interpolateTo(dawnSky, 4*(time - 0.75f));
+		}
 	}
 	
 }
