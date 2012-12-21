@@ -46,8 +46,7 @@ public class Game {
 	private final Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
 	private final Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
 	private final Sprite menu_miniDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
-	private final Sprite menu_mediumDown = SpriteStore.get().getSprite(
-			"sprites/menus/mini_down.png");
+	private final Sprite menu_mediumDown = SpriteStore.get().getSprite("sprites/menus/med_down.png");
 	private final Sprite menu_bigDown = SpriteStore.get().getSprite("sprites/menus/big_down.png");
 	private final Sprite menu_tag = SpriteStore.get().getSprite("sprites/menus/tag.png");
 	private final int menu_miniWidth = 256;
