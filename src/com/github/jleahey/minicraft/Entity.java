@@ -369,6 +369,9 @@ public abstract class Entity implements java.io.Serializable {
 	}
 	
 	// Only living entities have hitpoints; they should override these methods.
-	public void takeDamage(int amount) {}
-	public void heal(int amount) {}
+	public void takeDamage(int amount) {
+	}
+	
+	public void heal(int amount) {
+	}
 }
