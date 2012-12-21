@@ -24,6 +24,7 @@ public abstract class Entity implements java.io.Serializable {
 	public float x;
 	public float y;
 	public float dx;
+	public int hitPoints;
 	public float dy;
 	
 	protected Sprite sprite;
@@ -31,7 +32,7 @@ public abstract class Entity implements java.io.Serializable {
 	protected int widthPX;
 	protected int heightPX;
 	
-	public int hitPoints;
+	private float lastYPeak;
 	
 	Entity(Entity other) {
 		this.x = other.x;
@@ -76,6 +77,10 @@ public abstract class Entity implements java.io.Serializable {
 		boolean bottomRight = true;
 		boolean middleLeft = true;
 		boolean middleRight = true;
+		
+		if (dy < 0.01 && dy > -0.01) {
+			lastYPeak = y;
+		}
 		
 		if (favorVertical) {
 			for (int i = 1; i <= pixels && topLeft && topRight && bottomLeft && bottomRight; i++) {
@@ -205,13 +210,11 @@ public abstract class Entity implements java.io.Serializable {
 		if (hitTop) {
 			dy = 0.0000001f;
 		} else if (hitBottom) {
-			if (dy > 0.5f) {
-				// ranges from 0 to 0.15
-				float fallSpeedSurplus = dy - maxDY;
-				// damage is (70x)^2, from 0 to ~100 hp over [0, 0.15]
-				this.takeDamage((int) (4900 * fallSpeedSurplus * fallSpeedSurplus));
-			}
+			int dmg = (int) (y - lastYPeak - 2.75);
+			if (dmg > 0)
+				this.takeDamage(dmg * 5);
 			dy = 0;
+			lastYPeak = y;
 		}
 		
 		x = left;
