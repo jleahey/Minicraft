@@ -25,6 +25,7 @@ public abstract class LivingEntity extends Entity {
 	protected float armLength = 4.5f;
 	protected float moveDirection = 0;
 	protected long ticksAlive = 0;
+	protected long ticksUnderwater = 0;
 	protected boolean jumping = false;
 	
 	public LivingEntity(boolean gravityApplies, float x, float y, int width, int height) {
@@ -68,6 +69,16 @@ public abstract class LivingEntity extends Entity {
 		}
 		if (this.isInWater(world, tileSize)) {
 			jumping = false;
+		}
+		// drown check
+		if (this.isHeadUnderWater(world, tileSize)) {
+			ticksUnderwater++;
+			if (ticksUnderwater > 500) {
+				this.takeDamage(5);
+				ticksUnderwater = 300;
+			}
+		} else {
+			ticksUnderwater = 0;
 		}
 	}
 	
