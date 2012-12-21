@@ -363,9 +363,9 @@ public class Game {
 			int heartY = GraphicsHandler.get().getScreenHeight() - 50;
 			for (int heartIdx = 1; heartIdx <= 10; ++heartIdx) {
 				int hpDiff = player.hitPoints - heartIdx*10;
-				if (hpDiff > 5) {
+				if (hpDiff >= 0) {
 					fullHeart.draw(g, heartX, heartY, 10, 10);
-				} else if (hpDiff > 0) {
+				} else if (hpDiff >= -5) {
 					halfHeart.draw(g, heartX, heartY, 10, 10);
 				} else {
 					emptyHeart.draw(g, heartX, heartY, 10, 10);
