@@ -58,6 +58,7 @@ public class Game {
 	private Sprite builderIcon;
 	private Sprite minerIcon;
 	private Sprite[] breakingSprites;
+	private Sprite fullHeart, halfHeart, emptyHeart;
 	
 	public boolean viewFPS = false;
 	private boolean startMenu = true;
@@ -109,6 +110,9 @@ public class Game {
 		
 		builderIcon = SpriteStore.get().getSprite("sprites/other/builder.png");
 		minerIcon = SpriteStore.get().getSprite("sprites/other/miner.png");
+		fullHeart = SpriteStore.get().getSprite("sprites/other/full_heart.png");
+		halfHeart = SpriteStore.get().getSprite("sprites/other/half_heart.png");
+		emptyHeart = SpriteStore.get().getSprite("sprites/other/empty_heart.png");
 		
 		if (inventory == null) {
 			inventory = new Inventory(10, 4, 3, itemTypes);
@@ -340,9 +344,11 @@ public class Game {
 				minerIcon.draw(g, pos.x, pos.y, tileSize, tileSize);
 			}
 			
+			// draw the hotbar, and optionally the inventory screen
 			inventory.draw(g, GraphicsHandler.get().getScreenWidth(), GraphicsHandler.get()
 					.getScreenHeight());
 			
+			// draw the mouse
 			Int2 mouseTest = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize,
 					tileSize, tileSize, worldMouseX, worldMouseY);
 			g.setColor(Color.white);
@@ -350,6 +356,23 @@ public class Game {
 			g.setColor(Color.black);
 			g.fillOval(mouseTest.x - 3, mouseTest.y - 3, 6, 6);
 			
+
+			// HACK: draw hearts for health bar
+			// TODO: move this elsewhere, don't use so many magic constants
+			int heartX = (GraphicsHandler.get().getScreenWidth() - 250) / 2;
+			int heartY = GraphicsHandler.get().getScreenHeight() - 50;
+			for (int heartIdx = 1; heartIdx <= 10; ++heartIdx) {
+				int hpDiff = player.hitPoints - heartIdx*10;
+				if (hpDiff > 5) {
+					fullHeart.draw(g, heartX, heartY, 10, 10);
+				} else if (hpDiff > 0) {
+					halfHeart.draw(g, heartX, heartY, 10, 10);
+				} else {
+					emptyHeart.draw(g, heartX, heartY, 10, 10);
+				}
+				heartX += 15;
+			}
+
 			g.finishDrawing();
 			
 			SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
