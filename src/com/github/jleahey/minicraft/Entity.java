@@ -312,33 +312,30 @@ public abstract class Entity implements java.io.Serializable {
 	}
 	
 	public boolean isInWater(World world, int tileSize) {
-		float left = this.getLeft(tileSize);
-		float right = this.getRight(tileSize);
-		float top = this.getTop(tileSize);
-		float bottom = this.getBottom(tileSize);
-		if (world.isLiquid((int) left, (int) top) || world.isLiquid((int) right, (int) top)
-				|| world.isLiquid((int) left, (int) bottom)
-				|| world.isLiquid((int) right, (int) bottom)) {
-			return true;
-		}
-		return false;
+		int left = (int) this.getLeft(tileSize);
+		int right = (int) this.getRight(tileSize);
+		int top = (int) this.getTop(tileSize);
+		int bottom = (int) this.getBottom(tileSize);
+		return (world.isLiquid(left, top) || world.isLiquid(right, top)
+				|| world.isLiquid(left, bottom) || world.isLiquid(right, bottom));
+	}
+
+	public boolean isHeadUnderWater(World world, int tileSize) {
+		int top = (int) this.getTop(tileSize);
+		int centerX = (int) this.getCenterX(tileSize);
+		return world.isLiquid(centerX, top);
+
 	}
 	
 	public boolean isInWaterOrClimbable(World world, int tileSize) {
-		float left = this.getLeft(tileSize);
-		float right = this.getRight(tileSize);
-		float top = this.getTop(tileSize);
-		float bottom = this.getBottom(tileSize);
-		if (world.isLiquid((int) left, (int) top) || world.isLiquid((int) right, (int) top)
-				|| world.isLiquid((int) left, (int) bottom)
-				|| world.isLiquid((int) right, (int) bottom)
-				|| world.isClimbable((int) left, (int) top)
-				|| world.isClimbable((int) right, (int) top)
-				|| world.isClimbable((int) left, (int) bottom)
-				|| world.isClimbable((int) right, (int) bottom)) {
-			return true;
-		}
-		return false;
+		int left = (int) this.getLeft(tileSize);
+		int right = (int) this.getRight(tileSize);
+		int top = (int) this.getTop(tileSize);
+		int bottom = (int) this.getBottom(tileSize);
+		return (world.isLiquid(left, top) || world.isLiquid(right, top)
+				|| world.isLiquid(left, bottom) || world.isLiquid(right, bottom)
+				|| world.isClimbable(left, top) || world.isClimbable(right, top)
+				|| world.isClimbable(left, bottom) || world.isClimbable(right, bottom));
 	}
 	
 	public boolean collidesWith(Entity entity, int tileSize) {
