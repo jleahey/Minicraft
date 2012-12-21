@@ -19,7 +19,7 @@ import java.util.Random;
 public class World implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public Map<Character, Tile> tileTypes = new HashMap<Character, Tile>();
+	
 	public Tile[][] tiles;
 	public boolean[][] visibility;
 	public int width;
@@ -37,23 +37,6 @@ public class World implements java.io.Serializable {
 	private final int dayLength = 2000;
 	
 	public World(int width, int height, Random random) {
-		tileTypes.put('d', new Tile(new TileType("sprites/tiles/dirt.png", 'd')));
-		tileTypes.put('g', new Tile(new TileType("sprites/tiles/dirtwithgrass.png", 'g')));
-		tileTypes.put('l', new Tile(new TileType("sprites/tiles/leaves.png", 'l')));
-		tileTypes.put('p', new Tile(new TileType("sprites/tiles/plank.png", 'p')));
-		tileTypes.put('w', new Tile(new TileType("sprites/tiles/wood.png", 'w', true, false)));
-		tileTypes.put('s', new Tile(new TileType("sprites/tiles/stone.png", 's')));
-		tileTypes.put('a', new Tile(new TileType("sprites/tiles/air.png", 'a', true, false)));
-		tileTypes.put('t', new Tile(new TileType("sprites/tiles/water.png", 't', true, true)));
-		tileTypes.put('n', new Tile(new TileType("sprites/tiles/sand.png", 'n')));
-		tileTypes.put('i', new Tile(new TileType("sprites/tiles/ironore.png", 'i')));
-		tileTypes.put('c', new Tile(new TileType("sprites/tiles/coalore.png", 'c')));
-		tileTypes.put('m', new Tile(new TileType("sprites/tiles/diamondore.png", 'm')));
-		tileTypes.put('b', new Tile(new TileType("sprites/tiles/cobble.png", 'b')));
-		tileTypes.put('f', new Tile(new TileType("sprites/tiles/craft.png", 'f')));
-		tileTypes.put('x', new Tile(new TileType("sprites/tiles/adminite.png", 'x')));
-		tileTypes.put('S', new Tile(new TileType("sprites/tiles/sapling.png", 'S', true, false)));
-		tileTypes.put('L', new Tile(new TileType("sprites/tiles/ladder.png", 'L', true, false)));
 		
 		char[][] generated = WorldGenerator.generate(width, height, random);
 		visibility = WorldGenerator.visibility;
@@ -62,11 +45,11 @@ public class World implements java.io.Serializable {
 		tiles = new Tile[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				Tile tile = tileTypes.get(generated[i][j]);
+				Tile tile = Constants.tileTypes.get(generated[i][j]);
 				if (tile == null) {
-					tiles[i][j] = tileTypes.get('a');
+					tiles[i][j] = Constants.tileTypes.get('a');
 				} else {
-					tiles[i][j] = tileTypes.get(generated[i][j]);
+					tiles[i][j] = Constants.tileTypes.get(generated[i][j]);
 				}
 				
 			}
@@ -95,17 +78,17 @@ public class World implements java.io.Serializable {
 				}
 				if (isLight && tiles[x][y].type.name == 'd') {
 					if (random.nextDouble() < .005) {
-						tiles[x][y] = tileTypes.get('g');
+						tiles[x][y] = Constants.tileTypes.get('g');
 					}
 				} else if (tiles[x][y].type.name == 'g' && tiles[x][y - 1].type.name != 'a'
 						&& tiles[x][y - 1].type.name != 'l' && tiles[x][y - 1].type.name != 'w') {
 					if (random.nextDouble() < .25) {
-						tiles[x][y] = tileTypes.get('d');
+						tiles[x][y] = Constants.tileTypes.get('d');
 					}
 				} else if (tiles[x][y].type.name == 'n') {
 					if (isAir(x, y + 1) || isLiquid(x, y + 1)) {
 						changeTile(x, y + 1, tiles[x][y]);
-						changeTile(x, y, tileTypes.get('a'));
+						changeTile(x, y, Constants.tileTypes.get('a'));
 					}
 				} else if (tiles[x][y].type.name == 'S') {
 					if (random.nextDouble() < .01) {
@@ -168,7 +151,7 @@ public class World implements java.io.Serializable {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return false;
 		}
-		Tile tile = tileTypes.get(name);
+		Tile tile = Constants.tileTypes.get(name);
 		if (tile == null) {
 			return false;
 		}
@@ -191,7 +174,7 @@ public class World implements java.io.Serializable {
 		setVisible(x - 1, y);
 		setVisible(x, y - 1);
 		char name = tiles[x][y].type.name;
-		tiles[x][y] = tileTypes.get('a');
+		tiles[x][y] = Constants.tileTypes.get('a');
 		return name;
 	}
 	
@@ -312,19 +295,19 @@ public class World implements java.io.Serializable {
 					|| posY > screenHeight) {
 				continue;
 			}
-			tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
+			Constants.tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
 		}
 		
 		for (int j = height / 2; j < height; j++) {
 			int posX = (int) ((-1 - cameraX) * tileSize);
 			int posY = (int) ((j - cameraY) * tileSize);
 			if (!(posX < 0 - tileSize || posX > screenWidth || posY < 0 - tileSize || posY > screenHeight)) {
-				tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
+				Constants.tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
 			}
 			
 			posX = (int) ((width - cameraX) * tileSize);
 			if (!(posX < 0 - tileSize || posX > screenWidth)) {
-				tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
+				Constants.tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
 			}
 		}
 		
