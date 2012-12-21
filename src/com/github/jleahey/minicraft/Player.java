@@ -12,7 +12,7 @@
 
 package com.github.jleahey.minicraft;
 
-public class Player extends Entity {
+public class Player extends LivingEntity {
 	private static final long serialVersionUID = 1L;
 	
 	public Int2 handBreakPos = new Int2(0, 0);
@@ -21,118 +21,16 @@ public class Player extends Entity {
 	public float handStartY;
 	public float handEndX;
 	public float handEndY;
-	public boolean climbing = false;
-	public boolean facingRight = true;
 	
-	private final float walkSpeed = .1f;
-	private final float swimSpeed = .04f;
-	private float armLength = 4.5f;
-	private float moveDirection = 0;
 	private Sprite leftWalkSprite;
 	private Sprite rightWalkSprite;
-	private long ticksAlive = 0;
-	private boolean jumping = false;
 	
 	public Player(boolean gravityApplies, float x, float y, int width, int height) {
-		super(null, gravityApplies, x, y, width, height);
+		super(gravityApplies, x, y, width, height);
 		
 		leftWalkSprite = SpriteStore.get().getSprite("sprites/entities/left_man.png");
 		rightWalkSprite = SpriteStore.get().getSprite("sprites/entities/right_man.png");
 		sprite = SpriteStore.get().getSprite("sprites/entities/player.gif");
-	}
-	
-	public void jump(World world, int tileSize) {
-		if (jumping) {
-			return;
-		}
-		
-		if (!this.isInWater(world, tileSize)) {
-			dy = -.3f;
-			jumping = true;
-		} else {
-			dy = -maxWaterDY - .000001f;// BIG HACK
-		}
-	}
-	
-	@Override
-	public void updatePosition(World world, int tileSize) {
-		ticksAlive++;
-		boolean isSwimClimb = this.isInWaterOrClimbable(world, tileSize);
-		if (isSwimClimb) {
-			dx = moveDirection * swimSpeed;
-		} else {
-			dx = moveDirection * walkSpeed;
-		}
-		if (climbing && isSwimClimb) {
-			jumping = false;
-			dy = -maxWaterDY - .000001f;// BIG HACK
-		}
-		super.updatePosition(world, tileSize);
-		if (this.dy == 0) {
-			jumping = false;
-		}
-		if (this.isInWater(world, tileSize)) {
-			jumping = false;
-		}
-	}
-	
-	public void startLeft(boolean slow) {
-		facingRight = false;
-		if (slow) {
-			moveDirection = -.2f;
-		} else {
-			moveDirection = -1;
-		}
-	}
-	
-	public void stopLeft() {
-		if (moveDirection < 0) {
-			moveDirection = 0;
-		}
-	}
-	
-	public void startRight(boolean slow) {
-		facingRight = true;
-		if (slow) {
-			moveDirection = .2f;
-		} else {
-			moveDirection = 1;
-		}
-	}
-	
-	public void stopRight() {
-		if (moveDirection > 0) {
-			moveDirection = 0;
-		}
-	}
-	
-	public void startClimb() {
-		climbing = true;
-	}
-	
-	public void endClimb() {
-		climbing = false;
-	}
-	
-	public float findIntersection(float rayOx, float rayOy, float m, float p1x, float p1y,
-			float p2x, float p2y) {
-		float freeVar = -1;
-		if (p1x == p2x)// segment is vertical
-		{
-			freeVar = -m * (rayOx - p1x) + rayOy;// y1
-			if ((freeVar < p1y && freeVar < p2y) || (freeVar > p1y && freeVar > p2y)) {
-				return -1;
-			}
-		} else if (p1y == p2y)// segment is horizontal
-		{
-			freeVar = -(rayOy - p1y) / m + rayOx;// x1
-			if ((freeVar < p1x && freeVar < p2x) || (freeVar > p1x && freeVar > p2x)) {
-				return -1;
-			}
-		} else {
-			System.err.println("Find intersection -- bad arguments");
-		}
-		return freeVar;
 	}
 	
 	public void updateHand(GraphicsHandler g, float cameraX, float cameraY, float mouseX,
