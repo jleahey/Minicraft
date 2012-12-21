@@ -30,7 +30,7 @@ public abstract class Entity implements java.io.Serializable {
 	protected boolean gravityApplies;
 	protected int widthPX;
 	protected int heightPX;
-
+	
 	public int hitPoints;
 	
 	Entity(Entity other) {
@@ -209,7 +209,7 @@ public abstract class Entity implements java.io.Serializable {
 				// ranges from 0 to 0.15
 				float fallSpeedSurplus = dy - maxDY;
 				// damage is (70x)^2, from 0 to ~100 hp over [0, 0.15]
-				this.takeDamage((int)(4900*fallSpeedSurplus*fallSpeedSurplus));
+				this.takeDamage((int) (4900 * fallSpeedSurplus * fallSpeedSurplus));
 			}
 			dy = 0;
 		}
@@ -368,17 +368,17 @@ public abstract class Entity implements java.io.Serializable {
 			sprite.draw(g, pos.x, pos.y, widthPX, heightPX);
 		}
 	}
-
+	
 	public void takeDamage(int amount) {
 		this.hitPoints -= amount;
 		// TODO: play sound, update life bar, check for death
-		System.out.println("Took "+amount+" damage. Current health = "+this.hitPoints);
+		System.out.println("Took " + amount + " damage. Current health = " + this.hitPoints);
 	}
-
+	
 	public void heal(int amount) {
 		int newHP = this.hitPoints + amount;
 		this.hitPoints = (newHP > maxHP) ? maxHP : newHP;
 		// TODO: update life bar
-		System.out.println("Healed "+amount+". Current health = "+this.hitPoints);
+		System.out.println("Healed " + amount + ". Current health = " + this.hitPoints);
 	}
 }

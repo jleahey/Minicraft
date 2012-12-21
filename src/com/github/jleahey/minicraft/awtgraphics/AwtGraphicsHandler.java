@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 
 import com.github.jleahey.minicraft.Game;
 import com.github.jleahey.minicraft.Sprite;
+import com.github.jleahey.minicraft.SpriteStore;
 
 public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHandler {
 	private Canvas canvas;
@@ -75,7 +76,7 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 		
 		// add a listener to respond to the user closing the window. If they
 		// do we'd like to exit the game
-		//TODO: add this back in
+		// TODO: add this back in
 		container.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
@@ -102,18 +103,18 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 		g = (Graphics2D) strategy.getDrawGraphics();
 		g.setColor(Color.black);
 		g.fillRect(0, 0, screenWidth, screenHeight);
-					
+		
 	}
 	
 	@Override
 	public void finishDrawing() {
 		g.dispose();
-		strategy.show();	
+		strategy.show();
 	}
 	
 	@Override
 	public void setColor(com.github.jleahey.minicraft.Color color) {
-		//TODO: Profile, this might be quite slow "new" every color change
+		// TODO: Profile, this might be quite slow "new" every color change
 		g.setColor(new Color(color.R, color.G, color.B));
 	}
 	
@@ -134,11 +135,22 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 	
 	@Override
 	public void drawImage(Sprite sprite, int x, int y) {
-		g.drawImage(((AwtSprite)sprite).image, x, y, null);
+		// TODO: This is inefficient, and serialization should be done more neatly
+		AwtSprite awtSprite = (AwtSprite) sprite;
+		if (awtSprite.image == null) {
+			AwtSprite other = (AwtSprite) SpriteStore.get().loadSprite(awtSprite.ref);
+			awtSprite.image = other.image;
+		}
+		g.drawImage(awtSprite.image, x, y, null);
 	}
 	
 	@Override
 	public void drawImage(Sprite sprite, int x, int y, int width, int height) {
-		g.drawImage(((AwtSprite)sprite).image, x, y, width, height, null);
+		AwtSprite awtSprite = (AwtSprite) sprite;
+		if (awtSprite.image == null) {
+			AwtSprite other = (AwtSprite) SpriteStore.get().loadSprite(awtSprite.ref);
+			awtSprite.image = other.image;
+		}
+		g.drawImage(awtSprite.image, x, y, width, height, null);
 	}
 }

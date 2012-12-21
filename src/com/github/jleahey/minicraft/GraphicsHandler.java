@@ -1,4 +1,5 @@
 package com.github.jleahey.minicraft;
+
 import com.github.jleahey.minicraft.awtgraphics.AwtGraphicsHandler;
 
 public abstract class GraphicsHandler {
@@ -18,11 +19,11 @@ public abstract class GraphicsHandler {
 	}
 	
 	public static GraphicsHandler get() {
-		if(single == null) {
+		if (single == null) {
 			if (awtMode) {
 				single = new AwtGraphicsHandler();
 			} else {
-				//android!
+				// android!
 			}
 		}
 		return single;
@@ -41,7 +42,7 @@ public abstract class GraphicsHandler {
 	public abstract void drawString(String string, int x, int y);
 	
 	public abstract void fillOval(int x, int y, int width, int height);
-
+	
 	public abstract void drawImage(Sprite sprite, int x, int y);
 	
 	public abstract void drawImage(Sprite sprite, int x, int y, int width, int height);

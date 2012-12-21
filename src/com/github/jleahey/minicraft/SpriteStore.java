@@ -7,13 +7,14 @@ import com.github.jleahey.minicraft.awtgraphics.AwtSpriteStore;
 public abstract class SpriteStore {
 	/** The single instance of this class */
 	protected static SpriteStore single;
+	
 	/**
 	 * Get the single instance of this class
 	 * 
 	 * @return The single instance of this class
 	 */
 	public static SpriteStore get() {
-		if(single == null) {
+		if (single == null) {
 			if (GraphicsHandler.awtMode) {
 				single = new AwtSpriteStore();
 			} else {
@@ -47,5 +48,5 @@ public abstract class SpriteStore {
 		return sprite;
 	}
 	
-	protected abstract Sprite loadSprite(String ref);
+	public abstract Sprite loadSprite(String ref);
 }

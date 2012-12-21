@@ -10,11 +10,10 @@ import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
 
 import com.github.jleahey.minicraft.Game;
-import com.github.jleahey.minicraft.InventoryItem;
-import com.github.jleahey.minicraft.Tool;
 
 public class AwtEventsHandler {
-	 Game game;
+	Game game;
+	
 	public AwtEventsHandler(Game game, Canvas canvas) {
 		this.game = game;
 		// add a key input system (defined below) to our canvas
@@ -24,9 +23,9 @@ public class AwtEventsHandler {
 		canvas.addMouseWheelListener(new MouseWheelInputHander());
 		canvas.addMouseMotionListener(new MouseMoveInputHander());
 		
-		//TODO: A lot of this should be calling a nicer function in Game to handle mouse+keyboard/touch input
+		// TODO: A lot of this should be calling a nicer function in Game to handle
+		// mouse+keyboard/touch input
 	}
-	
 	
 	private class MouseWheelInputHander implements MouseWheelListener {
 		@Override

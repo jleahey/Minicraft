@@ -7,7 +7,6 @@ import java.awt.Transparency;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
@@ -26,7 +25,7 @@ import com.github.jleahey.minicraft.Sprite;
 public class AwtSpriteStore extends com.github.jleahey.minicraft.SpriteStore {
 	
 	@Override
-	protected Sprite loadSprite(String ref) {
+	public Sprite loadSprite(String ref) {
 		// otherwise, go away and grab the sprite from the resource
 		// loader
 		BufferedImage sourceImage = null;

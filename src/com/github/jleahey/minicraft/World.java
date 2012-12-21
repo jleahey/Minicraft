@@ -19,7 +19,6 @@ import java.util.Random;
 public class World implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	
 	public Tile[][] tiles;
 	public boolean[][] visibility;
 	public int width;

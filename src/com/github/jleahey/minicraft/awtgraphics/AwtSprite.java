@@ -1,12 +1,13 @@
 package com.github.jleahey.minicraft.awtgraphics;
 
-import java.awt.Graphics;
 import java.awt.Image;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.github.jleahey.minicraft.GraphicsHandler;
+import com.github.jleahey.minicraft.Sprite;
+import com.github.jleahey.minicraft.SpriteStore;
 
 /**
  * A sprite to be displayed on the screen. Note that a sprite
@@ -23,6 +24,12 @@ public class AwtSprite implements com.github.jleahey.minicraft.Sprite {
 	/** The image to be drawn for this sprite */
 	transient public Image image;
 	public String ref;
+	
+	// for serialization loading
+	public AwtSprite() {
+		AwtSprite s = (AwtSprite) SpriteStore.get().getSprite(ref);
+		this.image = s.image;
+	}
 	
 	/**
 	 * Create a new sprite based on an image
@@ -81,7 +88,7 @@ public class AwtSprite implements com.github.jleahey.minicraft.Sprite {
 		// always perform the default de-serialization first
 		// aInputStream.defaultReadObject();
 		ref = (String) aInputStream.readObject();
-		this.image = ((AwtSprite)AwtSpriteStore.get().getSprite(ref)).image;
+		this.image = ((AwtSprite) AwtSpriteStore.get().getSprite(ref)).image;
 	}
 	
 	/**
