@@ -95,6 +95,7 @@ public class AwtEventsHandler {
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_W:
+			case KeyEvent.VK_SPACE:
 				game.player.startClimb();
 				break;
 			case KeyEvent.VK_A:
@@ -102,9 +103,6 @@ public class AwtEventsHandler {
 				break;
 			case KeyEvent.VK_D:
 				game.player.startRight(e.isShiftDown());
-				break;
-			case KeyEvent.VK_SPACE:
-				game.spaceBar = true;
 				break;
 			}
 		}
@@ -119,6 +117,7 @@ public class AwtEventsHandler {
 		public void keyReleased(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_W:
+			case KeyEvent.VK_SPACE:
 				game.player.endClimb();
 				break;
 			case KeyEvent.VK_A:
@@ -126,9 +125,6 @@ public class AwtEventsHandler {
 				break;
 			case KeyEvent.VK_D:
 				game.player.stopRight();
-				break;
-			case KeyEvent.VK_SPACE:
-				game.spaceBar = false;
 				break;
 			case KeyEvent.VK_ESCAPE:
 				game.quitNow();

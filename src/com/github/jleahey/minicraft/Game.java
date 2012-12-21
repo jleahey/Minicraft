@@ -21,7 +21,6 @@ public class Game {
 	private int worldWidth = 512;
 	private int worldHeight = 256;
 	private boolean gameRunning = true;
-	public boolean spaceBar = false;
 	public boolean leftClick = false;
 	public boolean rightClick = false;
 	public boolean paused = true;
@@ -224,10 +223,6 @@ public class Game {
 				rightClick = false;
 			}
 			
-			if (spaceBar) {
-				player.jump(world, tileSize);
-			}
-			
 			if (leftClick && player.handBreakPos.x != -1) {
 				if (player.handBreakPos.equals(breakingPos)) {
 					breakingTicks++;
@@ -356,13 +351,12 @@ public class Game {
 			g.setColor(Color.black);
 			g.fillOval(mouseTest.x - 3, mouseTest.y - 3, 6, 6);
 			
-
 			// HACK: draw hearts for health bar
 			// TODO: move this elsewhere, don't use so many magic constants
 			int heartX = (GraphicsHandler.get().getScreenWidth() - 250) / 2;
 			int heartY = GraphicsHandler.get().getScreenHeight() - 50;
 			for (int heartIdx = 1; heartIdx <= 10; ++heartIdx) {
-				int hpDiff = player.hitPoints - heartIdx*10;
+				int hpDiff = player.hitPoints - heartIdx * 10;
 				if (hpDiff >= 0) {
 					fullHeart.draw(g, heartX, heartY, 10, 10);
 				} else if (hpDiff >= -5) {
@@ -372,7 +366,7 @@ public class Game {
 				}
 				heartX += 15;
 			}
-
+			
 			g.finishDrawing();
 			
 			SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
