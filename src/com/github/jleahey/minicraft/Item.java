@@ -25,7 +25,7 @@ public class Item extends Entity implements Cloneable {
 		this.item_id = id;
 		this.name = name;
 	}
-
+	
 	@Override
 	public Item clone() {
 		try {

@@ -48,7 +48,7 @@ public abstract class Entity implements java.io.Serializable {
 	protected Entity clone() throws CloneNotSupportedException {
 		return (Entity) super.clone();
 	}
-
+	
 	public void updatePosition(World world, int tileSize) {
 		int pixels = (int) Math.ceil(Math.max(Math.abs(dx), Math.abs(dy)) * tileSize);
 		
@@ -313,7 +313,7 @@ public abstract class Entity implements java.io.Serializable {
 		return (world.isLiquid(left, top) || world.isLiquid(right, top)
 				|| world.isLiquid(left, bottom) || world.isLiquid(right, bottom));
 	}
-
+	
 	public boolean isHeadUnderWater(World world, int tileSize) {
 		int top = (int) this.getTop(tileSize);
 		int centerX = (int) this.getCenterX(tileSize);

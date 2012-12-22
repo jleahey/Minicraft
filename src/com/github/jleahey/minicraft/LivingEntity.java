@@ -32,7 +32,7 @@ public abstract class LivingEntity extends Entity {
 		super(null, gravityApplies, x, y, width, height);
 		this.hitPoints = maxHP;
 	}
-
+	
 	public int airRemaining() {
 		return Math.max(10 - (ticksUnderwater / 50), 0);
 	}
