@@ -28,14 +28,6 @@ public class Tool extends Item {
 	public ToolType toolType;
 	public ToolPower toolPower;
 	
-	Tool(Tool other) {
-		super(other);
-		this.totalUses = other.totalUses;
-		this.uses = 0;
-		this.toolType = other.toolType;
-		this.toolPower = other.toolPower;
-	}
-	
 	public Tool(String ref, int size, int id, String name, int[][] template, int templateCount,
 			ToolType toolType, ToolPower toolPower) {
 		super(ref, size, id, name, template, templateCount);
@@ -53,7 +45,9 @@ public class Tool extends Item {
 	}
 	
 	@Override
-	public Object clone() {
-		return new Tool(this);
+	public Tool clone() {
+		Tool t = (Tool) super.clone();
+		t.uses = 0;
+		return t;
 	}
 }

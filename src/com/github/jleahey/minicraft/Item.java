@@ -12,19 +12,12 @@
 
 package com.github.jleahey.minicraft;
 
-public class Item extends Entity {
+public class Item extends Entity implements Cloneable {
 	private static final long serialVersionUID = 1L;
 	
 	public int item_id;
 	public String name;
 	public Template template;
-	
-	Item(Item other) {
-		super(other);
-		this.item_id = other.item_id;
-		this.name = other.name;
-		this.template = other.template;
-	}
 	
 	public Item(String ref, int size, int id, String name, int[][] template, int templateCount) {
 		super(ref, true, 0, 0, size, size);
@@ -32,10 +25,14 @@ public class Item extends Entity {
 		this.item_id = id;
 		this.name = name;
 	}
-	
+
 	@Override
-	public Object clone() {
-		return new Item(this);
+	public Item clone() {
+		try {
+			return (Item) super.clone();
+		} catch (CloneNotSupportedException e) {
+			return null; // should never happen
+		}
 	}
 	
 }

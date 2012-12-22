@@ -32,17 +32,6 @@ public abstract class Entity implements java.io.Serializable {
 	
 	private float lastYPeak;
 	
-	Entity(Entity other) {
-		this.x = other.x;
-		this.y = other.y;
-		this.dx = other.dx;
-		this.dy = other.dy;
-		this.sprite = other.sprite;
-		this.gravityApplies = other.gravityApplies;
-		this.heightPX = other.heightPX;
-		this.widthPX = other.widthPX;
-	}
-	
 	public Entity(String ref, boolean gravityApplies, float x, float y, int width, int height) {
 		if (ref != null) {
 			this.sprite = SpriteStore.get().getSprite(ref);
@@ -55,6 +44,11 @@ public abstract class Entity implements java.io.Serializable {
 		this.dx = this.dy = 0;
 	}
 	
+	@Override
+	protected Entity clone() throws CloneNotSupportedException {
+		return (Entity) super.clone();
+	}
+
 	public void updatePosition(World world, int tileSize) {
 		int pixels = (int) Math.ceil(Math.max(Math.abs(dx), Math.abs(dy)) * tileSize);
 		
