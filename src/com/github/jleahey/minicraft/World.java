@@ -21,6 +21,7 @@ public class World implements java.io.Serializable {
 	
 	public Tile[][] tiles;
 	public boolean[][] visibility;
+	public int[][] lightValues;
 	public int width;
 	public int height;
 	public Int2 spawnLocation;
@@ -37,10 +38,11 @@ public class World implements java.io.Serializable {
 	public World(int width, int height, Random random) {
 		
 		char[][] generated = WorldGenerator.generate(width, height, random);
-		visibility = WorldGenerator.visibility;
+		visibility = new boolean[width][height];// WorldGenerator.visibility;
 		WorldGenerator.visibility = null;
 		this.spawnLocation = WorldGenerator.playerLocation;
 		tiles = new Tile[width][height];
+		lightValues = new int[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Tile tile = Constants.tileTypes.get(generated[i][j]);
@@ -63,7 +65,8 @@ public class World implements java.io.Serializable {
 	public void chunkUpdate() {
 		ticksAlive++;
 		for (int i = 0; i < chunkWidth; i++) {
-			boolean isLight = true;
+			boolean isDirectLight = true;
+			int lightRayValue = Constants.LIGHT_VALUE_SUN;
 			for (int j = 0; j < height; j++) {
 				int x = i + chunkWidth * chunkNeedsUpdate;
 				if (x >= width || x < 0) {
@@ -74,7 +77,7 @@ public class World implements java.io.Serializable {
 					x = width - 1 - x;
 					y = height - 1 - y;
 				}
-				if (isLight && tiles[x][y].type.name == 'd') {
+				if (isDirectLight && tiles[x][y].type.name == 'd') {
 					if (random.nextDouble() < .005) {
 						tiles[x][y] = Constants.tileTypes.get('g');
 					}
@@ -103,17 +106,20 @@ public class World implements java.io.Serializable {
 						changeTile(x, y + 1, tiles[x][y]);
 					}
 				}
-				
+				// update lighting and visibility
+				lightRayValue -= tiles[x][y].type.lightBlocking;
+				if (lightRayValue < 0)
+					lightRayValue = 0;
+				if (lightValues[x][y] < lightRayValue)
+					lightValues[x][y] = lightRayValue;
+				spreadLighting(x, y, lightValues[x][y]);
 				if (tiles[x][y].type.passable && visibility[x][y]) {
-					setVisible(x + 1, y);
-					setVisible(x, y + 1);
-					setVisible(x - 1, y);
-					setVisible(x, y - 1);
+					spreadVisibility(x, y);
 				}
 				
 				if ((!tiles[x][y].type.passable || tiles[x][y].type.liquid)
 						&& tiles[x][y].type.name != 'l') {
-					isLight = false;
+					isDirectLight = false;
 				}
 			}
 		}
@@ -138,11 +144,34 @@ public class World implements java.io.Serializable {
 		}
 	}
 	
-	public void setVisible(int x, int y) {
+	private void spreadLighting(int x, int y, int currentLighting) {
+		if (currentLighting > 0)
+			currentLighting -= 1;
+		setLighting(x + 1, y, currentLighting);
+		setLighting(x, y + 1, currentLighting);
+		setLighting(x - 1, y, currentLighting);
+		setLighting(x, y - 1, currentLighting);
+	}
+	
+	private void spreadVisibility(int x, int y) {
+		setVisible(x + 1, y);
+		setVisible(x, y + 1);
+		setVisible(x - 1, y);
+		setVisible(x, y - 1);
+	}
+	
+	private void setVisible(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return;
 		}
 		visibility[x][y] = true;
+	}
+	
+	private void setLighting(int x, int y, int lightValue) {
+		if (x < 0 || x >= width || y < 0 || y >= height || lightValue < lightValues[x][y]) {
+			return;
+		}
+		lightValues[x][y] = lightValue;
 	}
 	
 	public boolean addTile(int x, int y, char name) {
@@ -167,10 +196,8 @@ public class World implements java.io.Serializable {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return 0;
 		}
-		setVisible(x + 1, y);
-		setVisible(x, y + 1);
-		setVisible(x - 1, y);
-		setVisible(x, y - 1);
+		spreadVisibility(x, y);
+		spreadLighting(x, y, lightValues[x][y]);
 		char name = tiles[x][y].type.name;
 		tiles[x][y] = Constants.tileTypes.get('a');
 		return name;
@@ -261,7 +288,7 @@ public class World implements java.io.Serializable {
 				tileSize, 0, height / 2);
 		g.setColor(Color.darkGray);
 		g.fillRect(pos.x, pos.y, width * tileSize, height * tileSize / 2);
-
+		
 		pos = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, screenWidth, screenHeight,
 				tileSize, 0, 0);
 		g.setColor(getSkyColor());
@@ -354,28 +381,28 @@ public class World implements java.io.Serializable {
 	// returns a float in the range [0,1)
 	// 0 is dawn, 0.25 is noon, 0.5 is dusk, 0.75 is midnight
 	public float getTimeOfDay() {
-		return ((float)(ticksAlive % dayLength)) / dayLength;
+		return ((float) (ticksAlive % dayLength)) / dayLength;
 	}
 	
 	public boolean isNight() {
 		return getTimeOfDay() > 0.5f;
 	}
-
+	
 	static final Color dawnSky = new Color(255, 217, 92);
 	static final Color noonSky = new Color(132, 210, 230);
 	static final Color duskSky = new Color(245, 92, 32);
 	static final Color midnightSky = new Color(0, 0, 0);
-
+	
 	public Color getSkyColor() {
 		float time = getTimeOfDay();
 		if (time < 0.25f) {
-			return dawnSky.interpolateTo(noonSky, 4*time);
+			return dawnSky.interpolateTo(noonSky, 4 * time);
 		} else if (time < 0.5f) {
-			return noonSky.interpolateTo(duskSky, 4*(time - 0.25f));
+			return noonSky.interpolateTo(duskSky, 4 * (time - 0.25f));
 		} else if (time < 0.75f) {
-			return duskSky.interpolateTo(midnightSky, 4*(time - 0.5f));
+			return duskSky.interpolateTo(midnightSky, 4 * (time - 0.5f));
 		} else {
-			return midnightSky.interpolateTo(dawnSky, 4*(time - 0.75f));
+			return midnightSky.interpolateTo(dawnSky, 4 * (time - 0.75f));
 		}
 	}
 	
