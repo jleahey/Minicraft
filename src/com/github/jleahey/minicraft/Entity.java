@@ -318,7 +318,6 @@ public abstract class Entity implements java.io.Serializable {
 		int top = (int) this.getTop(tileSize);
 		int centerX = (int) this.getCenterX(tileSize);
 		return world.isLiquid(centerX, top);
-
 	}
 	
 	public boolean isInWaterOrClimbable(World world, int tileSize) {

@@ -25,12 +25,16 @@ public abstract class LivingEntity extends Entity {
 	protected float armLength = 4.5f;
 	protected float moveDirection = 0;
 	protected long ticksAlive = 0;
-	protected long ticksUnderwater = 0;
+	protected int ticksUnderwater = 0;
 	protected boolean jumping = false;
 	
 	public LivingEntity(boolean gravityApplies, float x, float y, int width, int height) {
 		super(null, gravityApplies, x, y, width, height);
 		this.hitPoints = maxHP;
+	}
+
+	public int airRemaining() {
+		return Math.max(10 - (ticksUnderwater / 50), 0);
 	}
 	
 	public void jump(World world, int tileSize) {
@@ -73,8 +77,9 @@ public abstract class LivingEntity extends Entity {
 		// drown check
 		if (this.isHeadUnderWater(world, tileSize)) {
 			ticksUnderwater++;
-			if (ticksUnderwater > 500) {
+			if (this.airRemaining() == 0) {
 				this.takeDamage(5);
+				// back to about 4 bubbles' worth of air
 				ticksUnderwater = 300;
 			}
 		} else {

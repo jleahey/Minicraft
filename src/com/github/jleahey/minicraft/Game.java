@@ -56,7 +56,7 @@ public class Game {
 	private Sprite builderIcon;
 	private Sprite minerIcon;
 	private Sprite[] breakingSprites;
-	private Sprite fullHeart, halfHeart, emptyHeart;
+	private Sprite fullHeart, halfHeart, emptyHeart, bubble, emptyBubble;
 	
 	public boolean viewFPS = false;
 	private boolean startMenu = true;
@@ -111,6 +111,9 @@ public class Game {
 		fullHeart = SpriteStore.get().getSprite("sprites/other/full_heart.png");
 		halfHeart = SpriteStore.get().getSprite("sprites/other/half_heart.png");
 		emptyHeart = SpriteStore.get().getSprite("sprites/other/empty_heart.png");
+		bubble = SpriteStore.get().getSprite("sprites/other/bubble.png");
+		// there's no empty bubble image, so we'll just use this for now
+		emptyBubble = SpriteStore.get().getSprite("sprites/other/bubble_pop2.png");
 		
 		if (inventory == null) {
 			inventory = new Inventory(10, 4, 3, itemTypes);
@@ -364,6 +367,20 @@ public class Game {
 					emptyHeart.draw(g, heartX, heartY, 10, 10);
 				}
 				heartX += 15;
+			}
+
+			if (player.isHeadUnderWater(world, tileSize)) {
+				// another HACK: draw air bubbles
+				int bubbleX = (GraphicsHandler.get().getScreenWidth() + 50) / 2;
+				int numBubbles = player.airRemaining();
+				for (int bubbleIdx = 1; bubbleIdx <= 10; ++bubbleIdx) {
+					if (bubbleIdx <= numBubbles) {
+						bubble.draw(g, bubbleX, heartY, 10, 10);
+					} else {
+						emptyBubble.draw(g, bubbleX, heartY, 10, 10);
+					}
+					bubbleX += 15;
+				}
 			}
 			
 			g.finishDrawing();
