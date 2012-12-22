@@ -442,7 +442,6 @@ public class Game {
 			} else {
 				newItem.x = player.x - 1 - random.nextFloat();
 			}
-			;
 			newItem.y = player.y;
 			newItem.dy = -.1f;
 			entities.add(newItem);
