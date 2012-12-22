@@ -117,6 +117,10 @@ public class Game {
 		
 		if (inventory == null) {
 			inventory = new Inventory(10, 4, 3, itemTypes);
+			if (Constants.DEBUG) {
+				inventory.addItem(itemTypes.get((char) 175).clone(), 1);
+				inventory.addItem(itemTypes.get((char) 88).clone(), 1);
+			}
 		}
 		
 		musicPlayer.play();
@@ -187,6 +191,12 @@ public class Game {
 	
 	public void gameLoop() {
 		long lastLoopTime = System.currentTimeMillis();
+		
+		if (Constants.DEBUG) {
+			startMenu = false;
+			newMenu = false;
+			startGame(false, menu_mediumWidth);
+		}
 		
 		// keep looping round till the game ends
 		while (gameRunning) {
@@ -368,7 +378,7 @@ public class Game {
 				}
 				heartX += 15;
 			}
-
+			
 			if (player.isHeadUnderWater(world, tileSize)) {
 				// another HACK: draw air bubbles
 				int bubbleX = (GraphicsHandler.get().getScreenWidth() + 50) / 2;
