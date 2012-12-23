@@ -45,7 +45,7 @@ public class World implements java.io.Serializable {
 		lightValues = new int[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				if(Constants.DEBUG) {
+				if(Constants.DEBUG_VISIBILITY_ON) {
 					visibility[i][j] = true;
 				}
 				Tile tile = Constants.tileTypes.get(generated[i][j]);
@@ -329,19 +329,17 @@ public class World implements java.io.Serializable {
 					continue;
 				}
 				
+				int lightIntensity = lightValues[i][j] * 255 / Constants.LIGHT_VALUE_SUN;
+				Color tint = new Color(lightIntensity, lightIntensity, lightIntensity, 255 - lightIntensity);
+				
 				if (!visibility[i][j]) {
+					g.setColor(caveAir);
 					g.fillRect(posX, posY, tileSize, tileSize);
-					continue;
-				}
-				if (tiles[i][j].type.name != 'a') {
-					tiles[i][j].type.sprite.draw(g, posX, posY, tileSize, tileSize);
-					if(Constants.DEBUG) {
-						g.setColor(new Color(lightValues[i][j] * 255 / Constants.LIGHT_VALUE_SUN,
-								lightValues[i][j] * 255 / Constants.LIGHT_VALUE_SUN, lightValues[i][j]
-										* 255 / Constants.LIGHT_VALUE_SUN));
-						g.fillRect(posX, posY, tileSize/2, tileSize/2);
-						g.setColor(caveAir);
-					}
+				} else if (tiles[i][j].type.name != 'a') {
+					tiles[i][j].type.sprite.draw(g, posX, posY, tileSize, tileSize, tint);
+				} else {
+					g.setColor(tint);
+					g.fillRect(posX, posY, tileSize, tileSize);
 				}
 			}
 		}
