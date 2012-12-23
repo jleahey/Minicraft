@@ -32,7 +32,11 @@ public interface Sprite extends java.io.Serializable {
 	 */
 	public void draw(GraphicsHandler g, int x, int y);
 	
+	public void draw(GraphicsHandler g, int x, int y, Color tint);
+	
 	public void draw(GraphicsHandler g, int x, int y, int width, int height);
+	
+	public void draw(GraphicsHandler g, int x, int y, int width, int height, Color tint);
 	
 	public void readObject(ObjectInputStream aInputStream) throws ClassNotFoundException,
 			IOException;

@@ -33,7 +33,6 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 	@Override
 	public void init(final Game game) {
 		canvas = new Canvas();
-		// TODO Auto-generated method stub
 		// create a frame to contain our game
 		container = new JFrame("Minicraft");
 		
@@ -115,7 +114,7 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 	@Override
 	public void setColor(com.github.jleahey.minicraft.Color color) {
 		// TODO: Profile, this might be quite slow "new" every color change
-		g.setColor(new Color(color.R, color.G, color.B));
+		g.setColor(new Color(color.R, color.G, color.B, color.A));
 	}
 	
 	@Override
@@ -145,6 +144,13 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 	}
 	
 	@Override
+	public void drawImage(Sprite sprite, int x, int y, com.github.jleahey.minicraft.Color tint) {
+		int width = sprite.getWidth();
+		int height = sprite.getHeight();
+		drawImage(sprite, x, y, width, height, tint);
+	}
+	
+	@Override
 	public void drawImage(Sprite sprite, int x, int y, int width, int height) {
 		AwtSprite awtSprite = (AwtSprite) sprite;
 		if (awtSprite.image == null) {
@@ -152,5 +158,15 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 			awtSprite.image = other.image;
 		}
 		g.drawImage(awtSprite.image, x, y, width, height, null);
+	}
+	
+	@Override
+	public void drawImage(Sprite sprite, int x, int y, int width, int height,
+			com.github.jleahey.minicraft.Color tint) {
+		drawImage(sprite, x, y, width, height);
+		java.awt.Color old = g.getColor();
+		this.setColor(tint);
+		this.fillRect(x, y, width, height);
+		g.setColor(old);
 	}
 }

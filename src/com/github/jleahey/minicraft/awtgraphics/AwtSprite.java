@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import com.github.jleahey.minicraft.Color;
 import com.github.jleahey.minicraft.GraphicsHandler;
 import com.github.jleahey.minicraft.Sprite;
 import com.github.jleahey.minicraft.SpriteStore;
@@ -74,8 +75,16 @@ public class AwtSprite implements com.github.jleahey.minicraft.Sprite {
 		g.drawImage(this, x, y);
 	}
 	
+	public void draw(GraphicsHandler g, int x, int y, Color tint) {
+		g.drawImage(this, x, y, tint);
+	}
+	
 	public void draw(GraphicsHandler g, int x, int y, int width, int height) {
 		g.drawImage(this, x, y, width, height);
+	}
+	
+	public void draw(GraphicsHandler g, int x, int y, int width, int height, Color tint) {
+		g.drawImage(this, x, y, width, height, tint);
 	}
 	
 	/**
