@@ -38,13 +38,16 @@ public class World implements java.io.Serializable {
 	public World(int width, int height, Random random) {
 		
 		char[][] generated = WorldGenerator.generate(width, height, random);
-		visibility = new boolean[width][height];// WorldGenerator.visibility;
+		visibility = WorldGenerator.visibility;
 		WorldGenerator.visibility = null;
 		this.spawnLocation = WorldGenerator.playerLocation;
 		tiles = new Tile[width][height];
 		lightValues = new int[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
+				if(Constants.DEBUG) {
+					visibility[i][j] = true;
+				}
 				Tile tile = Constants.tileTypes.get(generated[i][j]);
 				if (tile == null) {
 					tiles[i][j] = Constants.tileTypes.get('a');
@@ -332,6 +335,13 @@ public class World implements java.io.Serializable {
 				}
 				if (tiles[i][j].type.name != 'a') {
 					tiles[i][j].type.sprite.draw(g, posX, posY, tileSize, tileSize);
+					if(Constants.DEBUG) {
+						g.setColor(new Color(lightValues[i][j] * 255 / Constants.LIGHT_VALUE_SUN,
+								lightValues[i][j] * 255 / Constants.LIGHT_VALUE_SUN, lightValues[i][j]
+										* 255 / Constants.LIGHT_VALUE_SUN));
+						g.fillRect(posX, posY, tileSize/2, tileSize/2);
+						g.setColor(caveAir);
+					}
 				}
 			}
 		}
