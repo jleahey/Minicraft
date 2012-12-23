@@ -30,4 +30,5 @@ public class Constants {
 	public static final int LIGHT_VALUE_TORCH = 15;
 	public static final int LIGHT_VALUE_SUN = 20;
 	public static final boolean DEBUG = true;
+	public static final boolean DEBUG_VISIBILITY_ON = false;
 }
