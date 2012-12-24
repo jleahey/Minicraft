@@ -184,9 +184,9 @@ public abstract class Entity implements java.io.Serializable {
 					|| world.isClimbable((int) right, (int) bottom)) {
 				dy += waterAcceleration;
 				if (dy > 0) {
-					dy = Math.min(maxWaterDY + .000001f, dy);
+					dy = Math.min(maxWaterDY, dy);
 				} else {
-					dy = Math.max(-maxWaterDY + .000001f, dy);
+					dy = Math.max(-maxWaterDY, dy);
 				}
 			} else {
 				dy += gravityAcceleration;
@@ -201,7 +201,7 @@ public abstract class Entity implements java.io.Serializable {
 			dy = 0.0000001f;
 		} else if (hitBottom) {
 			int dmg = (int) (y - lastYPeak - 2.75);
-			if (dmg > 0)
+			if (dmg > 0 && dy > maxWaterDY)
 				this.takeDamage(dmg * 5);
 			dy = 0;
 			lastYPeak = y;
