@@ -9,12 +9,12 @@ public class Constants {
 		tileTypes.put('d', new Tile(new TileType("sprites/tiles/dirt.png", 'd')));
 		tileTypes.put('g', new Tile(new TileType("sprites/tiles/dirtwithgrass.png", 'g')));
 		tileTypes
-				.put('l', new Tile(new TileType("sprites/tiles/leaves.png", 'l', false, false, 2)));
+				.put('l', new Tile(new TileType("sprites/tiles/leaves.png", 'l', false, false, 1)));
 		tileTypes.put('p', new Tile(new TileType("sprites/tiles/plank.png", 'p')));
 		tileTypes.put('w', new Tile(new TileType("sprites/tiles/wood.png", 'w', true, false, 0)));
 		tileTypes.put('s', new Tile(new TileType("sprites/tiles/stone.png", 's')));
 		tileTypes.put('a', new Tile(new TileType("sprites/tiles/air.png", 'a', true, false, 0)));
-		tileTypes.put('t', new Tile(new TileType("sprites/tiles/water.png", 't', true, true, 2)));
+		tileTypes.put('t', new Tile(new TileType("sprites/tiles/water.png", 't', true, true, 1)));
 		tileTypes.put('n', new Tile(new TileType("sprites/tiles/sand.png", 'n')));
 		tileTypes.put('i', new Tile(new TileType("sprites/tiles/ironore.png", 'i')));
 		tileTypes.put('c', new Tile(new TileType("sprites/tiles/coalore.png", 'c')));
@@ -31,4 +31,5 @@ public class Constants {
 	public static final int LIGHT_VALUE_SUN = 20;
 	public static final boolean DEBUG = true;
 	public static final boolean DEBUG_VISIBILITY_ON = false;
+	public static final int LIGHT_VALUE_OPAQUE = 10000;
 }

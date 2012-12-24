@@ -23,7 +23,7 @@ public class TileType implements java.io.Serializable {
 	protected int lightBlocking;
 	
 	public TileType(String ref, char name) {
-		this(ref, name, false, false, Integer.MAX_VALUE);
+		this(ref, name, false, false, Constants.LIGHT_VALUE_OPAQUE);
 	}
 	
 	public TileType(String ref, char name, boolean passable, boolean liquid, int lightBlocking) {
