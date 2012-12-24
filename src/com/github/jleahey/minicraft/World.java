@@ -40,7 +40,8 @@ public class World implements java.io.Serializable {
 	private Color caveAir = new Color(100, 100, 100);
 	private long ticksAlive = 0;
 	private final int dayLength = 20000;
-//	private int[] columnHeights;
+	
+	// private int[] columnHeights;
 	
 	public World(int width, int height, Random random) {
 		
@@ -50,7 +51,7 @@ public class World implements java.io.Serializable {
 		this.spawnLocation = WorldGenerator.playerLocation;
 		tiles = new Tile[width][height];
 		lightValues = new int[width][height];
-//		columnHeights = new int[width];
+		// columnHeights = new int[width];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				if (Constants.DEBUG_VISIBILITY_ON) {
@@ -72,12 +73,12 @@ public class World implements java.io.Serializable {
 		this.random = random;
 		initLighting();
 	}
-
+	
 	public void chunkUpdate() {
 		ticksAlive++;
 		for (int i = 0; i < chunkWidth; i++) {
 			boolean isDirectLight = true;
-//			int lightRayValue = Constants.LIGHT_VALUE_SUN;
+			// int lightRayValue = Constants.LIGHT_VALUE_SUN;
 			for (int j = 0; j < height; j++) {
 				int x = i + chunkWidth * chunkNeedsUpdate;
 				if (x >= width || x < 0) {
@@ -118,13 +119,13 @@ public class World implements java.io.Serializable {
 					}
 				}
 				// update lighting and visibility
-//				lightRayValue -= tiles[x][y].type.lightBlocking;
-//				if (lightRayValue < 0)
-//					lightRayValue = 0;
-//				if (lightValues[x][y] < lightRayValue)
-//					lightValues[x][y] = lightRayValue;
-//				if (tiles[x][y].type.lightBlocking < lightRayValue)
-//					spreadLighting(x, y, lightValues[x][y]);
+				// lightRayValue -= tiles[x][y].type.lightBlocking;
+				// if (lightRayValue < 0)
+				// lightRayValue = 0;
+				// if (lightValues[x][y] < lightRayValue)
+				// lightValues[x][y] = lightRayValue;
+				// if (tiles[x][y].type.lightBlocking < lightRayValue)
+				// spreadLighting(x, y, lightValues[x][y]);
 				if (tiles[x][y].type.passable && visibility[x][y]) {
 					spreadVisibility(x, y);
 				}
@@ -156,23 +157,23 @@ public class World implements java.io.Serializable {
 		}
 	}
 	
-//	private void spreadLighting(int x, int y, int currentLighting) {
-//		if (currentLighting > 0)
-//			currentLighting -= 1;
-//		setLighting(x + 1, y, currentLighting);
-//		setLighting(x, y + 1, currentLighting);
-//		setLighting(x - 1, y, currentLighting);
-//		setLighting(x, y - 1, currentLighting);
-//	}
+	// private void spreadLighting(int x, int y, int currentLighting) {
+	// if (currentLighting > 0)
+	// currentLighting -= 1;
+	// setLighting(x + 1, y, currentLighting);
+	// setLighting(x, y + 1, currentLighting);
+	// setLighting(x - 1, y, currentLighting);
+	// setLighting(x, y - 1, currentLighting);
+	// }
 	
 	private void initLighting() {
-		for(int x = 0; x < width; x++)
-			for(int y = 0; y < height; y++)
+		for (int x = 0; x < width; x++)
+			for (int y = 0; y < height; y++)
 				lightValues[x][y] = 0;
 		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
 		for (int x = 0; x < width; x++) {
-			for(int y = 0; y < height - 1; y++) {
-				if(tiles[x][y].type.lightBlocking != 0) {
+			for (int y = 0; y < height - 1; y++) {
+				if (tiles[x][y].type.lightBlocking != 0) {
 					break;
 				}
 				sources.add(new LightingPoint(x, y, Constants.LIGHT_VALUE_SUN));
@@ -203,16 +204,16 @@ public class World implements java.io.Serializable {
 		
 		public LinkedList<LightingPoint> getNeighbors(boolean additive, int width, int height) {
 			LinkedList<LightingPoint> neighbors = new LinkedList<LightingPoint>();
-			if(tiles[x][y].type.lightBlocking == Constants.LIGHT_VALUE_OPAQUE) {
+			if (tiles[x][y].type.lightBlocking == Constants.LIGHT_VALUE_OPAQUE) {
 				return neighbors;
 			}
 			int newValue = 0;
 			if (additive) {
 				newValue = lightValue - 1 - tiles[x][y].type.lightBlocking;
-			} 
-//			else {
-//				newValue = lightValue - 1 - tiles[x][y].type.lightBlocking;
-//			}
+			}
+			// else {
+			// newValue = lightValue - 1 - tiles[x][y].type.lightBlocking;
+			// }
 			if (x - 1 >= 0) {
 				neighbors.add(new LightingPoint(x - 1, y, newValue));
 			}
@@ -241,16 +242,17 @@ public class World implements java.io.Serializable {
 		in.addAll(sources);
 		while (!in.isEmpty()) {
 			LightingPoint current = in.poll();
-			if(additive && (current.lightValue <= lightValues[current.x][current.y] || current.lightValue <= 0)) {
+			if (additive
+					&& (current.lightValue <= lightValues[current.x][current.y] || current.lightValue <= 0)) {
 				continue;
 			}
 			List<LightingPoint> neighbors = current.getNeighbors(additive, width, height);
-			for(LightingPoint next : neighbors) {
-				if(out.contains(next)) {
+			for (LightingPoint next : neighbors) {
+				if (out.contains(next)) {
 					continue;
 				}
 				in.add(next);
-				if(!additive && current.lightValue <= next.lightValue) {
+				if (!additive && current.lightValue <= next.lightValue) {
 					lightValues[current.x][current.y] = current.lightValue;
 					spreadLightingDijkstra(next, true);
 					return;
@@ -259,7 +261,7 @@ public class World implements java.io.Serializable {
 			lightValues[current.x][current.y] = current.lightValue;
 			out.add(current);
 		}
-		System.out.println("Updated "+ out.size() + "/" + width*height + " tiles");
+		System.out.println("Updated " + out.size() + "/" + width * height + " tiles");
 	}
 	
 	private void spreadVisibility(int x, int y) {
@@ -276,12 +278,12 @@ public class World implements java.io.Serializable {
 		visibility[x][y] = true;
 	}
 	
-//	private void setLighting(int x, int y, int lightValue) {
-//		if (x < 0 || x >= width || y < 0 || y >= height || lightValue < lightValues[x][y]) {
-//			return;
-//		}
-//		lightValues[x][y] = lightValue;
-//	}
+	// private void setLighting(int x, int y, int lightValue) {
+	// if (x < 0 || x >= width || y < 0 || y >= height || lightValue < lightValues[x][y]) {
+	// return;
+	// }
+	// lightValues[x][y] = lightValue;
+	// }
 	
 	public boolean addTile(int x, int y, char name) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
@@ -297,10 +299,11 @@ public class World implements java.io.Serializable {
 			}
 		}
 		
-		List<LightingPoint> wells = new LightingPoint(x, y, lightValues[x][y]).getNeighbors(false, width, height);
+		List<LightingPoint> wells = new LightingPoint(x, y, lightValues[x][y]).getNeighbors(false,
+				width, height);
 		tiles[x][y] = tile;
 		lightValues[x][y] = 0;
-		for(LightingPoint well : wells) {
+		for (LightingPoint well : wells) {
 			spreadLightingDijkstra(well, false);
 		}
 		return true;
@@ -314,14 +317,15 @@ public class World implements java.io.Serializable {
 		char name = tiles[x][y].type.name;
 		tiles[x][y] = Constants.tileTypes.get('a');
 		spreadLightingDijkstra(getSunSources(x), true);
-		spreadLightingDijkstra(new LightingPoint(x, y, lightValues[x][y]).getNeighbors(true, width, height), true);
+		spreadLightingDijkstra(
+				new LightingPoint(x, y, lightValues[x][y]).getNeighbors(true, width, height), true);
 		return name;
 	}
 	
 	public List<LightingPoint> getSunSources(int column) {
 		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
-		for(int y = 0; y < height - 1; y++) {
-			if(tiles[column][y].type.lightBlocking != 0) {
+		for (int y = 0; y < height - 1; y++) {
+			if (tiles[column][y].type.lightBlocking != 0) {
 				break;
 			}
 			sources.add(new LightingPoint(column, y, Constants.LIGHT_VALUE_SUN));
