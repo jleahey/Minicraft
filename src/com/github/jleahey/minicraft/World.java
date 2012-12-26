@@ -12,14 +12,6 @@
 
 package com.github.jleahey.minicraft;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
-import java.util.Queue;
 import java.util.Random;
 
 public class World implements java.io.Serializable {
@@ -27,7 +19,6 @@ public class World implements java.io.Serializable {
 	
 	public Tile[][] tiles;
 	public boolean[][] visibility;
-	public int[][] lightValues;
 	public int width;
 	public int height;
 	public Int2 spawnLocation;
@@ -40,6 +31,7 @@ public class World implements java.io.Serializable {
 	private Color caveAir = new Color(100, 100, 100);
 	private long ticksAlive = 0;
 	private final int dayLength = 20000;
+	private LightingEngine lightingEngine;
 	
 	// private int[] columnHeights;
 	
@@ -50,7 +42,6 @@ public class World implements java.io.Serializable {
 		WorldGenerator.visibility = null;
 		this.spawnLocation = WorldGenerator.playerLocation;
 		tiles = new Tile[width][height];
-		lightValues = new int[width][height];
 		// columnHeights = new int[width];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
@@ -71,7 +62,7 @@ public class World implements java.io.Serializable {
 		this.chunkCount = (int) Math.ceil((double) width / chunkWidth);
 		this.chunkNeedsUpdate = 0;
 		this.random = random;
-		initLighting();
+		lightingEngine = new LightingEngine(width, height, tiles);
 	}
 	
 	public void chunkUpdate() {
@@ -166,104 +157,6 @@ public class World implements java.io.Serializable {
 	// setLighting(x, y - 1, currentLighting);
 	// }
 	
-	private void initLighting() {
-		for (int x = 0; x < width; x++)
-			for (int y = 0; y < height; y++)
-				lightValues[x][y] = 0;
-		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
-		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height - 1; y++) {
-				if (tiles[x][y].type.lightBlocking != 0) {
-					break;
-				}
-				sources.add(new LightingPoint(x, y, Constants.LIGHT_VALUE_SUN));
-			}
-		}
-		spreadLightingDijkstra(sources, true);
-	}
-	
-	public class LightingPoint implements Comparable<LightingPoint> {
-		
-		public int x, y, lightValue;
-		
-		public LightingPoint(int x, int y, int lightValue) {
-			this.x = x;
-			this.y = y;
-			this.lightValue = lightValue;
-		}
-		
-		@Override
-		public int compareTo(LightingPoint lightingPoint) {
-			if (this.lightValue < lightingPoint.lightValue) {
-				return 1;
-			} else if (this.lightValue == lightingPoint.lightValue) {
-				return 0;
-			}
-			return -1;
-		}
-		
-		public LinkedList<LightingPoint> getNeighbors(boolean additive, int width, int height) {
-			LinkedList<LightingPoint> neighbors = new LinkedList<LightingPoint>();
-			if (tiles[x][y].type.lightBlocking == Constants.LIGHT_VALUE_OPAQUE) {
-				return neighbors;
-			}
-			int newValue = 0;
-			if (additive) {
-				newValue = lightValue - 1 - tiles[x][y].type.lightBlocking;
-			}
-			// else {
-			// newValue = lightValue - 1 - tiles[x][y].type.lightBlocking;
-			// }
-			if (x - 1 >= 0) {
-				neighbors.add(new LightingPoint(x - 1, y, newValue));
-			}
-			if (x + 1 < width) {
-				neighbors.add(new LightingPoint(x + 1, y, newValue));
-			}
-			if (y - 1 >= 0) {
-				neighbors.add(new LightingPoint(x, y - 1, newValue));
-			}
-			if (y + 1 < height) {
-				neighbors.add(new LightingPoint(x, y + 1, newValue));
-			}
-			return neighbors;
-		}
-	}
-	
-	private void spreadLightingDijkstra(LightingPoint source, boolean additive) {
-		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
-		sources.add(source);
-		spreadLightingDijkstra(sources, additive);
-	}
-	
-	private void spreadLightingDijkstra(List<LightingPoint> sources, boolean additive) {
-		HashSet<LightingPoint> out = new HashSet<LightingPoint>();
-		PriorityQueue<LightingPoint> in = new PriorityQueue<LightingPoint>();
-		in.addAll(sources);
-		while (!in.isEmpty()) {
-			LightingPoint current = in.poll();
-			if (additive
-					&& (current.lightValue <= lightValues[current.x][current.y] || current.lightValue <= 0)) {
-				continue;
-			}
-			List<LightingPoint> neighbors = current.getNeighbors(additive, width, height);
-			for (LightingPoint next : neighbors) {
-				if (out.contains(next)) {
-					continue;
-				}
-				in.add(next);
-				if (!additive && current.lightValue <= next.lightValue) {
-					lightValues[current.x][current.y] = current.lightValue;
-					spreadLightingDijkstra(next, true);
-					return;
-				}
-			}
-			lightValues[current.x][current.y] = current.lightValue;
-			out.add(current);
-		}
-		System.out.println("Updated " + out.size() + "/" + width * height + " tiles");
-	}
-	
 	private void spreadVisibility(int x, int y) {
 		setVisible(x + 1, y);
 		setVisible(x, y + 1);
@@ -298,14 +191,8 @@ public class World implements java.io.Serializable {
 				return false;
 			}
 		}
-		
-		List<LightingPoint> wells = new LightingPoint(x, y, lightValues[x][y]).getNeighbors(false,
-				width, height);
 		tiles[x][y] = tile;
-		lightValues[x][y] = 0;
-		for (LightingPoint well : wells) {
-			spreadLightingDijkstra(well, false);
-		}
+		lightingEngine.addedTile(x, y);
 		return true;
 	}
 	
@@ -316,21 +203,8 @@ public class World implements java.io.Serializable {
 		spreadVisibility(x, y);
 		char name = tiles[x][y].type.name;
 		tiles[x][y] = Constants.tileTypes.get('a');
-		spreadLightingDijkstra(getSunSources(x), true);
-		spreadLightingDijkstra(
-				new LightingPoint(x, y, lightValues[x][y]).getNeighbors(true, width, height), true);
+		lightingEngine.removedTile(x, y);
 		return name;
-	}
-	
-	public List<LightingPoint> getSunSources(int column) {
-		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
-		for (int y = 0; y < height - 1; y++) {
-			if (tiles[column][y].type.lightBlocking != 0) {
-				break;
-			}
-			sources.add(new LightingPoint(column, y, Constants.LIGHT_VALUE_SUN));
-		}
-		return sources;
 	}
 	
 	public void changeTile(int x, int y, Tile tile) {
@@ -456,7 +330,8 @@ public class World implements java.io.Serializable {
 					continue;
 				}
 				
-				int lightIntensity = lightValues[i][j] * 255 / Constants.LIGHT_VALUE_SUN;
+				int lightIntensity = lightingEngine.getLightValue(i, j) * 255
+						/ Constants.LIGHT_VALUE_SUN;
 				Color tint = new Color(0, 0, 0, 255 - lightIntensity);
 				
 				if (!visibility[i][j]) {
