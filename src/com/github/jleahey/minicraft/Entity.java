@@ -18,7 +18,6 @@ public abstract class Entity implements java.io.Serializable {
 	protected static final float gravityAcceleration = .03f;
 	protected static final float waterAcceleration = .015f;
 	protected static final float maxWaterDY = .05f;
-	protected static final float maxDY = .65f;
 	
 	public float x;
 	public float y;
@@ -29,8 +28,6 @@ public abstract class Entity implements java.io.Serializable {
 	protected boolean gravityApplies;
 	protected int widthPX;
 	protected int heightPX;
-	
-	private float lastYPeak;
 	
 	public Entity(String ref, boolean gravityApplies, float x, float y, int width, int height) {
 		if (ref != null) {
@@ -67,10 +64,6 @@ public abstract class Entity implements java.io.Serializable {
 		boolean bottomRight = true;
 		boolean middleLeft = true;
 		boolean middleRight = true;
-		
-		if (dy < 0.01 && dy > -0.01) {
-			lastYPeak = y;
-		}
 		
 		if (favorVertical) {
 			for (int i = 1; i <= pixels && topLeft && topRight && bottomLeft && bottomRight; i++) {
@@ -151,32 +144,6 @@ public abstract class Entity implements java.io.Serializable {
 			}
 		}
 		
-		// for(float i = 1; i <= pixels; i++)
-		// {
-		// float scale = 1.f/pixels;
-		// left = left + dx*scale;
-		// right = right + dx*scale;
-		// top = top + dy*scale;
-		// bottom = bottom + dy*scale;
-		//
-		// boolean topLeft = world.passable((int)left, (int)top);
-		// boolean topRight = world.passable((int)right, (int)top);
-		// boolean bottomLeft = world.passable((int)left, (int)bottom);
-		// boolean bottomRight = world.passable((int)right, (int)bottom);
-		// if(!(topLeft && topRight && bottomLeft && bottomRight))
-		// {
-		// hitTop = topLeft || topRight;
-		// hitBottom = bottomLeft || bottomRight;
-		//
-		// left = left - dx*scale;
-		// right = right - dx*scale;
-		// top = top - dy*scale;
-		// bottom = bottom - dy*scale;
-		//
-		// break;
-		// }
-		// }
-		
 		if (gravityApplies) {
 			if (world.isClimbable((int) left, (int) top)
 					|| world.isClimbable((int) right, (int) top)
@@ -190,21 +157,18 @@ public abstract class Entity implements java.io.Serializable {
 				}
 			} else {
 				dy += gravityAcceleration;
-				if (dy > 0) {
-					dy = Math.min(maxDY, dy);
-				} else {
-					dy = Math.max(-maxDY, dy);
-				}
 			}
 		}
 		if (hitTop) {
 			dy = 0.0000001f;
 		} else if (hitBottom) {
-			int dmg = (int) (y - lastYPeak - 2.75);
-			if (dmg > 0 && dy > maxWaterDY)
-				this.takeDamage(dmg * 5);
+			// mathemagically derived to mimic the damage from
+			//   counting the number of meters dropped
+			int dmg = ((int) (114 * dy)) - 60;
+			if (dmg > 0) {
+				this.takeDamage(dmg);
+			}
 			dy = 0;
-			lastYPeak = y;
 		}
 		
 		x = left;
