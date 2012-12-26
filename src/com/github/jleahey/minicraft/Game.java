@@ -59,9 +59,9 @@ public class Game {
 	private Sprite fullHeart, halfHeart, emptyHeart, bubble, emptyBubble;
 	
 	public boolean viewFPS = false;
-	private boolean startMenu = true;
-	private boolean newMenu = false;
-	private long ticksRunning;
+	private boolean inMenu = true;
+	private MainMenu menu;
+	public long ticksRunning;
 	private Random random = new Random();
 	
 	public Player player;
@@ -75,6 +75,7 @@ public class Game {
 	 * Construct our game and set it running.
 	 */
 	public Game() {
+		menu = new MainMenu(this);
 		GraphicsHandler.get().init(this);
 		itemTypes = ItemLoader.loadItems(tileSize / 2);
 		System.gc();
@@ -84,7 +85,8 @@ public class Game {
 	 * Start a fresh game, this should clear out any old data and
 	 * create a new set.
 	 */
-	private void startGame(boolean load, int width) {
+	public void startGame(boolean load, int width) {
+		inMenu = false;
 		System.out.println("Creating world width: " + width);
 		worldWidth = width;
 		
@@ -134,58 +136,6 @@ public class Game {
 		System.gc();
 	}
 	
-	public void drawStartMenu(GraphicsHandler g) {
-		drawTileBackground(g, menu_bgTile, 32);
-		drawCenteredX(g, menu_logo, 70, 397, 50);
-		drawCenteredX(g, menu_newUp, 200, 160, 64);
-		drawCenteredX(g, menu_loadUp, 300, 160, 64);
-		float pixels = (Math.abs((float) ((ticksRunning % 100) - 50) / 50) + 1);
-		menu_tag.draw(g, 450, 70, (int) (60 * pixels), (int) (37 * pixels));
-		if (!leftClick) {
-			return;
-		}
-		
-		if (screenMouseY >= 300) {
-			leftClick = false;
-			startMenu = false;
-			startGame(true, menu_mediumWidth);
-		} else if (screenMouseY < 300) {
-			leftClick = false;
-			startMenu = false;
-			newMenu = true;
-		}
-	}
-	
-	public void drawNewMenu(GraphicsHandler g) {
-		drawTileBackground(g, menu_bgTile, 32);
-		drawCenteredX(g, menu_logo, 70, 397, 50);
-		drawCenteredX(g, menu_miniUp, 150, 160, 64);
-		drawCenteredX(g, menu_mediumUp, 250, 160, 64);
-		drawCenteredX(g, menu_bigUp, 350, 160, 64);
-		float pixels = (Math.abs((float) ((ticksRunning % 100) - 50) / 50) + 1);
-		menu_tag.draw(g, 450, 70, (int) (60 * pixels), (int) (37 * pixels));
-		if (!leftClick) {
-			return;
-		}
-		
-		if (screenMouseY >= 350) {
-			leftClick = false;
-			startMenu = false;
-			newMenu = false;
-			startGame(false, menu_bigWidth);
-		} else if (screenMouseY >= 250) {
-			leftClick = false;
-			startMenu = false;
-			newMenu = false;
-			startGame(false, menu_mediumWidth);
-		} else if (screenMouseY >= 150) {
-			leftClick = false;
-			startMenu = false;
-			newMenu = false;
-			startGame(false, menu_miniWidth);
-		}
-	}
-	
 	public void drawCenteredX(GraphicsHandler g, Sprite s, int top, int width, int height) {
 		s.draw(g, GraphicsHandler.get().getScreenWidth() / 2 - width / 2, top, width, height);
 	}
@@ -194,8 +144,6 @@ public class Game {
 		long lastLoopTime = System.currentTimeMillis();
 		
 		if (Constants.DEBUG) {
-			startMenu = false;
-			newMenu = false;
 			startGame(false, menu_mediumWidth);
 		}
 		
@@ -208,13 +156,8 @@ public class Game {
 			GraphicsHandler g = GraphicsHandler.get();
 			g.startDrawing();
 			
-			if (startMenu || newMenu) {
-				if (startMenu) {
-					drawStartMenu(g);
-				} else {
-					drawNewMenu(g);
-				}
-				
+			if (inMenu) {
+				menu.draw(g);
 				g.finishDrawing();
 				
 				SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
@@ -410,7 +353,7 @@ public class Game {
 		return this;
 	}
 	
-	private void drawTileBackground(GraphicsHandler g, Sprite sprite, int tileSize) {
+	public void drawTileBackground(GraphicsHandler g, Sprite sprite, int tileSize) {
 		for (int i = 0; i <= GraphicsHandler.get().getScreenWidth() / tileSize; i++) {
 			for (int j = 0; j <= GraphicsHandler.get().getScreenHeight() / tileSize; j++) {
 				sprite.draw(g, i * tileSize, j * tileSize, tileSize, tileSize);
