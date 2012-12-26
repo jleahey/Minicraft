@@ -61,8 +61,8 @@ public class LightingEngine implements Serializable {
 		lightFlow[x][y] = Direction.UNKNOWN;
 		// resetLighting(x, y);
 		
-		List<LightingPoint> wells = new LightingPoint(x, y, Direction.WELL, 0).getNeighbors(false,
-				width, height);
+		List<LightingPoint> wells = new LightingPoint(x, y, Direction.WELL, 0).getExactNeighbors(
+				width, height, 0);
 		lightValues[x][y] = 0;
 		for (LightingPoint well : wells) {
 			well.lightValue = 0;
@@ -115,35 +115,6 @@ public class LightingEngine implements Serializable {
 			this.lightValue = lightValue;
 		}
 		
-		// public LightingPoint(int x, int y) {
-		// this.x = x;
-		// this.y = y;
-		// this.lightValue = lightValues[x][y];
-		// }
-		
-		// @Override
-		// public int compareTo(LightingPoint lightingPoint) {
-		// if (this.lightValue < lightingPoint.lightValue) {
-		// return 1;
-		// } else if (this.lightValue > lightingPoint.lightValue) {
-		// return -1;
-		// }
-		//
-		// if (this.x < lightingPoint.x)
-		// return 1;
-		// else if (this.x > lightingPoint.x) {
-		// return -1;
-		// }
-		//
-		// if (this.y < lightingPoint.y)
-		// return 1;
-		// else if (this.y > lightingPoint.y) {
-		// return -1;
-		// }
-		//
-		// return 0;
-		// }
-		//
 		@Override
 		public boolean equals(Object o) {
 			LightingPoint other = (LightingPoint) o;
