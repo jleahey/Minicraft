@@ -215,22 +215,22 @@ public class Game {
 					drawNewMenu(g);
 				}
 				
-				GraphicsHandler.get().finishDrawing();
+				g.finishDrawing();
 				
 				SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
 				continue;
 			}
-			
-			float cameraX = player.x - GraphicsHandler.get().getScreenWidth() / tileSize / 2;
-			float cameraY = player.y - GraphicsHandler.get().getScreenHeight() / tileSize / 2;
+			final int screenWidth = g.getScreenWidth();
+			final int screenHeight = g.getScreenHeight();
+			float cameraX = player.x - screenWidth / tileSize / 2;
+			float cameraY = player.y - screenHeight / tileSize / 2;
 			
 			world.chunkUpdate();
-			world.draw(GraphicsHandler.get(), 0, 0, GraphicsHandler.get().getScreenWidth(),
-					GraphicsHandler.get().getScreenHeight(), cameraX, cameraY, tileSize);
+			world.draw(g, 0, 0, screenWidth, screenHeight, cameraX, cameraY, tileSize);
 			
-			boolean inventoryFocus = inventory.updateInventory(GraphicsHandler.get()
-					.getScreenWidth(), GraphicsHandler.get().getScreenHeight(), screenMouseX,
-					screenMouseY, leftClick, rightClick);
+			boolean inventoryFocus = inventory.updateInventory(
+				screenWidth, screenHeight, screenMouseX, screenMouseY,
+				leftClick, rightClick);
 			if (inventoryFocus) {
 				leftClick = false;
 				rightClick = false;
@@ -329,8 +329,7 @@ public class Game {
 					continue;
 				}
 				entity.updatePosition(world, tileSize);
-				entity.draw(g, cameraX, cameraY, GraphicsHandler.get().getScreenWidth(),
-						GraphicsHandler.get().getScreenHeight(), tileSize);
+				entity.draw(g, cameraX, cameraY, screenWidth, screenHeight, tileSize);
 			}
 			
 			if (viewFPS) {
@@ -353,8 +352,7 @@ public class Game {
 			}
 			
 			// draw the hotbar, and optionally the inventory screen
-			inventory.draw(g, GraphicsHandler.get().getScreenWidth(), GraphicsHandler.get()
-					.getScreenHeight());
+			inventory.draw(g, screenWidth, screenHeight);
 			
 			// draw the mouse
 			Int2 mouseTest = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize,
@@ -366,8 +364,8 @@ public class Game {
 			
 			// HACK: draw hearts for health bar
 			// TODO: move this elsewhere, don't use so many magic constants
-			int heartX = (GraphicsHandler.get().getScreenWidth() - 250) / 2;
-			int heartY = GraphicsHandler.get().getScreenHeight() - 50;
+			int heartX = (screenWidth - 250) / 2;
+			int heartY = screenHeight - 50;
 			for (int heartIdx = 1; heartIdx <= 10; ++heartIdx) {
 				int hpDiff = player.hitPoints - heartIdx * 10;
 				if (hpDiff >= 0) {
@@ -382,7 +380,7 @@ public class Game {
 			
 			if (player.isHeadUnderWater(world, tileSize)) {
 				// another HACK: draw air bubbles
-				int bubbleX = (GraphicsHandler.get().getScreenWidth() + 50) / 2;
+				int bubbleX = (screenWidth + 50) / 2;
 				int numBubbles = player.airRemaining();
 				for (int bubbleIdx = 1; bubbleIdx <= 10; ++bubbleIdx) {
 					if (bubbleIdx <= numBubbles) {
