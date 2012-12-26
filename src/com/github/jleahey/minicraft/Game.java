@@ -98,23 +98,30 @@ public class Game {
 				}
 			}
 		}
-		if (player == null) // didn't load a saved game
-		{
+		if (player == null) {
+			// didn't load a saved game
 			world = new World(worldWidth, worldHeight, random);
 			player = new Player(true, world.spawnLocation.x, world.spawnLocation.y,
 					7 * (tileSize / 8), 14 * (tileSize / 8));
 			entities.add(player);
 		}
 		
-		builderIcon = SpriteStore.get().getSprite("sprites/other/builder.png");
-		minerIcon = SpriteStore.get().getSprite("sprites/other/miner.png");
-		fullHeart = SpriteStore.get().getSprite("sprites/other/full_heart.png");
-		halfHeart = SpriteStore.get().getSprite("sprites/other/half_heart.png");
-		emptyHeart = SpriteStore.get().getSprite("sprites/other/empty_heart.png");
-		bubble = SpriteStore.get().getSprite("sprites/other/bubble.png");
+		// load sprites
+		final SpriteStore ss = SpriteStore.get();
+		builderIcon = ss.getSprite("sprites/other/builder.png");
+		minerIcon = ss.getSprite("sprites/other/miner.png");
+		fullHeart = ss.getSprite("sprites/other/full_heart.png");
+		halfHeart = ss.getSprite("sprites/other/half_heart.png");
+		emptyHeart = ss.getSprite("sprites/other/empty_heart.png");
+		bubble = ss.getSprite("sprites/other/bubble.png");
 		// there's no empty bubble image, so we'll just use this for now
-		emptyBubble = SpriteStore.get().getSprite("sprites/other/bubble_pop2.png");
+		emptyBubble = ss.getSprite("sprites/other/bubble_pop2.png");
 		
+		breakingSprites = new Sprite[8];
+		for (int i = 0; i < 8; i++) {
+			breakingSprites[i] = ss.getSprite("sprites/tiles/break" + i + ".png");
+		}
+
 		if (inventory == null) {
 			inventory = new Inventory(10, 4, 3, itemTypes);
 			if (Constants.DEBUG) {
@@ -124,12 +131,6 @@ public class Game {
 		}
 		
 		musicPlayer.play();
-		
-		breakingSprites = new Sprite[8];
-		for (int i = 0; i < 8; i++) {
-			breakingSprites[i] = SpriteStore.get().getSprite("sprites/tiles/break" + i + ".png");
-		}
-		
 		System.gc();
 	}
 	
