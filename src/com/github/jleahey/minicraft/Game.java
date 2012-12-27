@@ -35,24 +35,6 @@ public class Game {
 	private int breakingTicks;
 	private Int2 breakingPos;
 	
-	/* menu sprites */
-	private final Sprite menu_bgTile = SpriteStore.get().getSprite("sprites/tiles/dirt.png");
-	private final Sprite menu_logo = SpriteStore.get().getSprite("sprites/menus/title.png");
-	private final Sprite menu_newUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
-	private final Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
-	private final Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
-	private final Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
-	private final Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
-	private final Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
-	private final Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
-	private final Sprite menu_miniDown = SpriteStore.get().getSprite("sprites/menus/mini_down.png");
-	private final Sprite menu_mediumDown = SpriteStore.get().getSprite("sprites/menus/med_down.png");
-	private final Sprite menu_bigDown = SpriteStore.get().getSprite("sprites/menus/big_down.png");
-	private final Sprite menu_tag = SpriteStore.get().getSprite("sprites/menus/tag.png");
-	private final int menu_miniWidth = 256;
-	private final int menu_mediumWidth = 512;
-	private final int menu_bigWidth = 1024;
-	
 	private Sprite builderIcon;
 	private Sprite minerIcon;
 	private Sprite[] breakingSprites;
@@ -143,7 +125,7 @@ public class Game {
 		long lastLoopTime = System.currentTimeMillis();
 		
 		if (Constants.DEBUG) {
-			startGame(false, menu_mediumWidth);
+			startGame(false, 512);
 		}
 		
 		// keep looping round till the game ends
