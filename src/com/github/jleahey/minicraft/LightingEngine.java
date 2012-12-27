@@ -183,17 +183,31 @@ public class LightingEngine implements Serializable {
 		
 		public List<LightingPoint> getExactNeighbors(int width, int height, int lightingValue) {
 			LinkedList<LightingPoint> neighbors = new LinkedList<LightingPoint>();
-			if (x - 1 >= 0) {
-				neighbors.add(new LightingPoint(x - 1, y, Direction.RIGHT, lightingValue));
+			
+			boolean bufferLeft = (x > 0);
+			boolean bufferRight = (x < width - 1);
+			boolean bufferUp = (y > 0);
+			boolean bufferDown = (y < height - 1);
+			
+			if (bufferRight) {
+				neighbors.add(new LightingPoint(x + 1, y, Direction.RIGHT, lightingValue));
+				if (bufferUp)
+					neighbors.add(new LightingPoint(x + 1, y - 1, Direction.WELL, lightingValue));
+				if (bufferDown)
+					neighbors.add(new LightingPoint(x + 1, y + 1, Direction.WELL, lightingValue));
 			}
-			if (x + 1 < width) {
-				neighbors.add(new LightingPoint(x + 1, y, Direction.LEFT, lightingValue));
+			if (bufferLeft) {
+				neighbors.add(new LightingPoint(x - 1, y, Direction.LEFT, lightingValue));
+				if (bufferUp)
+					neighbors.add(new LightingPoint(x - 1, y - 1, Direction.WELL, lightingValue));
+				if (bufferDown)
+					neighbors.add(new LightingPoint(x - 1, y + 1, Direction.WELL, lightingValue));
 			}
-			if (y - 1 >= 0) {
-				neighbors.add(new LightingPoint(x, y - 1, Direction.DOWN, lightingValue));
+			if (bufferDown) {
+				neighbors.add(new LightingPoint(x, y + 1, Direction.DOWN, lightingValue));
 			}
-			if (y + 1 < height) {
-				neighbors.add(new LightingPoint(x, y + 1, Direction.UP, lightingValue));
+			if (bufferUp) {
+				neighbors.add(new LightingPoint(x, y - 1, Direction.UP, lightingValue));
 			}
 			return neighbors;
 		}
