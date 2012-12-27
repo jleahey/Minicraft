@@ -18,7 +18,6 @@ public class World implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public Tile[][] tiles;
-	public boolean[][] visibility;
 	public int width;
 	public int height;
 	public Int2 spawnLocation;
@@ -38,16 +37,12 @@ public class World implements java.io.Serializable {
 	public World(int width, int height, Random random) {
 		
 		char[][] generated = WorldGenerator.generate(width, height, random);
-		visibility = WorldGenerator.visibility;
 		WorldGenerator.visibility = null;
 		this.spawnLocation = WorldGenerator.playerLocation;
 		tiles = new Tile[width][height];
 		// columnHeights = new int[width];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				if (Constants.DEBUG_VISIBILITY_ON) {
-					visibility[i][j] = true;
-				}
 				Tile tile = Constants.tileTypes.get(generated[i][j]);
 				if (tile == null) {
 					tiles[i][j] = Constants.tileTypes.get('a');
@@ -117,9 +112,6 @@ public class World implements java.io.Serializable {
 				// lightValues[x][y] = lightRayValue;
 				// if (tiles[x][y].type.lightBlocking < lightRayValue)
 				// spreadLighting(x, y, lightValues[x][y]);
-				if (tiles[x][y].type.passable && visibility[x][y]) {
-					spreadVisibility(x, y);
-				}
 				
 				if ((!tiles[x][y].type.passable || tiles[x][y].type.liquid)
 						&& tiles[x][y].type.name != 'l') {
@@ -157,20 +149,6 @@ public class World implements java.io.Serializable {
 	// setLighting(x, y - 1, currentLighting);
 	// }
 	
-	private void spreadVisibility(int x, int y) {
-		setVisible(x + 1, y);
-		setVisible(x, y + 1);
-		setVisible(x - 1, y);
-		setVisible(x, y - 1);
-	}
-	
-	private void setVisible(int x, int y) {
-		if (x < 0 || x >= width || y < 0 || y >= height) {
-			return;
-		}
-		visibility[x][y] = true;
-	}
-	
 	// private void setLighting(int x, int y, int lightValue) {
 	// if (x < 0 || x >= width || y < 0 || y >= height || lightValue < lightValues[x][y]) {
 	// return;
@@ -200,7 +178,6 @@ public class World implements java.io.Serializable {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return 0;
 		}
-		spreadVisibility(x, y);
 		char name = tiles[x][y].type.name;
 		tiles[x][y] = Constants.tileTypes.get('a');
 		lightingEngine.removedTile(x, y);
@@ -297,7 +274,6 @@ public class World implements java.io.Serializable {
 				tileSize, 0, 0);
 		g.setColor(getSkyColor());
 		g.fillRect(pos.x, pos.y, width * tileSize, height * tileSize / 2 - 1);
-		g.setColor(caveAir);
 		for (int i = 0; i < width; i++) {
 			int posX = (int) ((i - cameraX) * tileSize);
 			int posY = (int) ((height - cameraY) * tileSize);
@@ -334,10 +310,7 @@ public class World implements java.io.Serializable {
 						/ Constants.LIGHT_VALUE_SUN;
 				Color tint = new Color(0, 0, 0, 255 - lightIntensity);
 				
-				if (!visibility[i][j]) {
-					g.setColor(caveAir);
-					g.fillRect(posX, posY, tileSize, tileSize);
-				} else if (tiles[i][j].type.name != 'a') {
+				if (tiles[i][j].type.name != 'a') {
 					tiles[i][j].type.sprite.draw(g, posX, posY, tileSize, tileSize, tint);
 				} else {
 					g.setColor(tint);
