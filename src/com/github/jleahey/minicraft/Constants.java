@@ -27,8 +27,8 @@ public class Constants {
 		tileTypes.put('L', new Tile(new TileType("sprites/tiles/ladder.png", 'L', true, false, 0)));
 	}
 	
-	public static final int LIGHT_VALUE_TORCH = 15;
-	public static final int LIGHT_VALUE_SUN = 20;
+	public static final int LIGHT_VALUE_TORCH = 13;
+	public static final int LIGHT_VALUE_SUN = 15;
 	public static final boolean DEBUG = false;
 	public static final boolean DEBUG_VISIBILITY_ON = false;
 	public static final int LIGHT_VALUE_OPAQUE = 10000;
