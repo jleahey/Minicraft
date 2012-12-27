@@ -267,7 +267,7 @@ public class LightingEngine implements Serializable {
 		
 		@Override
 		public int hashCode() {
-			return x * 13 + y * 17 + lightValue * 23 + flow.ordinal() * 29;
+			return x * 13 + y * 17;
 			
 		}
 	}
