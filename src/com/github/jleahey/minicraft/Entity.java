@@ -65,9 +65,10 @@ public abstract class Entity implements java.io.Serializable {
 		boolean middleLeft = true;
 		boolean middleRight = true;
 		
+		float scale = 1.f / pixels;
+		
 		if (favorVertical) {
 			for (int i = 1; i <= pixels && topLeft && topRight && bottomLeft && bottomRight; i++) {
-				float scale = 1.f / pixels;
 				top = top + dy * scale;
 				bottom = bottom + dy * scale;
 				
@@ -83,11 +84,9 @@ public abstract class Entity implements java.io.Serializable {
 					hitBottom |= !bottomLeft || !bottomRight;
 					top = top - dy * scale;
 					bottom = bottom - dy * scale;
-					// pixels = i;
 				}
 			}
 			for (int i = 1; i <= pixels && topLeft && topRight && bottomLeft && bottomRight; i++) {
-				float scale = 1.f / pixels;
 				left = left + dx * scale;
 				right = right + dx * scale;
 				
@@ -105,7 +104,6 @@ public abstract class Entity implements java.io.Serializable {
 			}
 		} else {
 			for (int i = 1; i <= pixels && topLeft && topRight && bottomLeft && bottomRight; i++) {
-				float scale = 1.f / pixels;
 				left = left + dx * scale;
 				right = right + dx * scale;
 				
@@ -119,11 +117,9 @@ public abstract class Entity implements java.io.Serializable {
 				if (!(topLeft && topRight && bottomLeft && bottomRight && middleLeft && middleRight)) {
 					left = left - dx * scale;
 					right = right - dx * scale;
-					// pixels = i;
 				}
 			}
 			for (int i = 1; i <= pixels && topLeft && topRight && bottomLeft && bottomRight; i++) {
-				float scale = 1.f / pixels;
 				top = top + dy * scale;
 				bottom = bottom + dy * scale;
 				
@@ -139,7 +135,6 @@ public abstract class Entity implements java.io.Serializable {
 					hitBottom |= !bottomLeft || !bottomRight;
 					top = top - dy * scale;
 					bottom = bottom - dy * scale;
-					// pixels = i;
 				}
 			}
 		}
@@ -197,14 +192,6 @@ public abstract class Entity implements java.io.Serializable {
 	
 	public float getRight(int tileSize) {
 		return x + (float) (widthPX) / tileSize;
-	}
-	
-	public void setXInd(int xInd) {
-		x = xInd;
-	}
-	
-	public void setYInd(int yInd, int tileSize) {
-		y = yInd - (float) (heightPX + 1) / tileSize;
 	}
 	
 	public boolean isInWater(World world, int tileSize) {
