@@ -191,17 +191,21 @@ public class LightingEngine implements Serializable {
 			
 			if (bufferRight) {
 				neighbors.add(new LightingPoint(x + 1, y, Direction.RIGHT, lightingValue));
-				if (bufferUp)
+				if (bufferUp) {
 					neighbors.add(new LightingPoint(x + 1, y - 1, Direction.WELL, lightingValue));
-				if (bufferDown)
+				}
+				if (bufferDown) {
 					neighbors.add(new LightingPoint(x + 1, y + 1, Direction.WELL, lightingValue));
+				}
 			}
 			if (bufferLeft) {
 				neighbors.add(new LightingPoint(x - 1, y, Direction.LEFT, lightingValue));
-				if (bufferUp)
+				if (bufferUp) {
 					neighbors.add(new LightingPoint(x - 1, y - 1, Direction.WELL, lightingValue));
-				if (bufferDown)
+				}
+				if (bufferDown) {
 					neighbors.add(new LightingPoint(x - 1, y + 1, Direction.WELL, lightingValue));
+				}
 			}
 			if (bufferDown) {
 				neighbors.add(new LightingPoint(x, y + 1, Direction.DOWN, lightingValue));
@@ -231,74 +235,10 @@ public class LightingEngine implements Serializable {
 		}
 	}
 	
-	public static class LightPositionComparator implements Comparator<LightingPoint> {
-		
-		static final LightPositionComparator single = new LightPositionComparator();
-		
-		public static LightPositionComparator get() {
-			return single;
-		}
-		
-		@Override
-		public int compare(LightingPoint arg0, LightingPoint arg1) {
-			if (arg0.x < arg1.x) {
-				return 1;
-			} else if (arg0.x > arg1.x) {
-				return -1;
-			}
-			
-			if (arg0.y < arg1.y) {
-				return 1;
-			} else if (arg0.y > arg1.y) {
-				return -1;
-			}
-			
-			return 0;
-		}
-	}
-	
-	private void spreadLightingDijkstra(LightingPoint source) {
-		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
-		sources.add(source);
-		spreadLightingDijkstra(sources);
-	}
-	
-	private List<LightingPoint> spreadDarknessDijkstra(List<LightingPoint> wells) {
-		LinkedList<LightingPoint> turningPoints = new LinkedList<LightingPoint>();
-		PriorityQueue<LightingPoint> in = new PriorityQueue<LightingPoint>(wells.size(),
-				new LightValueComparator());
-		HashSet<LightingPoint> out = new HashSet<LightingPoint>();
-		
-		in.addAll(wells);
-		out.addAll(wells);
-		
-		while (!in.isEmpty()) {
-			LightingPoint current = in.poll();
-			int x = current.x, y = current.y;
-			if (current.flow != lightFlow[x][y] && lightFlow[x][y] != Direction.UNKNOWN) {
-				current.lightValue = lightValues[x][y];
-				turningPoints.add(current);
-				out.add(current);
-				continue;
-			}
-			for (LightingPoint next : current.getNeighbors(false, x, y)) {
-				if (out.contains(next)) {
-					continue;
-				}
-				in.add(next);
-			}
-			lightValues[x][y] = 0;
-			out.add(current);
-		}
-		
-		return turningPoints;
-	}
-	
 	private void spreadLightingDijkstra(List<LightingPoint> sources) {
 		HashSet<LightingPoint> out = new HashSet<LightingPoint>();
 		PriorityQueue<LightingPoint> in = new PriorityQueue<LightingPoint>(sources.size(),
 				new LightValueComparator());
-		
 		// consider that the input sources are done (this is not a good assumption if different
 		// light sources have different values......)
 		out.addAll(sources);
@@ -317,7 +257,6 @@ public class LightingEngine implements Serializable {
 					&& current.flow != Direction.SOURCE) {
 				System.out.println("There's a bug in the source map!");
 			}
-			
 			List<LightingPoint> neighbors = current.getNeighbors(true, width, height);
 			for (LightingPoint next : neighbors) {
 				if (out.contains(next)) {
@@ -328,7 +267,7 @@ public class LightingEngine implements Serializable {
 		}
 	}
 	
-	public Direction opposite(Direction direction) {
+	public Direction oppositeDirection(Direction direction) {
 		switch (direction) {
 		case RIGHT:
 			return Direction.LEFT;
