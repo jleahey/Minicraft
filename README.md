@@ -9,7 +9,14 @@
 
 ## Inspiration
 
-Minicraft was initially conceived as a Demake of Minecraft for Game Jolt's Indie Game Demake Contest.  Without Notch we would have never created this fun game!  We overcame the difficulties of losing a dimension in various ways and we tried to stay true to Minecraft throughout.  Enjoy our "8-bit" 2D version of the game!
+Minicraft was initially conceived as a
+[demake](http://en.wikipedia.org/wiki/Video_game_remake#.22Demakes.22) of
+[Minecraft](http://minecraft.net/) for
+[Game Jolt](http://gamejolt.com/)'s
+[Indie Game Demake Contest](http://gamejolt.com/freeware/games/adventure/minicraft/2818/).
+Without Notch we would have never created this fun game!
+We overcame the difficulties of losing a dimension in various ways and we tried to stay true to Minecraft throughout.
+Enjoy our "8-bit" 2D version of the game!
 
 ## What's Different
 
