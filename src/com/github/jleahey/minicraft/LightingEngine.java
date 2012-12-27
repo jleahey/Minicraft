@@ -12,7 +12,7 @@ public class LightingEngine implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	public enum Direction {
-		RIGHT, UP, LEFT, DOWN, SOURCE, WELL, UNKNOWN
+		RIGHT, UP_RIGHT, UP, UP_LEFT, LEFT, DOWN_LEFT, DOWN, DOWN_RIGHT, SOURCE, WELL, UNKNOWN
 	};
 	
 	public Direction[][] lightFlow;
@@ -192,19 +192,23 @@ public class LightingEngine implements Serializable {
 			if (bufferRight) {
 				neighbors.add(new LightingPoint(x + 1, y, Direction.RIGHT, lightingValue));
 				if (bufferUp) {
-					neighbors.add(new LightingPoint(x + 1, y - 1, Direction.WELL, lightingValue));
+					neighbors
+							.add(new LightingPoint(x + 1, y - 1, Direction.UP_RIGHT, lightingValue));
 				}
 				if (bufferDown) {
-					neighbors.add(new LightingPoint(x + 1, y + 1, Direction.WELL, lightingValue));
+					neighbors.add(new LightingPoint(x + 1, y + 1, Direction.DOWN_RIGHT,
+							lightingValue));
 				}
 			}
 			if (bufferLeft) {
 				neighbors.add(new LightingPoint(x - 1, y, Direction.LEFT, lightingValue));
 				if (bufferUp) {
-					neighbors.add(new LightingPoint(x - 1, y - 1, Direction.WELL, lightingValue));
+					neighbors
+							.add(new LightingPoint(x - 1, y - 1, Direction.UP_LEFT, lightingValue));
 				}
 				if (bufferDown) {
-					neighbors.add(new LightingPoint(x - 1, y + 1, Direction.WELL, lightingValue));
+					neighbors
+							.add(new LightingPoint(x - 1, y + 1, Direction.UP_LEFT, lightingValue));
 				}
 			}
 			if (bufferDown) {
@@ -277,6 +281,14 @@ public class LightingEngine implements Serializable {
 			return Direction.DOWN;
 		case DOWN:
 			return Direction.UP;
+		case UP_RIGHT:
+			return Direction.DOWN_LEFT;
+		case UP_LEFT:
+			return Direction.DOWN_RIGHT;
+		case DOWN_RIGHT:
+			return Direction.UP_LEFT;
+		case DOWN_LEFT:
+			return Direction.UP_RIGHT;
 		default:
 			return Direction.UNKNOWN;
 		}
@@ -292,6 +304,14 @@ public class LightingEngine implements Serializable {
 			return new Int2(x, y - 1);
 		case DOWN:
 			return new Int2(x, y + 1);
+		case UP_RIGHT:
+			return new Int2(x + 1, y - 1);
+		case UP_LEFT:
+			return new Int2(x - 1, y - 1);
+		case DOWN_RIGHT:
+			return new Int2(x + 1, y + 1);
+		case DOWN_LEFT:
+			return new Int2(x - 1, y + 1);
 		default:
 			return null;
 		}
