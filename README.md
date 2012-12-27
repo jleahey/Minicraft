@@ -119,6 +119,6 @@ Axes break wood tiles faster, and shovels break dirt, sand, and leaves very quic
 
 ## Libraries Used
 
- * Easyogg
- * Jorbis
- * gson
+ * [Easyogg](http://www.cokeandcode.com/index.html?page=libs)
+ * [JOrbis](http://www.jcraft.com/jorbis/)
+ * [gson](http://code.google.com/p/google-gson/)
