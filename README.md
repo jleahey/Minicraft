@@ -108,10 +108,10 @@ Axes break wood tiles faster, and shovels break dirt, sand, and leaves very quic
 ## Future Plans
 
  * Version 1.1 (we hope)
-    - Day/Night
-    - Furnace
-    - Life
-    - Drowning
+    - Day/Night ✓
+    - Life ✓
+    - Drowning ✓
+    - Furnaces
     - Enemies
     - Chests
     - Infinite Levels
