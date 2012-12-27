@@ -68,8 +68,7 @@ public class Game {
 	public World world;
 	
 	public MusicPlayer musicPlayer = new MusicPlayer("sounds/music.ogg");
-	public int screenMouseX;
-	public int screenMouseY;
+	public Int2 screenMousePos = new Int2(0, 0);
 	
 	/**
 	 * Construct our game and set it running.
@@ -153,11 +152,13 @@ public class Game {
 			long delta = SystemTimer.getTime() - lastLoopTime;
 			lastLoopTime = SystemTimer.getTime();
 			
+
 			GraphicsHandler g = GraphicsHandler.get();
 			g.startDrawing();
 			
 			if (inMenu) {
 				menu.draw(g);
+				drawMouse(g, screenMousePos);
 				g.finishDrawing();
 				
 				SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
@@ -167,13 +168,14 @@ public class Game {
 			final int screenHeight = g.getScreenHeight();
 			float cameraX = player.x - screenWidth / tileSize / 2;
 			float cameraY = player.y - screenHeight / tileSize / 2;
+			float worldMouseX = (cameraX * tileSize + screenMousePos.x) / tileSize;
+			float worldMouseY = (cameraY * tileSize + screenMousePos.y) / tileSize - .5f;
 			
 			world.chunkUpdate();
 			world.draw(g, 0, 0, screenWidth, screenHeight, cameraX, cameraY, tileSize);
 			
 			boolean inventoryFocus = inventory.updateInventory(
-				screenWidth, screenHeight, screenMouseX, screenMouseY,
-				leftClick, rightClick);
+				screenWidth, screenHeight, screenMousePos, leftClick, rightClick);
 			if (inventoryFocus) {
 				leftClick = false;
 				rightClick = false;
@@ -257,8 +259,6 @@ public class Game {
 				}
 			}
 			
-			float worldMouseX = (cameraX * tileSize + screenMouseX) / tileSize;
-			float worldMouseY = (cameraY * tileSize + screenMouseY) / tileSize - .5f;
 			player.updateHand(g, cameraX, cameraY, worldMouseX, worldMouseY, world, tileSize);
 			
 			java.util.Iterator<Entity> it = entities.iterator();
@@ -300,10 +300,7 @@ public class Game {
 			// draw the mouse
 			Int2 mouseTest = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize,
 					tileSize, tileSize, worldMouseX, worldMouseY);
-			g.setColor(Color.white);
-			g.fillOval(mouseTest.x - 4, mouseTest.y - 4, 8, 8);
-			g.setColor(Color.black);
-			g.fillOval(mouseTest.x - 3, mouseTest.y - 3, 6, 6);
+			drawMouse(g, mouseTest);
 			
 			// HACK: draw hearts for health bar
 			// TODO: move this elsewhere, don't use so many magic constants
@@ -351,6 +348,13 @@ public class Game {
 	
 	private Game getGame() {
 		return this;
+	}
+
+	public void drawMouse(GraphicsHandler g, Int2 pos) {
+		g.setColor(Color.white);
+		g.fillOval(pos.x - 4, pos.y - 4, 8, 8);
+		g.setColor(Color.black);
+		g.fillOval(pos.x - 3, pos.y - 3, 6, 6);
 	}
 	
 	public void drawTileBackground(GraphicsHandler g, Sprite sprite, int tileSize) {

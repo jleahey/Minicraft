@@ -43,14 +43,14 @@ public class AwtEventsHandler {
 	private class MouseMoveInputHander implements MouseMotionListener {
 		@Override
 		public void mouseDragged(MouseEvent arg0) {
-			game.screenMouseX = arg0.getX();
-			game.screenMouseY = arg0.getY();
+			game.screenMousePos.x = arg0.getX();
+			game.screenMousePos.y = arg0.getY();
 		}
 		
 		@Override
 		public void mouseMoved(MouseEvent arg0) {
-			game.screenMouseX = arg0.getX();
-			game.screenMouseY = arg0.getY();
+			game.screenMousePos.x = arg0.getX();
+			game.screenMousePos.y = arg0.getY();
 		}
 	}
 	

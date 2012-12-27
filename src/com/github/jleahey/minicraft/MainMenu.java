@@ -59,7 +59,7 @@ public class MainMenu {
 			return;
 		}
 		game.leftClick = false;
-		if (game.screenMouseY >= 300) {
+		if (game.screenMousePos.y >= 300) {
 			game.startGame(true, menu_mediumWidth);
 		} else {
 			newGame = true;
@@ -75,11 +75,11 @@ public class MainMenu {
 		}
 		game.leftClick = false;
 		newGame = false;
-		if (game.screenMouseY >= 350) {
+		if (game.screenMousePos.y >= 350) {
 			game.startGame(false, menu_bigWidth);
-		} else if (game.screenMouseY >= 250) {
+		} else if (game.screenMousePos.y >= 250) {
 			game.startGame(false, menu_mediumWidth);
-		} else if (game.screenMouseY >= 150) {
+		} else if (game.screenMousePos.y >= 150) {
 			game.startGame(false, menu_miniWidth);
 		}
 	}

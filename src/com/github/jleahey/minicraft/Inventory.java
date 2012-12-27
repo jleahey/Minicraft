@@ -75,8 +75,8 @@ public class Inventory implements java.io.Serializable {
 	}
 	
 	// returns true if the mouse hit in the inventory
-	public boolean updateInventory(int screenWidth, int screenHeight, int mouseX, int mouseY,
-			boolean leftClick, boolean rightClick) {
+	public boolean updateInventory(int screenWidth, int screenHeight,
+			Int2 mousePos, boolean leftClick, boolean rightClick) {
 		if (!visible) {
 			return false;
 		}
@@ -89,17 +89,18 @@ public class Inventory implements java.io.Serializable {
 		int x = screenWidth / 2 - panelWidth / 2;
 		int y = screenHeight / 2 - panelHeight / 2;
 		
-		if (mouseX < x || mouseX > x + panelWidth || mouseY < y || mouseY > y + panelHeight) {
+		if (mousePos.x < x || mousePos.x > x + panelWidth
+				|| mousePos.y < y || mousePos.y > y + panelHeight) {
 			return false;
 		}
 		
-		holdingX = mouseX;
-		holdingY = mouseY - tileSize;
+		holdingX = mousePos.x;
+		holdingY = mousePos.y - tileSize;
 		if (!leftClick && !rightClick) {
 			return true;
 		}
 		
-		Int2 position = mouseToCoor(mouseX - x, mouseY - y, seperation, tileSize);
+		Int2 position = mouseToCoor(mousePos.x - x, mousePos.y - y, seperation, tileSize);
 		if (position != null) {
 			if (holding.isEmpty()) {
 				if (rightClick && inventoryItems[position.x][position.y].count > 1) {
@@ -167,8 +168,8 @@ public class Inventory implements java.io.Serializable {
 		y = y + seperation * 2 + tileSize - 5;
 		
 		boolean craftThisUpdate = false;
-		if (mouseX >= x && mouseX <= x + tileSize + 10 && mouseY >= y
-				&& mouseY <= y + tileSize * 2 + 10) {
+		if (mousePos.x >= x && mousePos.x <= x + tileSize + 10 && mousePos.y >= y
+				&& mousePos.y <= y + tileSize * 2 + 10) {
 			craftThisUpdate = true;
 		}
 		
