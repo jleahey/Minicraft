@@ -136,7 +136,7 @@ public class Game {
 	}
 	
 	public void drawCenteredX(GraphicsHandler g, Sprite s, int top, int width, int height) {
-		s.draw(g, GraphicsHandler.get().getScreenWidth() / 2 - width / 2, top, width, height);
+		s.draw(g, g.getScreenWidth() / 2 - width / 2, top, width, height);
 	}
 	
 	public void gameLoop() {
