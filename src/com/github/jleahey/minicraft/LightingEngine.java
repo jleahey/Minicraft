@@ -31,19 +31,24 @@ public class LightingEngine implements Serializable {
 	}
 	
 	private void init() {
-		for (int x = 0; x < width; x++)
-			for (int y = 0; y < height; y++)
-				lightValues[x][y] = 0;
-		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
 		for (int x = 0; x < width; x++) {
-			for (int y = 0; y < height - 1; y++) {
-				if (tiles[x][y].type.lightBlocking != 0) {
-					break;
-				}
-				sources.add(new LightingPoint(x, y, Direction.SOURCE, Constants.LIGHT_VALUE_SUN));
+			for (int y = 0; y < height; y++) {
+				lightValues[x][y] = 0;
+				lightFlow[x][y] = Direction.UNKNOWN;
 			}
 		}
-		spreadLightingDijkstra(sources, true);
+		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
+		for (int x = 0; x < width; x++) {
+			
+			sources.addAll(getSunSources(x));
+			// for (int y = 0; y < height - 1; y++) {
+			// if (tiles[x][y].type.lightBlocking != 0) {
+			// break;
+			// }
+			// sources.add(new LightingPoint(x, y, Direction.SOURCE, Constants.LIGHT_VALUE_SUN));
+			// }
+		}
+		spreadLightingDijkstra(sources);
 	}
 	
 	public int getLightValue(int x, int y) {
@@ -51,25 +56,49 @@ public class LightingEngine implements Serializable {
 	}
 	
 	public void removedTile(int x, int y) {
-		spreadLightingDijkstra(getSunSources(x), true);
-		spreadLightingDijkstra(
-				new LightingPoint(x, y, Direction.UNKNOWN, lightValues[x][y]).getNeighbors(true,
-						width, height), true);
+		spreadLightingDijkstra(getSunSources(x));
+		spreadLightingDijkstra(new LightingPoint(x, y, Direction.UNKNOWN, lightValues[x][y])
+				.getNeighbors(true, width, height));
 	}
 	
 	public void addedTile(int x, int y) {
-		lightFlow[x][y] = Direction.UNKNOWN;
-		// resetLighting(x, y);
-		
-		List<LightingPoint> wells = new LightingPoint(x, y, Direction.WELL, 0).getExactNeighbors(
-				width, height, 0);
-		lightValues[x][y] = 0;
-		for (LightingPoint well : wells) {
-			well.lightValue = 0;
-			if (tiles[well.x][well.y].type.lightBlocking != Constants.LIGHT_VALUE_OPAQUE) {
-				spreadLightingDijkstra(well, false);
+		// redo the column for sun
+		boolean sun = true;
+		for (int i = 0; i < height; i++) {
+			if (tiles[x][i].type.lightBlocking != 0) {
+				sun = false;
+			}
+			if (sun) {
+				lightFlow[x][i] = Direction.SOURCE;
+			} else {
+				lightFlow[x][i] = Direction.UNKNOWN;
 			}
 		}
+		lightFlow[x][y] = Direction.UNKNOWN;
+		resetLighting(x, y);
+		//
+		//
+		// List<LightingPoint> wells = new LightingPoint(x, y, Direction.WELL, 0).getExactNeighbors(
+		// width, height, 0);
+		// lightValues[x][y] = 0;
+		// for (LightingPoint well : wells) {
+		// well.lightValue = 0;
+		// if (tiles[well.x][well.y].type.lightBlocking != Constants.LIGHT_VALUE_OPAQUE) {
+		// }
+		// }
+		// List<LightingPoint> sources = spreadDarknessDijkstra(wells);
+		//
+		// int minColumn = Integer.MAX_VALUE, maxColumn = Integer.MIN_VALUE;
+		// for (LightingPoint point : sources) {
+		// if (point.x < minColumn)
+		// minColumn = point.x;
+		// if (point.x > maxColumn)
+		// maxColumn = point.x;
+		// }
+		// for (int i = minColumn; i < maxColumn; i++)
+		// sources.addAll(getSunSources(i));
+		//
+		// spreadLightingDijkstra(sources);
 	}
 	
 	public List<LightingPoint> getSunSources(int column) {
@@ -93,14 +122,81 @@ public class LightingEngine implements Serializable {
 		int bottom = Math.min(y + Constants.LIGHT_VALUE_SUN, height - 1);
 		List<LightingPoint> sources = new LinkedList<LightingPoint>();
 		
+		boolean bufferLeft = (left > 0);
+		boolean bufferRight = (right < width - 1);
+		boolean bufferTop = (top > 0);
+		boolean bufferBottom = (bottom < height - 1);
+		
+		if (bufferTop) {
+			if (bufferLeft) {
+				sources.add(getLightingPoint(left - 1, top - 1));
+				zeroLightValue(left - 1, top - 1);
+			}
+			if (bufferRight) {
+				sources.add(getLightingPoint(right + 1, top - 1));
+				zeroLightValue(right + 1, top - 1);
+			}
+			for (int i = left; i <= right; i++) {
+				sources.add(getLightingPoint(i, top - 1));
+				zeroLightValue(i, top - 1);
+			}
+		}
+		if (bufferBottom) {
+			if (bufferLeft) {
+				sources.add(getLightingPoint(left - 1, bottom + 1));
+				zeroLightValue(left - 1, bottom + 1);
+			}
+			if (bufferRight) {
+				sources.add(getLightingPoint(right + 1, bottom + 1));
+				zeroLightValue(right + 1, bottom + 1);
+			}
+			for (int i = left; i <= right; i++) {
+				sources.add(getLightingPoint(i, bottom + 1));
+				zeroLightValue(i, bottom + 1);
+			}
+		}
+		
+		if (bufferLeft) {
+			for (int i = top; i <= bottom; i++) {
+				sources.add(getLightingPoint(left - 1, i));
+				zeroLightValue(left - 1, i);
+			}
+		}
+		
+		if (bufferRight) {
+			for (int i = top; i <= bottom; i++) {
+				sources.add(getLightingPoint(right + 1, i));
+				zeroLightValue(right + 1, i);
+			}
+		}
+		
+		// for (int i = left - Constants.LIGHT_VALUE_SUN; i <= right + Constants.LIGHT_VALUE_SUN;
+		// i++) {
+		// for (int j = top - Constants.LIGHT_VALUE_SUN; j <= bottom + Constants.LIGHT_VALUE_SUN;
+		// j++) {
+		// if (lightFlow[i][j] == Direction.SOURCE) {
+		// lightValues[i][j] = Constants.LIGHT_VALUE_SUN;
+		// sources.add(new LightingPoint(i, j, Direction.SOURCE, lightValues[i][j]));
+		// }
+		// }
+		// }
 		for (int i = left; i <= right; i++) {
 			for (int j = top; j <= bottom; j++) {
-				if (lightFlow[i][j] == Direction.SOURCE)
-					sources.add(new LightingPoint(i, j, Direction.SOURCE, lightValues[i][j]));
+				if (lightFlow[i][j] == Direction.SOURCE) {
+					sources.add(getLightingPoint(i, j));
+				}
 				lightValues[i][j] = 0;
 			}
 		}
-		spreadLightingDijkstra(sources, true);
+		spreadLightingDijkstra(sources);
+	}
+	
+	private void zeroLightValue(int x, int y) {
+		lightValues[x][y] = 0;
+	}
+	
+	private LightingPoint getLightingPoint(int x, int y) {
+		return new LightingPoint(x, y, lightFlow[x][y], lightValues[x][y]);
 	}
 	
 	public class LightingPoint { // implements Comparable<LightingPoint> {
@@ -118,8 +214,9 @@ public class LightingEngine implements Serializable {
 		@Override
 		public boolean equals(Object o) {
 			LightingPoint other = (LightingPoint) o;
-			return other.x == this.x && other.y == this.y && other.lightValue == this.lightValue
-					&& other.flow == this.flow;
+			return other.x == this.x && other.y == this.y;
+			// && other.lightValue == this.lightValue
+			// && other.flow == this.flow;
 		}
 		
 		public List<LightingPoint> getNeighbors(boolean additive, int width, int height) {
@@ -128,8 +225,8 @@ public class LightingEngine implements Serializable {
 				return neighbors;
 			}
 			int newValue = lightValue - 1 - tiles[x][y].type.lightBlocking;
-			if (!additive)
-				newValue = -newValue;
+			// if (!additive)
+			// newValue = -newValue;
 			
 			neighbors = getExactNeighbors(width, height, newValue);
 			// if (additive) {
@@ -197,15 +294,15 @@ public class LightingEngine implements Serializable {
 		
 		@Override
 		public int compare(LightingPoint arg0, LightingPoint arg1) {
-			if (arg0.x < arg1.x)
+			if (arg0.x < arg1.x) {
 				return 1;
-			else if (arg0.x > arg1.x) {
+			} else if (arg0.x > arg1.x) {
 				return -1;
 			}
 			
-			if (arg0.y < arg1.y)
+			if (arg0.y < arg1.y) {
 				return 1;
-			else if (arg0.y > arg1.y) {
+			} else if (arg0.y > arg1.y) {
 				return -1;
 			}
 			
@@ -213,83 +310,79 @@ public class LightingEngine implements Serializable {
 		}
 	}
 	
-	private void spreadLightingDijkstra(LightingPoint source, boolean additive) {
+	private void spreadLightingDijkstra(LightingPoint source) {
 		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
 		sources.add(source);
-		spreadLightingDijkstra(sources, additive);
+		spreadLightingDijkstra(sources);
 	}
 	
-	private void spreadLightingDijkstra(List<LightingPoint> sources, boolean additive) {
+	private List<LightingPoint> spreadDarknessDijkstra(List<LightingPoint> wells) {
+		LinkedList<LightingPoint> turningPoints = new LinkedList<LightingPoint>();
+		PriorityQueue<LightingPoint> in = new PriorityQueue<LightingPoint>(wells.size(),
+				new LightValueComparator());
 		HashSet<LightingPoint> out = new HashSet<LightingPoint>();
-		PriorityQueue<LightingPoint> in;
-		if (additive)
-			in = new PriorityQueue<LightingPoint>(sources.size(), new LightValueComparator());
-		else
-			in = new PriorityQueue<LightingPoint>(sources.size(), new LightValueComparator());
-		List<LightingPoint> turningPoints = new LinkedList<LightingPoint>();
+		
+		in.addAll(wells);
+		out.addAll(wells);
+		
+		while (!in.isEmpty()) {
+			LightingPoint current = in.poll();
+			int x = current.x, y = current.y;
+			if (current.flow != lightFlow[x][y] && lightFlow[x][y] != Direction.UNKNOWN) {
+				current.lightValue = lightValues[x][y];
+				turningPoints.add(current);
+				out.add(current);
+				continue;
+			}
+			for (LightingPoint next : current.getNeighbors(false, x, y)) {
+				if (out.contains(next)) {
+					continue;
+				}
+				in.add(next);
+			}
+			lightValues[x][y] = 0;
+			out.add(current);
+		}
+		
+		return turningPoints;
+	}
+	
+	private void spreadLightingDijkstra(List<LightingPoint> sources) {
+		HashSet<LightingPoint> out = new HashSet<LightingPoint>();
+		PriorityQueue<LightingPoint> in = new PriorityQueue<LightingPoint>(sources.size(),
+				new LightValueComparator());
+		
+		// consider that the input sources are done (this is not a good assumption if different
+		// light sources have different values......)
+		out.addAll(sources);
 		
 		in.addAll(sources);
 		while (!in.isEmpty()) {
 			LightingPoint current = in.poll();
-			if (additive) {
-				lightFlow[current.x][current.y] = current.flow;
-			}
-			if (additive
-					&& (current.lightValue <= lightValues[current.x][current.y] || current.lightValue < 0)) {
+			out.add(current);
+			
+			if (current.lightValue <= lightValues[current.x][current.y] || current.lightValue < 0) {
 				continue;
 			}
-			if (!additive && current.lightValue <= -Constants.LIGHT_VALUE_SUN) {
-				continue;
+			lightValues[current.x][current.y] = current.lightValue;
+			lightFlow[current.x][current.y] = current.flow;
+			if (lightFlow[current.x][current.y] == Direction.SOURCE
+					&& current.flow != Direction.SOURCE) {
+				System.out.println("There's a bug in the source map!");
 			}
 			
-			List<LightingPoint> neighbors = current.getNeighbors(additive, width, height);
-			for (LightingPoint next : neighbors) {
+			List<LightingPoint> neighbors = current.getNeighbors(true, width, height);
+			nexter: for (LightingPoint next : neighbors) {
 				// for (LightingPoint o : out) {
 				// if (next.equals(o)) {
 				// continue nexter;
 				// }
 				// }
 				if (out.contains(next)) {
-					continue;
-				}
-				
-				if (!additive) {
-					
-					if (lightFlow[next.x][next.y] != next.flow
-							|| lightFlow[next.x][next.y] == Direction.SOURCE) {
-						
-						// if ((lightValues[current.x][current.y] < lightValues[next.x][next.y] &&
-						// lightValues[current.x][current.y] != 0)
-						// || lightFlow[current.x][current.y] == Direction.SOURCE) {
-						turningPoints.add(new LightingPoint(next.x, next.y, next.flow,
-								lightValues[next.x][next.y]));
-						out.add(next);
-						continue;
-						// while (!in.isEmpty()) {
-						// LightingPoint leftover = in.poll();
-						// lightValues[leftover.x][leftover.y] = 0;
-						// }
-						// lightValues[current.x][current.y] = current.lightValue;
-						// spreadLightingDijkstra(next, true);
-						// return;
-					}
+					continue nexter;
 				}
 				in.add(next);
 			}
-			if (additive) {
-				lightValues[current.x][current.y] = current.lightValue;
-			} else {
-				if (lightFlow[current.x][current.y] != Direction.SOURCE)
-					lightValues[current.x][current.y] = 0;
-			}
-			out.add(current);
-		}
-		if (!additive) {
-			if (turningPoints.size() == 0) {
-				return;
-			}
-			System.out.println(turningPoints.size() + " turning points.");
-			spreadLightingDijkstra(turningPoints, true);
 		}
 		System.out.println("Updated " + out.size() + "/" + width * height + " tiles");
 	}
@@ -306,6 +399,21 @@ public class LightingEngine implements Serializable {
 			return Direction.UP;
 		default:
 			return Direction.UNKNOWN;
+		}
+	}
+	
+	public Int2 followDirection(int x, int y, Direction direction) {
+		switch (direction) {
+		case RIGHT:
+			return new Int2(x + 1, y);
+		case LEFT:
+			return new Int2(x - 1, y);
+		case UP:
+			return new Int2(x, y - 1);
+		case DOWN:
+			return new Int2(x, y + 1);
+		default:
+			return null;
 		}
 	}
 }
