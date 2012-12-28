@@ -27,7 +27,6 @@ public class World implements java.io.Serializable {
 	private int chunkWidth = 16;
 	private boolean chunkFillRight = true;
 	private Random random;
-	private Color caveAir = new Color(100, 100, 100);
 	private long ticksAlive = 0;
 	private final int dayLength = 20000;
 	private LightingEngine lightingEngine;
