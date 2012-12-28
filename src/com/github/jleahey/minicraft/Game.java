@@ -25,8 +25,6 @@ public class Game {
 	public boolean rightClick = false;
 	public boolean paused = true;
 	
-	private Map<Character, Item> itemTypes;
-	
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	
 	private int tileSize = 32;
@@ -58,7 +56,6 @@ public class Game {
 	public Game() {
 		menu = new MainMenu(this);
 		GraphicsHandler.get().init(this);
-		itemTypes = ItemLoader.loadItems(tileSize / 2);
 		System.gc();
 	}
 	
@@ -92,10 +89,10 @@ public class Game {
 					7 * (tileSize / 8), 14 * (tileSize / 8));
 			entities.add(player);
 			// make a new inventory
-			inventory = new Inventory(10, 4, 3, itemTypes);
+			inventory = new Inventory(10, 4, 3);
 			if (Constants.DEBUG) {
-				inventory.addItem(itemTypes.get((char) 175).clone(), 1);
-				inventory.addItem(itemTypes.get((char) 88).clone(), 1);
+				inventory.addItem(Constants.itemTypes.get((char) 175).clone(), 1);
+				inventory.addItem(Constants.itemTypes.get((char) 88).clone(), 1);
 			}
 		}
 		
@@ -202,7 +199,7 @@ public class Game {
 					if (name == 'l' && random.nextDouble() < .1) {
 						name = 'S';
 					}
-					Item newItem = itemTypes.get(name);
+					Item newItem = Constants.itemTypes.get(name);
 					if (newItem != null) // couldn't find that item
 					{
 						newItem = (Item) newItem.clone();
@@ -366,7 +363,7 @@ public class Game {
 					entity.widthPX *= 2;
 					entity.heightPX *= 2;
 				}
-				for (Item item : itemTypes.values()) {
+				for (Item item : Constants.itemTypes.values()) {
 					item.widthPX *= 2;
 					item.heightPX *= 2;
 				}
@@ -378,7 +375,7 @@ public class Game {
 					entity.widthPX /= 2;
 					entity.heightPX /= 2;
 				}
-				for (Item item : itemTypes.values()) {
+				for (Item item : Constants.itemTypes.values()) {
 					item.widthPX /= 2;
 					item.heightPX /= 2;
 				}

@@ -26,6 +26,11 @@ public class Constants {
 				.put('S', new Tile(new TileType("sprites/tiles/sapling.png", 'S', true, false, 0)));
 		tileTypes.put('L', new Tile(new TileType("sprites/tiles/ladder.png", 'L', true, false, 0)));
 	}
+
+	public static Map<Character, Item> itemTypes;
+	static {
+		itemTypes = ItemLoader.loadItems(16);
+	}
 	
 	public static final int LIGHT_VALUE_TORCH = 13;
 	public static final int LIGHT_VALUE_SUN = 15;

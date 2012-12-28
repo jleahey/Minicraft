@@ -32,9 +32,8 @@ public class Inventory implements java.io.Serializable {
 	private char[][] tableTwo = new char[2][2];
 	private char[][] tableThree = new char[3][3];
 	private InventoryItem craftable = new InventoryItem(null);
-	private Map<Character, Item> itemTypes;
 	
-	public Inventory(int width, int height, int craftingHeight, Map<Character, Item> itemTypes) {
+	public Inventory(int width, int height, int craftingHeight) {
 		inventoryItems = new InventoryItem[width][height + craftingHeight];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height + craftingHeight; j++) {
@@ -44,7 +43,6 @@ public class Inventory implements java.io.Serializable {
 		selectedInventory = 0;
 		playerRow = height + craftingHeight - 1;
 		this.craftingHeight = craftingHeight;
-		this.itemTypes = itemTypes;
 	}
 	
 	public void addItem(Item item, int count) {
@@ -183,7 +181,7 @@ public class Inventory implements java.io.Serializable {
 			keepChecking = false;
 			// only craft one at a time for now
 			char[][] currentTable = computeCraftTable();
-			for (Item entry : itemTypes.values()) {
+			for (Item entry : Constants.itemTypes.values()) {
 				craftable.item = null;
 				craftable.count = 0;
 				if (entry.template.compare(currentTable)) {
