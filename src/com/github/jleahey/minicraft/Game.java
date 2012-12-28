@@ -68,8 +68,12 @@ public class Game {
 	 */
 	public void startGame(boolean load, int width) {
 		inMenu = false;
-		System.out.println("Creating world width: " + width);
-		worldWidth = width;
+		if (load) {
+			System.out.println("Loading world, width: " + worldWidth);
+		} else {
+			System.out.println("Creating world, width: " + width);
+			worldWidth = width;
+		}
 		
 		entities.clear();
 		if (load && SaveLoad.doLoad(this)) {
@@ -81,12 +85,18 @@ public class Game {
 				}
 			}
 		}
-		if (player == null) {
-			// didn't load a saved game
+		if (!load) {
+			// make a new world and player
 			world = new World(worldWidth, worldHeight, random);
 			player = new Player(true, world.spawnLocation.x, world.spawnLocation.y,
 					7 * (tileSize / 8), 14 * (tileSize / 8));
 			entities.add(player);
+			// make a new inventory
+			inventory = new Inventory(10, 4, 3, itemTypes);
+			if (Constants.DEBUG) {
+				inventory.addItem(itemTypes.get((char) 175).clone(), 1);
+				inventory.addItem(itemTypes.get((char) 88).clone(), 1);
+			}
 		}
 		
 		// load sprites
@@ -103,14 +113,6 @@ public class Game {
 		breakingSprites = new Sprite[8];
 		for (int i = 0; i < 8; i++) {
 			breakingSprites[i] = ss.getSprite("sprites/tiles/break" + i + ".png");
-		}
-
-		if (inventory == null) {
-			inventory = new Inventory(10, 4, 3, itemTypes);
-			if (Constants.DEBUG) {
-				inventory.addItem(itemTypes.get((char) 175).clone(), 1);
-				inventory.addItem(itemTypes.get((char) 88).clone(), 1);
-			}
 		}
 		
 		musicPlayer.play();
