@@ -63,7 +63,6 @@ public class World implements java.io.Serializable {
 		ticksAlive++;
 		for (int i = 0; i < chunkWidth; i++) {
 			boolean isDirectLight = true;
-			// int lightRayValue = Constants.LIGHT_VALUE_SUN;
 			for (int j = 0; j < height; j++) {
 				int x = i + chunkWidth * chunkNeedsUpdate;
 				if (x >= width || x < 0) {
@@ -103,15 +102,6 @@ public class World implements java.io.Serializable {
 						changeTile(x, y + 1, tiles[x][y]);
 					}
 				}
-				// update lighting and visibility
-				// lightRayValue -= tiles[x][y].type.lightBlocking;
-				// if (lightRayValue < 0)
-				// lightRayValue = 0;
-				// if (lightValues[x][y] < lightRayValue)
-				// lightValues[x][y] = lightRayValue;
-				// if (tiles[x][y].type.lightBlocking < lightRayValue)
-				// spreadLighting(x, y, lightValues[x][y]);
-				
 				if ((!tiles[x][y].type.passable || tiles[x][y].type.liquid)
 						&& tiles[x][y].type.name != 'l') {
 					isDirectLight = false;
@@ -138,22 +128,6 @@ public class World implements java.io.Serializable {
 			}
 		}
 	}
-	
-	// private void spreadLighting(int x, int y, int currentLighting) {
-	// if (currentLighting > 0)
-	// currentLighting -= 1;
-	// setLighting(x + 1, y, currentLighting);
-	// setLighting(x, y + 1, currentLighting);
-	// setLighting(x - 1, y, currentLighting);
-	// setLighting(x, y - 1, currentLighting);
-	// }
-	
-	// private void setLighting(int x, int y, int lightValue) {
-	// if (x < 0 || x >= width || y < 0 || y >= height || lightValue < lightValues[x][y]) {
-	// return;
-	// }
-	// lightValues[x][y] = lightValue;
-	// }
 	
 	public boolean addTile(int x, int y, char name) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
