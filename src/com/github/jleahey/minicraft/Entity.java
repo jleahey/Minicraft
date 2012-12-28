@@ -153,16 +153,19 @@ public abstract class Entity implements java.io.Serializable {
 			} else {
 				dy += gravityAcceleration;
 			}
+			if (hitBottom) {			
+				// mathemagically derived to mimic the damage from
+				//   counting the number of meters dropped
+				int dmg = ((int) (114 * dy)) - 60;
+				if (dmg > 0) {
+					this.takeDamage(dmg);
+				}
+				dx *= 0.9;  // loss of energy due to friction
+			}
 		}
 		if (hitTop) {
 			dy = 0.0000001f;
 		} else if (hitBottom) {
-			// mathemagically derived to mimic the damage from
-			//   counting the number of meters dropped
-			int dmg = ((int) (114 * dy)) - 60;
-			if (dmg > 0) {
-				this.takeDamage(dmg);
-			}
 			dy = 0;
 		}
 		
