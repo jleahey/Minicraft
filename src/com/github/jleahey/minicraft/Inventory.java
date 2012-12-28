@@ -64,7 +64,7 @@ public class Inventory implements java.io.Serializable {
 		}
 	}
 	
-	public void decreaseSeleted(int count) {
+	public void decreaseSelected(int count) {
 		inventoryItems[selectedInventory][playerRow].remove(count);
 	}
 	

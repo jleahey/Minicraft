@@ -233,7 +233,7 @@ public class Game {
 							boolean placed = world.addTile(player.handBuildPos.x,
 									player.handBuildPos.y, (char) current.getItem().item_id);
 							if (placed) {
-								inventory.decreaseSeleted(1);
+								inventory.decreaseSelected(1);
 							}
 						}
 					}
