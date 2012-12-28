@@ -324,7 +324,7 @@ public class Game {
 	}
 	
 	public void setInventorySelect(int count) {
-		inventory.selectedInventory = count;
+		inventory.hotbarIdx = count;
 	}
 	
 	private Game getGame() {

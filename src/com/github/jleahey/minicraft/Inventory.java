@@ -19,7 +19,7 @@ public class Inventory implements java.io.Serializable {
 	
 	public InventoryItem[][] inventoryItems;
 	public int tableSizeAvailable = 2;
-	public int selectedInventory = 0;
+	public int hotbarIdx = 0;
 	
 	private int maxCount = 64;
 	private int playerRow;
@@ -40,7 +40,7 @@ public class Inventory implements java.io.Serializable {
 				inventoryItems[i][j] = new InventoryItem(null);
 			}
 		}
-		selectedInventory = 0;
+		hotbarIdx = 0;
 		playerRow = height + craftingHeight - 1;
 		this.craftingHeight = craftingHeight;
 	}
@@ -65,11 +65,11 @@ public class Inventory implements java.io.Serializable {
 	}
 	
 	public void decreaseSelected(int count) {
-		inventoryItems[selectedInventory][playerRow].remove(count);
+		inventoryItems[hotbarIdx][playerRow].remove(count);
 	}
 	
 	public InventoryItem selectedItem() {
-		return inventoryItems[selectedInventory][playerRow];
+		return inventoryItems[hotbarIdx][playerRow];
 	}
 	
 	// returns true if the mouse hit in the inventory
@@ -265,13 +265,13 @@ public class Inventory implements java.io.Serializable {
 		
 		for (int j = 0; j < inventoryItems.length; j++) {
 			InventoryItem current = inventoryItems[j][playerRow];
-			if (selectedInventory == j) {
+			if (hotbarIdx == j) {
 				g.setColor(Color.blue);
 				g.fillRect(x + seperation - 2, y + seperation - 2, tileSize + 4, tileSize + 4);
 			}
 			g.setColor(Color.LIGHT_GRAY);
 			g.fillRect(x + seperation, y + seperation, tileSize, tileSize);
-			// if(selectedInventory == j)
+			// if(hotbarIdx == j)
 			// {
 			//
 			// if(current.item == null)

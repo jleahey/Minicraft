@@ -31,11 +31,11 @@ public class AwtEventsHandler {
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			int notches = e.getWheelRotation();
-			game.inventory.selectedInventory += notches;
-			if (game.inventory.selectedInventory < 0) {
-				game.inventory.selectedInventory = 0;
-			} else if (game.inventory.selectedInventory > 9) {
-				game.inventory.selectedInventory = 9;
+			game.inventory.hotbarIdx += notches;
+			if (game.inventory.hotbarIdx < 0) {
+				game.inventory.hotbarIdx = 0;
+			} else if (game.inventory.hotbarIdx > 9) {
+				game.inventory.hotbarIdx = 9;
 			}
 		}
 	}
