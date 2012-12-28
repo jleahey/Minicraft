@@ -21,9 +21,8 @@ public class MainMenu {
 	private static final Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
 	private static final Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
 	private static final Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
-	// TODO: make the "quit" button graphics
-	private static final Sprite menu_quitUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
-	private static final Sprite menu_quitDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
+	private static final Sprite menu_quitUp = SpriteStore.get().getSprite("sprites/menus/quit_up.png");
+	private static final Sprite menu_quitDown = SpriteStore.get().getSprite("sprites/menus/quit_down.png");
 	private static final Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
 	private static final Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
 	private static final Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
