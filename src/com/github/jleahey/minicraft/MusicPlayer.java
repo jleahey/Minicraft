@@ -50,6 +50,14 @@ public class MusicPlayer {
 			e.printStackTrace();
 		}
 	}
+
+	public void pause() {
+		try {
+			ogg.stop();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	public void close() {
 		try {

@@ -79,7 +79,8 @@ public class AwtGraphicsHandler extends com.github.jleahey.minicraft.GraphicsHan
 		container.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				game.quitNow();
+				game.goToMainMenu();  // this saves and cleans up appropriately
+				game.quit();
 			}
 		});
 		new AwtEventsHandler(game, canvas);

@@ -21,6 +21,9 @@ public class MainMenu {
 	private static final Sprite menu_newDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
 	private static final Sprite menu_loadUp = SpriteStore.get().getSprite("sprites/menus/load_up.png");
 	private static final Sprite menu_loadDown = SpriteStore.get().getSprite("sprites/menus/load_down.png");
+	// TODO: make the "quit" button graphics
+	private static final Sprite menu_quitUp = SpriteStore.get().getSprite("sprites/menus/new_up.png");
+	private static final Sprite menu_quitDown = SpriteStore.get().getSprite("sprites/menus/new_down.png");
 	private static final Sprite menu_miniUp = SpriteStore.get().getSprite("sprites/menus/mini_up.png");
 	private static final Sprite menu_mediumUp = SpriteStore.get().getSprite("sprites/menus/med_up.png");
 	private static final Sprite menu_bigUp = SpriteStore.get().getSprite("sprites/menus/big_up.png");
@@ -53,16 +56,28 @@ public class MainMenu {
 	}
 	
 	private void drawStartMenu(GraphicsHandler g) {
-		game.drawCenteredX(g, menu_newUp, 200, 160, 64);
-		game.drawCenteredX(g, menu_loadUp, 300, 160, 64);
+		game.drawCenteredX(g, menu_newUp, 150, 160, 64);
+		game.drawCenteredX(g, menu_loadUp, 250, 160, 64);
+		game.drawCenteredX(g, menu_quitUp, 350, 160, 64);
+		int mouseY = game.screenMousePos.y;
+		// TODO: use the mouse x-value as well
+		if (mouseY >= 350 && mouseY <= 414) {
+			game.drawCenteredX(g, menu_quitDown, 350, 160, 64);
+		} else if (mouseY >= 250 && mouseY <= 314) {
+			game.drawCenteredX(g, menu_loadDown, 250, 160, 64);
+		} else if (mouseY >= 150 && mouseY <= 214) {
+			game.drawCenteredX(g, menu_newDown, 150, 160, 64);
+		}
 		if (!game.leftClick) {
 			return;
 		}
 		game.leftClick = false;
-		if (game.screenMousePos.y >= 300) {
-			game.startGame(true, menu_mediumWidth);
-		} else {
-			newGame = true;
+		if (mouseY >= 350 && mouseY <= 414) {
+			game.quit();  // "quit" button
+		} else if (mouseY >= 250 && mouseY <= 314) {
+			game.startGame(true, menu_mediumWidth);  // "load" button
+		} else if (mouseY >= 150 && mouseY <= 214) {
+			newGame = true;  // "new" button
 		}
 	}
 	
@@ -70,16 +85,25 @@ public class MainMenu {
 		game.drawCenteredX(g, menu_miniUp, 150, 160, 64);
 		game.drawCenteredX(g, menu_mediumUp, 250, 160, 64);
 		game.drawCenteredX(g, menu_bigUp, 350, 160, 64);
+		int mouseY = game.screenMousePos.y;
+		// TODO: use the mouse x-value as well
+		if (mouseY >= 350 && mouseY <= 414) {
+			game.drawCenteredX(g, menu_bigDown, 350, 160, 64);
+		} else if (mouseY >= 250 && mouseY <= 314) {
+			game.drawCenteredX(g, menu_mediumDown, 250, 160, 64);
+		} else if (mouseY >= 150 && mouseY <= 214) {
+			game.drawCenteredX(g, menu_miniDown, 150, 160, 64);
+		}
 		if (!game.leftClick) {
 			return;
 		}
 		game.leftClick = false;
 		newGame = false;
-		if (game.screenMousePos.y >= 350) {
+		if (mouseY >= 350 && mouseY <= 414) {
 			game.startGame(false, menu_bigWidth);
-		} else if (game.screenMousePos.y >= 250) {
+		} else if (mouseY >= 250 && mouseY <= 314) {
 			game.startGame(false, menu_mediumWidth);
-		} else if (game.screenMousePos.y >= 150) {
+		} else if (mouseY >= 150 && mouseY <= 214) {
 			game.startGame(false, menu_miniWidth);
 		}
 	}

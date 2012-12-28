@@ -405,9 +405,14 @@ public class Game {
 		}
 	}
 	
-	public void quitNow() {
+	public void goToMainMenu() {
 		zoom(0);
 		SaveLoad.doSave(getGame());
+		musicPlayer.pause();
+		inMenu = true;  // go back to the main menu
+	}
+
+	public void quit() {
 		musicPlayer.close();
 		System.exit(0);
 	}

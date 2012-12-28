@@ -127,7 +127,11 @@ public class AwtEventsHandler {
 				game.player.stopRight();
 				break;
 			case KeyEvent.VK_ESCAPE:
-				game.quitNow();
+				if (game.inventory.isVisible()) {
+					game.inventory.setVisible(false);
+				} else {
+					game.goToMainMenu();
+				}
 				break;
 			}
 		}
