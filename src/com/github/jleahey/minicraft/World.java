@@ -281,7 +281,7 @@ public class World implements java.io.Serializable {
 				
 				int lightIntensity = lightingEngine.getLightValue(i, j) * 255
 						/ Constants.LIGHT_VALUE_SUN;
-				Color tint = new Color(0, 0, 0, 255 - lightIntensity);
+				Color tint = new Color(16, 16, 16, 255 - lightIntensity);
 				
 				if (tiles[i][j].type.name != 'a') {
 					tiles[i][j].type.sprite.draw(g, posX, posY, tileSize, tileSize, tint);
