@@ -27,14 +27,13 @@ public class SaveLoad {
 	public static void doSave(Game game) {
 		
 		try {
-			if (game.inventory == null) {
+			if (game.world == null) {
 				return;
 			}
 			
 			FileOutputStream fileOut = new FileOutputStream("MiniCraft.sav");
 			ObjectOutputStream out = new ObjectOutputStream(fileOut);
 			
-			out.writeObject(game.inventory);
 			out.writeObject(game.world);
 			out.writeObject(game.entities);
 			
@@ -67,7 +66,6 @@ public class SaveLoad {
 		}
 		
 		try {
-			game.inventory = (Inventory) in.readObject();
 			game.world = (World) in.readObject();
 			game.entities = (ArrayList<Entity>) in.readObject();
 			in.close();

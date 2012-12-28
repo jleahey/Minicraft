@@ -19,6 +19,7 @@ public abstract class LivingEntity extends Entity {
 	public int hitPoints;
 	public boolean climbing = false;
 	public boolean facingRight = true;
+	public Inventory inventory;
 	
 	protected final float walkSpeed = .1f;
 	protected final float swimSpeed = .04f;
@@ -31,6 +32,11 @@ public abstract class LivingEntity extends Entity {
 	public LivingEntity(boolean gravityApplies, float x, float y, int width, int height) {
 		super(null, gravityApplies, x, y, width, height);
 		this.hitPoints = maxHP;
+		inventory = new Inventory(10, 4, 3);
+	}
+
+	public void giveItem(Item item, int count) {
+		inventory.addItem(item, count);
 	}
 	
 	public int airRemaining() {

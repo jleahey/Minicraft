@@ -31,11 +31,11 @@ public class AwtEventsHandler {
 		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			int notches = e.getWheelRotation();
-			game.inventory.hotbarIdx += notches;
-			if (game.inventory.hotbarIdx < 0) {
-				game.inventory.hotbarIdx = 0;
-			} else if (game.inventory.hotbarIdx > 9) {
-				game.inventory.hotbarIdx = 9;
+			game.player.inventory.hotbarIdx += notches;
+			if (game.player.inventory.hotbarIdx < 0) {
+				game.player.inventory.hotbarIdx = 0;
+			} else if (game.player.inventory.hotbarIdx > 9) {
+				game.player.inventory.hotbarIdx = 9;
 			}
 		}
 	}
@@ -127,8 +127,8 @@ public class AwtEventsHandler {
 				game.player.stopRight();
 				break;
 			case KeyEvent.VK_ESCAPE:
-				if (game.inventory.isVisible()) {
-					game.inventory.setVisible(false);
+				if (game.player.inventory.isVisible()) {
+					game.player.inventory.setVisible(false);
 				} else {
 					game.goToMainMenu();
 				}
@@ -148,13 +148,13 @@ public class AwtEventsHandler {
 			case '7':
 			case '8':
 			case '9':
-				game.setInventorySelect(e.getKeyChar() - '1');
+				game.player.setHotbarItem(e.getKeyChar() - '1');
 				break;
 			case '0':
-				game.setInventorySelect(9);
+				game.player.setHotbarItem(9);
 				break;
 			case 'e':
-				game.inventory.setVisible(!game.inventory.isVisible());
+				game.player.inventory.setVisible(!game.player.inventory.isVisible());
 				break;
 			case '=':
 				game.zoom(1);

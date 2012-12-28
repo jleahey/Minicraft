@@ -28,7 +28,6 @@ public class Game {
 	public ArrayList<Entity> entities = new ArrayList<Entity>();
 	
 	private int tileSize = 32;
-	public Inventory inventory;
 	
 	private int breakingTicks;
 	private Int2 breakingPos;
@@ -88,11 +87,9 @@ public class Game {
 			player = new Player(true, world.spawnLocation.x, world.spawnLocation.y,
 					7 * (tileSize / 8), 14 * (tileSize / 8));
 			entities.add(player);
-			// make a new inventory
-			inventory = new Inventory(10, 4, 3);
 			if (Constants.DEBUG) {
-				inventory.addItem(Constants.itemTypes.get((char) 175).clone(), 1);
-				inventory.addItem(Constants.itemTypes.get((char) 88).clone(), 1);
+				player.giveItem(Constants.itemTypes.get((char) 175).clone(), 1);
+				player.giveItem(Constants.itemTypes.get((char) 88).clone(), 1);
 			}
 		}
 		
@@ -155,7 +152,7 @@ public class Game {
 			world.chunkUpdate();
 			world.draw(g, 0, 0, screenWidth, screenHeight, cameraX, cameraY, tileSize);
 			
-			boolean inventoryFocus = inventory.updateInventory(
+			boolean inventoryFocus = player.inventory.updateInventory(
 				screenWidth, screenHeight, screenMousePos, leftClick, rightClick);
 			if (inventoryFocus) {
 				leftClick = false;
@@ -170,7 +167,7 @@ public class Game {
 				}
 				breakingPos = player.handBreakPos;
 				
-				InventoryItem inventoryItem = inventory.selectedItem();
+				InventoryItem inventoryItem = player.inventory.selectedItem();
 				Item item = inventoryItem.getItem();
 				int ticksNeeded = world.breakTicks(breakingPos.x, breakingPos.y, item);
 				
@@ -217,11 +214,11 @@ public class Game {
 			
 			if (rightClick) {
 				if (world.isCraft(player.handBreakPos.x, player.handBreakPos.y)) {
-					inventory.tableSizeAvailable = 3;
-					inventory.setVisible(true);
+					player.inventory.tableSizeAvailable = 3;
+					player.inventory.setVisible(true);
 				} else {
 					rightClick = false;
-					InventoryItem current = inventory.selectedItem();
+					InventoryItem current = player.inventory.selectedItem();
 					if (!current.isEmpty()) {
 						int left = (int) player.getLeft(tileSize);
 						int right = (int) player.getRight(tileSize);
@@ -233,7 +230,7 @@ public class Game {
 							boolean placed = world.addTile(player.handBuildPos.x,
 									player.handBuildPos.y, (char) current.getItem().item_id);
 							if (placed) {
-								inventory.decreaseSelected(1);
+								player.inventory.decreaseSelected(1);
 							}
 						}
 					}
@@ -247,7 +244,7 @@ public class Game {
 				Entity entity = it.next();
 				if (entity != player && player.collidesWith(entity, tileSize)) {
 					if (entity instanceof Item || entity instanceof Tool) {
-						addToInventory(((Item) entity));
+						player.giveItem((Item) entity, 1);
 					}
 					it.remove();
 					continue;
@@ -276,7 +273,7 @@ public class Game {
 			}
 			
 			// draw the hotbar, and optionally the inventory screen
-			inventory.draw(g, screenWidth, screenHeight);
+			player.inventory.draw(g, screenWidth, screenHeight);
 			
 			// draw the mouse
 			Int2 mouseTest = StockMethods.computeDrawLocationInPlace(cameraX, cameraY, tileSize,
@@ -317,18 +314,6 @@ public class Game {
 			
 			SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
 		}
-	}
-	
-	private void addToInventory(Item item) {
-		inventory.addItem(item, 1);
-	}
-	
-	public void setInventorySelect(int count) {
-		inventory.hotbarIdx = count;
-	}
-	
-	private Game getGame() {
-		return this;
 	}
 
 	public void drawMouse(GraphicsHandler g, Int2 pos) {
@@ -384,7 +369,8 @@ public class Game {
 	}
 	
 	public void tossItem() {
-		InventoryItem inventoryItem = inventory.selectedItem();
+		// TODO: move this into Player
+		InventoryItem inventoryItem = player.inventory.selectedItem();
 		if (!inventoryItem.isEmpty()) {
 			Item newItem = inventoryItem.getItem();
 			if (!(newItem instanceof Tool)) {
@@ -404,7 +390,7 @@ public class Game {
 	
 	public void goToMainMenu() {
 		zoom(0);
-		SaveLoad.doSave(getGame());
+		SaveLoad.doSave(this);
 		musicPlayer.pause();
 		inMenu = true;  // go back to the main menu
 	}
