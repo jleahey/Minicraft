@@ -159,6 +159,10 @@ public class World implements java.io.Serializable {
 	
 	public void changeTile(int x, int y, Tile tile) {
 		tiles[x][y] = tile;
+		if (tile.type.lightBlocking > 0)
+			lightingEngine.addedTile(x, y);
+		else
+			lightingEngine.removedTile(x, y);
 	}
 	
 	private char[] breakWood = new char[] { 'w', 'p', 'f' };
