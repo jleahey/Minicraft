@@ -279,8 +279,7 @@ public class World implements java.io.Serializable {
 					continue;
 				}
 				
-				int lightIntensity = lightingEngine.getLightValue(i, j) * 255
-						/ Constants.LIGHT_VALUE_SUN;
+				int lightIntensity = (int) (getLightValue(i, j) * 255);
 				Color tint = new Color(16, 16, 16, 255 - lightIntensity);
 				
 				if (tiles[i][j].type.name != 'a') {
@@ -332,6 +331,31 @@ public class World implements java.io.Serializable {
 			return false;
 		}
 		return tiles[x][y].type != null && (tiles[x][y].type.name == 'f');
+	}
+	
+	/**
+	 * @return a light value [0,1]
+	 **/
+	public float getLightValue(int x, int y) {
+		float daylight = getDaylight();
+		float lightValue = ((float) lightingEngine.getLightValue(x, y)) / Constants.LIGHT_VALUE_SUN;
+		return daylight * lightValue;
+	}
+	
+	public float getDaylight() {
+		float timeOfDay = getTimeOfDay();
+		if (timeOfDay > .4f && timeOfDay < .6f) {
+			return 1 - StockMethods.smoothStep(.4f, .6f, timeOfDay);
+		} else if (timeOfDay > .9) {
+			return StockMethods.smoothStep(.9f, 1.1f, timeOfDay);
+		} else if (timeOfDay < .1) {
+			return StockMethods.smoothStep(-.1f, .1f, timeOfDay);
+		} else if (timeOfDay > .5f) {
+			return 0;
+		} else {
+			return 1;
+		}
+		
 	}
 	
 	// returns a float in the range [0,1)
