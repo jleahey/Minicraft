@@ -12,19 +12,29 @@
 
 package com.github.jleahey.minicraft;
 
+import com.github.jleahey.minicraft.Constants.TileID;
+
 public final class TileTemplate implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
-	public final static TileTemplate tree = new TileTemplate(new char[][] {
-			{ 0, 'l', 'l', 0, 0, 0 }, { 'l', 'l', 'l', 'l', 0, 0 },
-			{ 'l', 'l', 'l', 'w', 'w', 'w' }, { 'l', 'l', 'l', 'l', 0, 0 },
-			{ 0, 'l', 'l', 0, 0, 0 } }, 5, 2);
-	public char[][] template;
+	public final static TileTemplate tree = new TileTemplate(
+			new TileID[][] {
+					{ TileID.NONE, TileID.LEAVES, TileID.LEAVES, TileID.NONE, TileID.NONE,
+							TileID.NONE },
+					{ TileID.LEAVES, TileID.LEAVES, TileID.LEAVES, TileID.LEAVES, TileID.NONE,
+							TileID.NONE },
+					{ TileID.LEAVES, TileID.LEAVES, TileID.LEAVES, TileID.WOOD, TileID.WOOD,
+							TileID.WOOD },
+					{ TileID.LEAVES, TileID.LEAVES, TileID.LEAVES, TileID.LEAVES, TileID.NONE,
+							TileID.NONE },
+					{ TileID.NONE, TileID.LEAVES, TileID.LEAVES, TileID.NONE, TileID.NONE,
+							TileID.NONE } }, 5, 2);
+	public TileID[][] template;
 	public int spawnX;
 	public int spawnY;
 	
-	private TileTemplate(char[][] template, int spawnX, int spawnY) {
-		this.template = template;
+	private TileTemplate(TileID[][] tileIDs, int spawnX, int spawnY) {
+		this.template = tileIDs;
 		this.spawnX = spawnX;
 		this.spawnY = spawnY;
 	}

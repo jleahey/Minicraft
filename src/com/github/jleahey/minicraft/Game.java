@@ -13,8 +13,9 @@
 package com.github.jleahey.minicraft;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Random;
+
+import com.github.jleahey.minicraft.Constants.TileID;
 
 public class Game {
 	
@@ -130,7 +131,6 @@ public class Game {
 			long delta = SystemTimer.getTime() - lastLoopTime;
 			lastLoopTime = SystemTimer.getTime();
 			
-
 			GraphicsHandler g = GraphicsHandler.get();
 			g.startDrawing();
 			
@@ -152,8 +152,8 @@ public class Game {
 			world.chunkUpdate();
 			world.draw(g, 0, 0, screenWidth, screenHeight, cameraX, cameraY, tileSize);
 			
-			boolean inventoryFocus = player.inventory.updateInventory(
-				screenWidth, screenHeight, screenMousePos, leftClick, rightClick);
+			boolean inventoryFocus = player.inventory.updateInventory(screenWidth, screenHeight,
+					screenMousePos, leftClick, rightClick);
 			if (inventoryFocus) {
 				leftClick = false;
 				rightClick = false;
@@ -186,17 +186,17 @@ public class Game {
 					}
 					
 					breakingTicks = 0;
-					char name = world.removeTile(player.handBreakPos.x, player.handBreakPos.y);
-					if (name == 'g') {
-						name = 'd';
+					TileID name = world.removeTile(player.handBreakPos.x, player.handBreakPos.y);
+					if (name == TileID.GRASS) {
+						name = TileID.DIRT;
 					}
-					if (name == 's') {
-						name = 'b';
+					if (name == TileID.STONE) {
+						name = TileID.COBBLE;
 					}
-					if (name == 'l' && random.nextDouble() < .1) {
-						name = 'S';
+					if (name == TileID.LEAVES && random.nextDouble() < .1) {
+						name = TileID.SAPLING;
 					}
-					Item newItem = Constants.itemTypes.get(name);
+					Item newItem = Constants.itemTypes.get((char) name.breaksInto);
 					if (newItem != null) // couldn't find that item
 					{
 						newItem = (Item) newItem.clone();
@@ -228,7 +228,8 @@ public class Game {
 						if (!(player.handBuildPos.x >= left && player.handBuildPos.x <= right
 								&& player.handBuildPos.y >= top && player.handBuildPos.y <= bottom)) {
 							boolean placed = world.addTile(player.handBuildPos.x,
-									player.handBuildPos.y, (char) current.getItem().item_id);
+									player.handBuildPos.y,
+									Constants.tileIDs.get(current.getItem().item_id));
 							if (placed) {
 								player.inventory.decreaseSelected(1);
 							}
@@ -315,7 +316,7 @@ public class Game {
 			SystemTimer.sleep(lastLoopTime + 16 - SystemTimer.getTime());
 		}
 	}
-
+	
 	public void drawMouse(GraphicsHandler g, Int2 pos) {
 		g.setColor(Color.white);
 		g.fillOval(pos.x - 4, pos.y - 4, 8, 8);
@@ -392,9 +393,9 @@ public class Game {
 		zoom(0);
 		SaveLoad.doSave(this);
 		musicPlayer.pause();
-		inMenu = true;  // go back to the main menu
+		inMenu = true; // go back to the main menu
 	}
-
+	
 	public void quit() {
 		musicPlayer.close();
 		System.exit(0);

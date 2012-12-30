@@ -14,6 +14,8 @@ package com.github.jleahey.minicraft;
 
 import java.util.Random;
 
+import com.github.jleahey.minicraft.Constants.TileID;
+
 public class World implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -35,7 +37,7 @@ public class World implements java.io.Serializable {
 	
 	public World(int width, int height, Random random) {
 		
-		char[][] generated = WorldGenerator.generate(width, height, random);
+		TileID[][] generated = WorldGenerator.generate(width, height, random);
 		WorldGenerator.visibility = null;
 		this.spawnLocation = WorldGenerator.playerLocation;
 		tiles = new Tile[width][height];
@@ -44,7 +46,7 @@ public class World implements java.io.Serializable {
 			for (int j = 0; j < height; j++) {
 				Tile tile = Constants.tileTypes.get(generated[i][j]);
 				if (tile == null) {
-					tiles[i][j] = Constants.tileTypes.get('a');
+					tiles[i][j] = Constants.tileTypes.get(TileID.AIR);
 				} else {
 					tiles[i][j] = Constants.tileTypes.get(generated[i][j]);
 				}
@@ -73,21 +75,23 @@ public class World implements java.io.Serializable {
 					x = width - 1 - x;
 					y = height - 1 - y;
 				}
-				if (isDirectLight && tiles[x][y].type.name == 'd') {
+				if (isDirectLight && tiles[x][y].type.name == TileID.DIRT) {
 					if (random.nextDouble() < .005) {
-						tiles[x][y] = Constants.tileTypes.get('g');
+						tiles[x][y] = Constants.tileTypes.get(TileID.GRASS);
 					}
-				} else if (tiles[x][y].type.name == 'g' && tiles[x][y - 1].type.name != 'a'
-						&& tiles[x][y - 1].type.name != 'l' && tiles[x][y - 1].type.name != 'w') {
+				} else if (tiles[x][y].type.name == TileID.GRASS
+						&& tiles[x][y - 1].type.name != TileID.AIR
+						&& tiles[x][y - 1].type.name != TileID.LEAVES
+						&& tiles[x][y - 1].type.name != TileID.WOOD) {
 					if (random.nextDouble() < .25) {
-						tiles[x][y] = Constants.tileTypes.get('d');
+						tiles[x][y] = Constants.tileTypes.get(TileID.DIRT);
 					}
-				} else if (tiles[x][y].type.name == 'n') {
+				} else if (tiles[x][y].type.name == TileID.SAND) {
 					if (isAir(x, y + 1) || isLiquid(x, y + 1)) {
 						changeTile(x, y + 1, tiles[x][y]);
-						changeTile(x, y, Constants.tileTypes.get('a'));
+						changeTile(x, y, Constants.tileTypes.get(TileID.AIR));
 					}
-				} else if (tiles[x][y].type.name == 'S') {
+				} else if (tiles[x][y].type.name == TileID.SAPLING) {
 					if (random.nextDouble() < .01) {
 						addTemplate(TileTemplate.tree, x, y);
 					}
@@ -103,7 +107,7 @@ public class World implements java.io.Serializable {
 					}
 				}
 				if ((!tiles[x][y].type.passable || tiles[x][y].type.liquid)
-						&& tiles[x][y].type.name != 'l') {
+						&& tiles[x][y].type.name != TileID.LEAVES) {
 					isDirectLight = false;
 				}
 			}
@@ -118,7 +122,7 @@ public class World implements java.io.Serializable {
 	private void addTemplate(TileTemplate tileTemplate, int x, int y) {
 		for (int i = 0; i < tileTemplate.template.length; i++) {
 			for (int j = 0; j < tileTemplate.template[0].length; j++) {
-				if (tileTemplate.template[i][j] != 0 && x - tileTemplate.spawnY + i >= 0
+				if (tileTemplate.template[i][j] != TileID.NONE && x - tileTemplate.spawnY + i >= 0
 						&& x - tileTemplate.spawnY + i < tiles.length
 						&& y - tileTemplate.spawnX + j >= 0
 						&& y - tileTemplate.spawnX + j < tiles[0].length) {
@@ -129,7 +133,7 @@ public class World implements java.io.Serializable {
 		}
 	}
 	
-	public boolean addTile(int x, int y, char name) {
+	public boolean addTile(int x, int y, TileID name) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return false;
 		}
@@ -137,8 +141,9 @@ public class World implements java.io.Serializable {
 		if (tile == null) {
 			return false;
 		}
-		if (name == 'S' && y + 1 < height) {
-			if (tiles[x][y + 1].type.name != 'd' && tiles[x][y + 1].type.name != 'g') {
+		if (name == TileID.SAPLING && y + 1 < height) {
+			if (tiles[x][y + 1].type.name != TileID.DIRT
+					&& tiles[x][y + 1].type.name != TileID.GRASS) {
 				return false;
 			}
 		}
@@ -147,12 +152,12 @@ public class World implements java.io.Serializable {
 		return true;
 	}
 	
-	public char removeTile(int x, int y) {
+	public TileID removeTile(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
-			return 0;
+			return TileID.NONE;
 		}
-		char name = tiles[x][y].type.name;
-		tiles[x][y] = Constants.tileTypes.get('a');
+		TileID name = tiles[x][y].type.name;
+		tiles[x][y] = Constants.tileTypes.get(TileID.AIR);
 		lightingEngine.removedTile(x, y);
 		return name;
 	}
@@ -165,34 +170,34 @@ public class World implements java.io.Serializable {
 			lightingEngine.removedTile(x, y);
 	}
 	
-	private char[] breakWood = new char[] { 'w', 'p', 'f' };
-	private char[] breakStone = new char[] { 's', 'b', 'c' };
-	private char[] breakMetal = new char[] { 'i' };
-	private char[] breakDiamond = new char[] { 'm' };
+	private TileID[] breakWood = new TileID[] { TileID.WOOD, TileID.PLANK, TileID.CRAFTING_BENCH };
+	private TileID[] breakStone = new TileID[] { TileID.STONE, TileID.COBBLE, TileID.COAL_ORE };
+	private TileID[] breakMetal = new TileID[] { TileID.IRON_ORE };
+	private TileID[] breakDiamond = new TileID[] { TileID.DIAMOND_ORE };
 	
 	public int breakTicks(int x, int y, Item item) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return Integer.MAX_VALUE;
 		}
-		char currentName = tiles[x][y].type.name;
+		TileID currentName = tiles[x][y].type.name;
 		
-		char[] breakType = null; // hand breakable by all
-		for (char element : breakWood) {
+		TileID[] breakType = null; // hand breakable by all
+		for (TileID element : breakWood) {
 			if (element == currentName) {
 				breakType = breakWood;
 			}
 		}
-		for (char element : breakStone) {
+		for (TileID element : breakStone) {
 			if (element == currentName) {
 				breakType = breakStone;
 			}
 		}
-		for (char element : breakMetal) {
+		for (TileID element : breakMetal) {
 			if (element == currentName) {
 				breakType = breakMetal;
 			}
 		}
-		for (char element : breakDiamond) {
+		for (TileID element : breakDiamond) {
 			if (element == currentName) {
 				breakType = breakDiamond;
 			}
@@ -228,7 +233,7 @@ public class World implements java.io.Serializable {
 		}
 	}
 	
-	private int handResult(char[] breakType) {
+	private int handResult(TileID[] breakType) {
 		if (breakType == null) {
 			return 50;
 		} else if (breakType == breakWood) {
@@ -258,19 +263,22 @@ public class World implements java.io.Serializable {
 					|| posY > screenHeight) {
 				continue;
 			}
-			Constants.tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
+			Constants.tileTypes.get(TileID.ADMINITE).type.sprite.draw(g, posX, posY, tileSize,
+					tileSize);
 		}
 		
 		for (int j = height / 2; j < height; j++) {
 			int posX = (int) ((-1 - cameraX) * tileSize);
 			int posY = (int) ((j - cameraY) * tileSize);
 			if (!(posX < 0 - tileSize || posX > screenWidth || posY < 0 - tileSize || posY > screenHeight)) {
-				Constants.tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
+				Constants.tileTypes.get(TileID.ADMINITE).type.sprite.draw(g, posX, posY, tileSize,
+						tileSize);
 			}
 			
 			posX = (int) ((width - cameraX) * tileSize);
 			if (!(posX < 0 - tileSize || posX > screenWidth)) {
-				Constants.tileTypes.get('x').type.sprite.draw(g, posX, posY, tileSize, tileSize);
+				Constants.tileTypes.get(TileID.ADMINITE).type.sprite.draw(g, posX, posY, tileSize,
+						tileSize);
 			}
 		}
 		
@@ -286,7 +294,7 @@ public class World implements java.io.Serializable {
 				int lightIntensity = (int) (getLightValue(i, j) * 255);
 				Color tint = new Color(16, 16, 16, 255 - lightIntensity);
 				
-				if (tiles[i][j].type.name != 'a') {
+				if (tiles[i][j].type.name != TileID.AIR) {
 					tiles[i][j].type.sprite.draw(g, posX, posY, tileSize, tileSize, tint);
 				} else {
 					g.setColor(tint);
@@ -314,7 +322,7 @@ public class World implements java.io.Serializable {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return false;
 		}
-		return tiles[x][y].type != null && tiles[x][y].type.name == 'a';
+		return tiles[x][y].type != null && tiles[x][y].type.name == TileID.AIR;
 	}
 	
 	public boolean isBreakable(int x, int y) {
@@ -326,15 +334,15 @@ public class World implements java.io.Serializable {
 			return false;
 		}
 		return tiles[x][y].type != null
-				&& (tiles[x][y].type.name == 'w' || tiles[x][y].type.name == 'p'
-						|| tiles[x][y].type.name == 'L' || tiles[x][y].type.liquid);
+				&& (tiles[x][y].type.name == TileID.WOOD || tiles[x][y].type.name == TileID.PLANK
+						|| tiles[x][y].type.name == TileID.LADDER || tiles[x][y].type.liquid);
 	}
 	
 	public boolean isCraft(int x, int y) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return false;
 		}
-		return tiles[x][y].type != null && (tiles[x][y].type.name == 'f');
+		return tiles[x][y].type != null && (tiles[x][y].type.name == TileID.CRAFTING_BENCH);
 	}
 	
 	/**

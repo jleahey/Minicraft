@@ -12,21 +12,23 @@
 
 package com.github.jleahey.minicraft;
 
+import com.github.jleahey.minicraft.Constants.TileID;
+
 public class TileType implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/** The sprite that represents this Type */
 	protected Sprite sprite;
-	protected char name;
+	protected TileID name;
 	protected boolean passable;
 	protected boolean liquid;
 	protected int lightBlocking;
 	
-	public TileType(String ref, char name) {
+	public TileType(String ref, TileID name) {
 		this(ref, name, false, false, Constants.LIGHT_VALUE_OPAQUE);
 	}
 	
-	public TileType(String ref, char name, boolean passable, boolean liquid, int lightBlocking) {
+	public TileType(String ref, TileID name, boolean passable, boolean liquid, int lightBlocking) {
 		this.sprite = SpriteStore.get().getSprite(ref);
 		this.name = name;
 		this.passable = passable;

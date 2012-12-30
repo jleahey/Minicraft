@@ -15,17 +15,20 @@ package com.github.jleahey.minicraft;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.github.jleahey.minicraft.Constants.TileID;
+
 public class WorldGenerator {
 	
 	public static boolean[][] visibility;
 	public static Int2 playerLocation;
 	
-	public static char[][] generate(int width, int height, Random random) {
-		char[][] world = new char[width][height];
+	public static TileID[][] generate(int width, int height, Random random) {
+		TileID[][] world = new TileID[width][height];
 		visibility = new boolean[width][height];
 		for (int i = 0; i < visibility.length; i++) {
 			for (int j = 0; j < visibility[0].length; j++) {
 				visibility[i][j] = true;
+				world[i][j] = TileID.NONE;
 			}
 		}
 		
@@ -83,8 +86,8 @@ public class WorldGenerator {
 				trees.add(new Int2(i, surface - 1));
 			}
 			
-			if (i > width / 4 && surface < median && world[i - 1][surface - 1] == 0
-					&& world[i - 1][surface] == 'g' && !playerLocFound) {
+			if (i > width / 4 && surface < median && world[i - 1][surface - 1] == TileID.NONE
+					&& world[i - 1][surface] == TileID.GRASS && !playerLocFound) {
 				playerLocation.x = i;
 				playerLocation.y = surface - 2;
 				playerLocFound = true;
@@ -97,20 +100,20 @@ public class WorldGenerator {
 				setVisible(i, j - 1);
 			}
 			
-			world[i][surface] = 'g';
+			world[i][surface] = TileID.GRASS;
 			for (int j = 1; j <= dirtDepth; j++) {
-				world[i][surface + j] = 'd';
+				world[i][surface + j] = TileID.DIRT;
 				visibility[i][surface + j] = false;
 			}
 			for (int j = dirtDepth; surface + j < height; j++) {
-				world[i][surface + j] = 's';
+				world[i][surface + j] = TileID.STONE;
 				visibility[i][surface + j] = false;
 			}
 		}
 		
 		// water
 		for (int i = 0; i < width; i++) {
-			if (world[i][median] != 0) {
+			if (world[i][median] != TileID.NONE) {
 				continue;
 			}
 			
@@ -121,12 +124,12 @@ public class WorldGenerator {
 				// setVisible(i-1,j);
 				// setVisible(i,j-1);
 				
-				if (world[i][j] != 0) {
-					carve(world, i, j - 1, 1 + random.nextDouble() * 2, 'n', new char[] { 't', 0 },
-							false);
+				if (world[i][j] != TileID.NONE) {
+					carve(world, i, j - 1, 1 + random.nextDouble() * 2, TileID.SAND, new TileID[] {
+							TileID.WATER, TileID.NONE }, false);
 					break;
 				}
-				world[i][j] = 't';
+				world[i][j] = TileID.WATER;
 			}
 		}
 		
@@ -135,9 +138,10 @@ public class WorldGenerator {
 		for (int i = 0; i < coalCount; i++) {
 			int posX = random.nextInt(width);
 			int posY = random.nextInt(height);
-			if (world[posX][posY] == 's') {
+			if (world[posX][posY] == TileID.STONE) {
 				double coalSize = 1 + random.nextDouble() * .6;
-				carve(world, posX, posY, coalSize, 'c', new char[] { 'd', 'n', 't', 0 }, false);
+				carve(world, posX, posY, coalSize, TileID.COAL_ORE, new TileID[] { TileID.DIRT,
+						TileID.SAND, TileID.WATER, TileID.NONE }, false);
 			}
 		}
 		
@@ -146,25 +150,28 @@ public class WorldGenerator {
 		for (int i = 0; i < ironCount; i++) {
 			int posX = random.nextInt(width);
 			int posY = random.nextInt(height / 2) + height / 2;
-			if (world[posX][posY] == 's') {
+			if (world[posX][posY] == TileID.STONE) {
 				double ironSize = 1 + random.nextDouble() * .6;
-				carve(world, posX, posY, ironSize, 'i', new char[] { 'd', 'n', 'c', 't', 0 }, false);
+				carve(world, posX, posY, ironSize, TileID.IRON_ORE, new TileID[] { TileID.DIRT,
+						TileID.SAND, TileID.COAL_ORE, TileID.WATER, TileID.NONE }, false);
 			}
 		}
 		
-		char[] diamondIgnore = new char[] { 'd', 'n', 'c', 't', 0 };
+		TileID[] diamondIgnore = new TileID[] { TileID.DIRT, TileID.SAND, TileID.COAL_ORE,
+				TileID.WATER, TileID.NONE };
 		// diamond
 		int diamondCount = (int) (width / 16 + random.nextDouble() * 3);
 		for (int i = 0; i < diamondCount; i++) {
 			int posX = random.nextInt(width);
 			int posY = random.nextInt(height / 8) + height * 7 / 8;
-			if (world[posX][posY] == 's') {
+			if (world[posX][posY] == TileID.STONE) {
 				double diamondSize = 1 + random.nextDouble() * .45;
-				carve(world, posX, posY, diamondSize, 'm', diamondIgnore, false);
+				carve(world, posX, posY, diamondSize, TileID.DIAMOND_ORE, diamondIgnore, false);
 			}
 		}
 		
-		char[] caveIgnore = new char[] { 'd', 'c', 't', 'g', 'n', 0 };
+		TileID[] caveIgnore = new TileID[] { TileID.DIRT, TileID.COAL_ORE, TileID.WATER,
+				TileID.GRASS, TileID.SAND, TileID.NONE };
 		// caves
 		int caveCount = (int) (width / 16 + random.nextDouble() * 3);
 		for (int i = 0; i < caveCount; i++) {
@@ -186,12 +193,12 @@ public class WorldGenerator {
 					break;
 				}
 				double caveSize = 1 + random.nextDouble() * .45;
-				carve(world, posX, posY, caveSize, '\0', caveIgnore, false);
+				carve(world, posX, posY, caveSize, TileID.NONE, caveIgnore, false);
 			}
 		}
 		
 		for (Int2 pos : trees) {
-			if (world[pos.x][pos.y + 1] == 'g') {
+			if (world[pos.x][pos.y + 1] == TileID.GRASS) {
 				addTemplate(world, TileTemplate.tree, pos);
 			}
 		}
@@ -206,8 +213,8 @@ public class WorldGenerator {
 		visibility[x][y] = true;
 	}
 	
-	private static void carve(char[][] world, int x, int y, double distance, char type,
-			char[] ignoreTypes, boolean left) {
+	private static void carve(TileID[][] world, int x, int y, double distance, TileID type,
+			TileID[] ignoreTypes, boolean left) {
 		for (int i = -(int) distance; (!left && i <= (int) distance) || (left && i <= 0); i++) {
 			int currentX = x + i;
 			if (currentX < 0 || currentX >= world.length) {
@@ -219,7 +226,7 @@ public class WorldGenerator {
 					continue;
 				}
 				boolean ignoreThis = false;
-				for (char ignore : ignoreTypes) {
+				for (TileID ignore : ignoreTypes) {
 					if (world[currentX][currentY] == ignore) {
 						ignoreThis = true;
 					}
@@ -234,10 +241,11 @@ public class WorldGenerator {
 		}
 	}
 	
-	private static void addTemplate(char[][] world, TileTemplate tileTemplate, Int2 position) {
+	private static void addTemplate(TileID[][] world, TileTemplate tileTemplate, Int2 position) {
 		for (int i = 0; i < tileTemplate.template.length; i++) {
 			for (int j = 0; j < tileTemplate.template[0].length; j++) {
-				if (tileTemplate.template[i][j] != 0 && position.x - tileTemplate.spawnY + i >= 0
+				if (tileTemplate.template[i][j] != TileID.NONE
+						&& position.x - tileTemplate.spawnY + i >= 0
 						&& position.x - tileTemplate.spawnY + i < world.length
 						&& position.y - tileTemplate.spawnX + j >= 0
 						&& position.y - tileTemplate.spawnX + j < world[0].length) {
