@@ -73,7 +73,12 @@ public class Game {
 		}
 		
 		entities.clear();
-		if (load && SaveLoad.doLoad(this)) {
+		if (load) {
+			// check to see loading is possible (and if so load)
+			load = SaveLoad.doLoad(this);
+		}
+		
+		if (load) {
 			for (Entity entity : entities) {
 				if (entity instanceof Player) {
 					player = (Player) entity;
