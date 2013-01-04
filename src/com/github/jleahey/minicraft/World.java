@@ -164,10 +164,11 @@ public class World implements java.io.Serializable {
 	
 	public void changeTile(int x, int y, Tile tile) {
 		tiles[x][y] = tile;
-		if (tile.type.lightBlocking > 0)
+		if (tile.type.lightBlocking > 0) {
 			lightingEngine.addedTile(x, y);
-		else
+		} else {
 			lightingEngine.removedTile(x, y);
+		}
 	}
 	
 	private TileID[] breakWood = new TileID[] { TileID.WOOD, TileID.PLANK, TileID.CRAFTING_BENCH };
@@ -284,8 +285,8 @@ public class World implements java.io.Serializable {
 		
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
-				int posX = (int) ((i - cameraX) * tileSize);
-				int posY = (int) ((j - cameraY) * tileSize);
+				int posX = Math.round(((i - cameraX) * tileSize));
+				int posY = Math.round(((j - cameraY) * tileSize));
 				if (posX < 0 - tileSize || posX > screenWidth || posY < 0 - tileSize
 						|| posY > screenHeight) {
 					continue;
