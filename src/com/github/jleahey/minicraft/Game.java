@@ -96,6 +96,7 @@ public class Game {
 			if (Constants.DEBUG) {
 				player.giveItem(Constants.itemTypes.get((char) 175).clone(), 1);
 				player.giveItem(Constants.itemTypes.get((char) 88).clone(), 1);
+				player.giveItem(Constants.itemTypes.get((char) 106).clone(), 64);
 			}
 		}
 		

@@ -11,5 +11,6 @@
 {item_id:102,name:"craft",   spriteRef:"sprites/tiles/craft.png",     yield:1, recipe:[[112,112],[112,112]]},
 {item_id:107,name:"stick",   spriteRef:"sprites/entities/stick.png",  yield:4, recipe:[[112],[112]]},
 {item_id:76, name:"ladder",  spriteRef:"sprites/tiles/ladder.png",    yield:8, recipe:[[107,0,107],[107,107,107],[107,0,107]]},
-{item_id:112,name:"plank",   spriteRef:"sprites/tiles/plank.png",     yield:4, recipe:[[119]]}
+{item_id:112,name:"plank",   spriteRef:"sprites/tiles/plank.png",     yield:4, recipe:[[119]]},
+{item_id:106,name:"torch",   spriteRef:"sprites/tiles/torch.png",     yield:4, recipe:[[99],[107]]}
 ]

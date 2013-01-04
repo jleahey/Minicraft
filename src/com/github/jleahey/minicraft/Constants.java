@@ -8,7 +8,7 @@ public class Constants {
 	public enum TileID {
 		DIRT(100), GRASS(0), LEAVES(0), PLANK(112), WOOD(119), STONE(115), AIR(0), WATER(0), SAND(
 				110), IRON_ORE(105), COAL_ORE(99), DIAMOND_ORE(109), COBBLE(98), CRAFTING_BENCH(102), ADMINITE(
-				0), SAPLING(83), LADDER(76), NONE(0);
+				0), SAPLING(83), LADDER(76), TORCH(106), NONE(0);
 		
 		// This is for json to link to... It represents what the item will break into
 		public final int breaksInto;
@@ -54,6 +54,8 @@ public class Constants {
 				TileID.SAPLING, true, false, 0)));
 		tileTypes.put(TileID.LADDER, new Tile(new TileType("sprites/tiles/ladder.png",
 				TileID.LADDER, true, false, 0)));
+		tileTypes.put(TileID.TORCH, new Tile(new TileType("sprites/tiles/torch.png", TileID.TORCH,
+				true, false, 0, Constants.LIGHT_VALUE_TORCH)));
 		
 		for (TileID tileID : TileID.values()) {
 			tileIDs.put(tileID.breaksInto, tileID);
