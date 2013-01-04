@@ -15,7 +15,7 @@ public class LightingEngine implements Serializable {
 		RIGHT, UP_RIGHT, UP, UP_LEFT, LEFT, DOWN_LEFT, DOWN, DOWN_RIGHT, SOURCE, WELL, UNKNOWN
 	};
 	
-	public Direction[][] lightFlow;
+	public Direction[][] lightFlowSun;
 	
 	private int[][] lightValues;
 	private int width, height;
@@ -26,7 +26,7 @@ public class LightingEngine implements Serializable {
 		this.height = height;
 		this.tiles = tiles;
 		lightValues = new int[width][height];
-		lightFlow = new Direction[width][height];
+		lightFlowSun = new Direction[width][height];
 		init();
 	}
 	
@@ -34,7 +34,7 @@ public class LightingEngine implements Serializable {
 		for (int x = 0; x < width; x++) {
 			for (int y = 0; y < height; y++) {
 				lightValues[x][y] = 0;
-				lightFlow[x][y] = Direction.UNKNOWN;
+				lightFlowSun[x][y] = Direction.UNKNOWN;
 			}
 		}
 		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
@@ -62,12 +62,12 @@ public class LightingEngine implements Serializable {
 				sun = false;
 			}
 			if (sun) {
-				lightFlow[x][i] = Direction.SOURCE;
+				lightFlowSun[x][i] = Direction.SOURCE;
 			} else {
-				lightFlow[x][i] = Direction.UNKNOWN;
+				lightFlowSun[x][i] = Direction.UNKNOWN;
 			}
 		}
-		lightFlow[x][y] = Direction.UNKNOWN;
+		lightFlowSun[x][y] = Direction.UNKNOWN;
 		resetLighting(x, y);
 	}
 	
@@ -136,7 +136,7 @@ public class LightingEngine implements Serializable {
 		}
 		for (int i = left; i <= right; i++) {
 			for (int j = top; j <= bottom; j++) {
-				if (lightFlow[i][j] == Direction.SOURCE) {
+				if (lightFlowSun[i][j] == Direction.SOURCE) {
 					sources.add(getLightingPoint(i, j));
 				}
 				lightValues[i][j] = 0;
@@ -150,7 +150,7 @@ public class LightingEngine implements Serializable {
 	}
 	
 	private LightingPoint getLightingPoint(int x, int y) {
-		return new LightingPoint(x, y, lightFlow[x][y], lightValues[x][y]);
+		return new LightingPoint(x, y, lightFlowSun[x][y], lightValues[x][y]);
 	}
 	
 	public class LightingPoint {
@@ -267,8 +267,8 @@ public class LightingEngine implements Serializable {
 				continue;
 			}
 			lightValues[current.x][current.y] = current.lightValue;
-			lightFlow[current.x][current.y] = current.flow;
-			if (lightFlow[current.x][current.y] == Direction.SOURCE
+			lightFlowSun[current.x][current.y] = current.flow;
+			if (lightFlowSun[current.x][current.y] == Direction.SOURCE
 					&& current.flow != Direction.SOURCE) {
 				System.out.println("There's a bug in the source map!");
 			}
