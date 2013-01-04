@@ -23,17 +23,24 @@ public class TileType implements java.io.Serializable {
 	protected boolean passable;
 	protected boolean liquid;
 	protected int lightBlocking;
+	protected int lightEmitting;
 	
 	public TileType(String ref, TileID name) {
 		this(ref, name, false, false, Constants.LIGHT_VALUE_OPAQUE);
 	}
 	
 	public TileType(String ref, TileID name, boolean passable, boolean liquid, int lightBlocking) {
+		this(ref, name, passable, liquid, lightBlocking, 0);
+	}
+	
+	public TileType(String ref, TileID name, boolean passable, boolean liquid, int lightBlocking,
+			int lightEmitting) {
 		this.sprite = SpriteStore.get().getSprite(ref);
 		this.name = name;
 		this.passable = passable;
 		this.liquid = liquid;
 		this.lightBlocking = lightBlocking;
+		this.lightEmitting = lightEmitting;
 	}
 	
 	public void draw(GraphicsHandler g, int x, int y) {
