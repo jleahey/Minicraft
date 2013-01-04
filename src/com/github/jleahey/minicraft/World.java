@@ -58,7 +58,7 @@ public class World implements java.io.Serializable {
 		this.chunkCount = (int) Math.ceil((double) width / chunkWidth);
 		this.chunkNeedsUpdate = 0;
 		this.random = random;
-		lightingEngine = new LightingEngine(width, height, tiles);
+		lightingEngine = new LightingEngine(width, height, tiles, true);
 	}
 	
 	public void chunkUpdate() {
