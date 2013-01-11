@@ -31,7 +31,8 @@ public class World implements java.io.Serializable {
 	private Random random;
 	private long ticksAlive = 0;
 	private final int dayLength = 20000;
-	private LightingEngine lightingEngine;
+	private LightingEngine lightingEngineSun;
+	private LightingEngine lightingEngineSourceBlocks;
 	
 	// private int[] columnHeights;
 	
@@ -58,7 +59,8 @@ public class World implements java.io.Serializable {
 		this.chunkCount = (int) Math.ceil((double) width / chunkWidth);
 		this.chunkNeedsUpdate = 0;
 		this.random = random;
-		lightingEngine = new LightingEngine(width, height, tiles, true);
+		lightingEngineSun = new LightingEngine(width, height, tiles, true);
+		lightingEngineSourceBlocks = new LightingEngine(width, height, tiles, false);
 	}
 	
 	public void chunkUpdate() {
@@ -148,7 +150,8 @@ public class World implements java.io.Serializable {
 			}
 		}
 		tiles[x][y] = tile;
-		lightingEngine.addedTile(x, y);
+		lightingEngineSun.addedTile(x, y);
+		lightingEngineSourceBlocks.addedTile(x, y);
 		return true;
 	}
 	
@@ -158,16 +161,17 @@ public class World implements java.io.Serializable {
 		}
 		TileID name = tiles[x][y].type.name;
 		tiles[x][y] = Constants.tileTypes.get(TileID.AIR);
-		lightingEngine.removedTile(x, y);
+		lightingEngineSun.removedTile(x, y);
+		lightingEngineSourceBlocks.removedTile(x, y);
 		return name;
 	}
 	
 	public void changeTile(int x, int y, Tile tile) {
 		tiles[x][y] = tile;
 		if (tile.type.lightBlocking > 0) {
-			lightingEngine.addedTile(x, y);
+			lightingEngineSun.addedTile(x, y);
 		} else {
-			lightingEngine.removedTile(x, y);
+			lightingEngineSun.removedTile(x, y);
 		}
 	}
 	
@@ -351,8 +355,13 @@ public class World implements java.io.Serializable {
 	 **/
 	public float getLightValue(int x, int y) {
 		float daylight = getDaylight();
-		float lightValue = ((float) lightingEngine.getLightValue(x, y)) / Constants.LIGHT_VALUE_SUN;
-		return daylight * lightValue;
+		float lightValueSun = ((float) lightingEngineSun.getLightValue(x, y))
+				/ Constants.LIGHT_VALUE_SUN * daylight;
+		float lightValueSourceBlocks = ((float) lightingEngineSourceBlocks.getLightValue(x, y))
+				/ Constants.LIGHT_VALUE_SUN;
+		if (lightValueSun >= lightValueSourceBlocks)
+			return lightValueSun;
+		return lightValueSourceBlocks;
 	}
 	
 	public float getDaylight() {
