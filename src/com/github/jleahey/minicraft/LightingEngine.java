@@ -41,8 +41,20 @@ public class LightingEngine implements Serializable {
 			}
 		}
 		LinkedList<LightingPoint> sources = new LinkedList<LightingPoint>();
-		for (int x = 0; x < width; x++) {
-			sources.addAll(getSunSources(x));
+		if (isSun) {
+			for (int x = 0; x < width; x++) {
+				sources.addAll(getSunSources(x));
+			}
+		} else {
+			for (int x = 0; x < width; x++) {
+				for (int y = 0; y < height; y++) {
+					if (tiles[x][y].type.lightEmitting > 0) {
+						lightFlow[x][y] = Direction.SOURCE;
+						lightValues[x][y] = tiles[x][y].type.lightEmitting;
+					}
+					
+				}
+			}
 		}
 		spreadLightingDijkstra(sources);
 	}
@@ -52,14 +64,20 @@ public class LightingEngine implements Serializable {
 	}
 	
 	public void removedTile(int x, int y) {
+		if (!isSun && lightFlow[x][y] == Direction.SOURCE) {
+			resetLighting(x, y);
+			return;
+		}
+		lightFlow[x][y] = Direction.UNKNOWN;
 		if (isSun) {
 			spreadLightingDijkstra(getSunSources(x));
 		}
-		spreadLightingDijkstra(new LightingPoint(x, y, Direction.UNKNOWN, lightValues[x][y], false)
+		spreadLightingDijkstra(new LightingPoint(x, y, Direction.UNKNOWN, lightValues[x][y])
 				.getNeighbors(true, width, height));
 	}
 	
 	public void addedTile(int x, int y) {
+		lightFlow[x][y] = Direction.UNKNOWN;
 		if (isSun) {
 			// redo the column for sun
 			boolean sun = true;
@@ -73,8 +91,10 @@ public class LightingEngine implements Serializable {
 					lightFlow[x][i] = Direction.UNKNOWN;
 				}
 			}
+		} else if (tiles[x][y].type.lightEmitting > 0) {
+			lightValues[x][y] = tiles[x][y].type.lightEmitting;
+			lightFlow[x][y] = Direction.SOURCE;
 		}
-		lightFlow[x][y] = Direction.UNKNOWN;
 		resetLighting(x, y);
 	}
 	
@@ -252,6 +272,8 @@ public class LightingEngine implements Serializable {
 	}
 	
 	private void spreadLightingDijkstra(List<LightingPoint> sources) {
+		if (sources.isEmpty())
+			return;
 		HashSet<LightingPoint> out = new HashSet<LightingPoint>();
 		PriorityQueue<LightingPoint> in = new PriorityQueue<LightingPoint>(sources.size(),
 				new LightValueComparator());
