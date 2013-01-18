@@ -354,6 +354,8 @@ public class World implements java.io.Serializable {
 	 * @return a light value [0,1]
 	 **/
 	public float getLightValue(int x, int y) {
+		if (Constants.DEBUG_VISIBILITY_ON)
+			return 1;
 		float daylight = getDaylight();
 		float lightValueSun = ((float) lightingEngineSun.getLightValue(x, y))
 				/ Constants.LIGHT_VALUE_SUN * daylight;
