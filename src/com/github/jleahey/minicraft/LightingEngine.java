@@ -65,6 +65,7 @@ public class LightingEngine implements Serializable {
 	
 	public void removedTile(int x, int y) {
 		if (!isSun && lightFlow[x][y] == Direction.SOURCE) {
+			lightFlow[x][y] = Direction.UNKNOWN;
 			resetLighting(x, y);
 			return;
 		}
