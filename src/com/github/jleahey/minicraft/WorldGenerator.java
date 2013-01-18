@@ -133,42 +133,15 @@ public class WorldGenerator {
 			}
 		}
 		
-		// coal
-		int coalCount = (int) (width / 2 + random.nextDouble() * 3);
-		for (int i = 0; i < coalCount; i++) {
-			int posX = random.nextInt(width);
-			int posY = random.nextInt(height);
-			if (world[posX][posY] == TileID.STONE) {
-				double coalSize = 1 + random.nextDouble() * .6;
-				carve(world, posX, posY, coalSize, TileID.COAL_ORE, new TileID[] { TileID.DIRT,
-						TileID.SAND, TileID.WATER, TileID.NONE }, false);
-			}
-		}
+		uniformlyAddMinerals(world, TileID.COAL_ORE, .01f, (int) (height * .4),
+				(int) (height * .9), new TileID[] { TileID.DIRT, TileID.SAND, TileID.WATER,
+						TileID.NONE }, random);
 		
-		// iron
-		int ironCount = (int) (width / 4 + random.nextDouble() * 3);
-		for (int i = 0; i < ironCount; i++) {
-			int posX = random.nextInt(width);
-			int posY = random.nextInt(height / 2) + height / 2;
-			if (world[posX][posY] == TileID.STONE) {
-				double ironSize = 1 + random.nextDouble() * .6;
-				carve(world, posX, posY, ironSize, TileID.IRON_ORE, new TileID[] { TileID.DIRT,
-						TileID.SAND, TileID.COAL_ORE, TileID.WATER, TileID.NONE }, false);
-			}
-		}
+		uniformlyAddMinerals(world, TileID.IRON_ORE, .005f, (int) (height * .5), height,
+				new TileID[] { TileID.DIRT, TileID.SAND, TileID.WATER, TileID.NONE }, random);
 		
-		TileID[] diamondIgnore = new TileID[] { TileID.DIRT, TileID.SAND, TileID.COAL_ORE,
-				TileID.WATER, TileID.NONE };
-		// diamond
-		int diamondCount = (int) (width / 16 + random.nextDouble() * 3);
-		for (int i = 0; i < diamondCount; i++) {
-			int posX = random.nextInt(width);
-			int posY = random.nextInt(height / 8) + height * 7 / 8;
-			if (world[posX][posY] == TileID.STONE) {
-				double diamondSize = 1 + random.nextDouble() * .45;
-				carve(world, posX, posY, diamondSize, TileID.DIAMOND_ORE, diamondIgnore, false);
-			}
-		}
+		uniformlyAddMinerals(world, TileID.DIAMOND_ORE, .001f, (int) (height * .9), height,
+				new TileID[] { TileID.DIRT, TileID.SAND, TileID.WATER, TileID.NONE }, random);
 		
 		TileID[] caveIgnore = new TileID[] { TileID.DIRT, TileID.COAL_ORE, TileID.WATER,
 				TileID.GRASS, TileID.SAND, TileID.NONE };
@@ -204,6 +177,27 @@ public class WorldGenerator {
 		}
 		
 		return world;
+	}
+	
+	// Density [0,1]
+	private static void uniformlyAddMinerals(TileID[][] world, TileID mineral, float density,
+			int minDepth, int maxDepth, TileID[] ignoreTypes, Random random) {
+		int missesAllowed = 100;
+		int width = world.length;
+		int totalHeight = maxDepth - minDepth;
+		int desired = (int) (density * width * totalHeight);
+		int added = 0;
+		int iterations = 0;
+		while (added < desired && added - iterations < missesAllowed) {
+			int posX = random.nextInt(width);
+			int posY = random.nextInt(totalHeight) + minDepth;
+			if (world[posX][posY] == TileID.STONE) {
+				double mineralSize = 1 + random.nextDouble() * .6;
+				carve(world, posX, posY, mineralSize, mineral, ignoreTypes, false);
+				added++;
+			}
+			iterations++;
+		}
 	}
 	
 	private static void setVisible(int x, int y) {
