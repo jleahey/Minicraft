@@ -230,12 +230,14 @@ public class Game {
 						int right = (int) player.getRight(tileSize);
 						int top = (int) player.getTop(tileSize);
 						int bottom = (int) player.getBottom(tileSize);
+						TileID itemID = Constants.tileIDs.get(current.getItem().item_id);
+						Tile item = Constants.tileTypes.get(itemID);
 						
 						if (!(player.handBuildPos.x >= left && player.handBuildPos.x <= right
-								&& player.handBuildPos.y >= top && player.handBuildPos.y <= bottom)) {
+								&& player.handBuildPos.y >= top && player.handBuildPos.y <= bottom)
+								|| item.type.passable) {
 							boolean placed = world.addTile(player.handBuildPos.x,
-									player.handBuildPos.y,
-									Constants.tileIDs.get(current.getItem().item_id));
+									player.handBuildPos.y, itemID);
 							if (placed) {
 								player.inventory.decreaseSelected(1);
 							}
