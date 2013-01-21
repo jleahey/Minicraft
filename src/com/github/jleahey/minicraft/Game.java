@@ -416,6 +416,15 @@ public class Game {
 	 *            The arguments that are passed into our game
 	 */
 	public static void main(String argv[]) {
+		// really simple argument parsing
+		for (String arg : argv) {
+			if (arg.equals("-d") || arg.equals("--debug")) {
+				Constants.DEBUG = true;
+			} else {
+				System.err.println("Unrecognized argument: "+arg);
+			}
+		}
+		// initialize the game state
 		Game g = new Game();
 		
 		// Start the main game loop, note: this method will not
