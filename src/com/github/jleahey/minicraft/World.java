@@ -135,6 +135,10 @@ public class World implements java.io.Serializable {
 		}
 	}
 	
+	public boolean addTile(Int2 pos, TileID name) {
+		return addTile(pos.x, pos.y, name);
+	}
+
 	public boolean addTile(int x, int y, TileID name) {
 		if (x < 0 || x >= width || y < 0 || y >= height) {
 			return false;

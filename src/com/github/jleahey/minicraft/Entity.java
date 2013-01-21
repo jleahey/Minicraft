@@ -240,6 +240,15 @@ public abstract class Entity implements java.io.Serializable {
 		
 		return !(bottom1 < top2 || top1 > bottom2 || right1 < left2 || left1 > right2);
 	}
+
+	public boolean inBoundingBox(Int2 pos, int tileSize) {
+		int left = (int) this.getLeft(tileSize);
+		int right = (int) this.getRight(tileSize);
+		int top = (int) this.getTop(tileSize);
+		int bottom = (int) this.getBottom(tileSize);
+		
+		return pos.x >= left && pos.x <= right && pos.y >= top && pos.y <= bottom;
+	}
 	
 	public void draw(GraphicsHandler g, float cameraX, float cameraY, int screenWidth,
 			int screenHeight, int tileSize) {

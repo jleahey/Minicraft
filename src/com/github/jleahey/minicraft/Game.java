@@ -220,25 +220,21 @@ public class Game {
 			
 			if (rightClick) {
 				if (world.isCraft(player.handBreakPos.x, player.handBreakPos.y)) {
+					// clicked on a crafting table
+					// TODO: expand this to any item with a GUI
 					player.inventory.tableSizeAvailable = 3;
 					player.inventory.setVisible(true);
 				} else {
+					// placing a block
 					rightClick = false;
 					InventoryItem current = player.inventory.selectedItem();
 					if (!current.isEmpty()) {
-						int left = (int) player.getLeft(tileSize);
-						int right = (int) player.getRight(tileSize);
-						int top = (int) player.getTop(tileSize);
-						int bottom = (int) player.getBottom(tileSize);
 						TileID itemID = Constants.tileIDs.get(current.getItem().item_id);
-						Tile item = Constants.tileTypes.get(itemID);
+						boolean isPassable = Constants.tileTypes.get(itemID).type.passable;
 						
-						if (!(player.handBuildPos.x >= left && player.handBuildPos.x <= right
-								&& player.handBuildPos.y >= top && player.handBuildPos.y <= bottom)
-								|| item.type.passable) {
-							boolean placed = world.addTile(player.handBuildPos.x,
-									player.handBuildPos.y, itemID);
-							if (placed) {
+						if (isPassable || !player.inBoundingBox(player.handBuildPos, tileSize)) {
+							if (world.addTile(player.handBuildPos, itemID)) {
+								// placed successfully
 								player.inventory.decreaseSelected(1);
 							}
 						}
